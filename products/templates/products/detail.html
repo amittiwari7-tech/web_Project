@@ -1,0 +1,665 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} // Technical Overview & Instant License{% endblock %}
+
+{% block content %}
+<style>
+  :root {
+    --text-pure: #FFFFFF;
+    --text-body: #E2E8F0;
+    --text-sub: #94A3B8;
+    --card-surface: #0B1220;
+    --card-surface-hover: #111B30;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-glow: rgba(6, 182, 212, 0.45);
+    --accent-cyan: #06B6D4;
+    --accent-emerald: #10B981;
+    --accent-violet: #6366F1;
+  }
+
+  .detail-wrapper {
+    padding-bottom: 4rem;
+  }
+
+  .detail-card {
+    background: var(--card-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: 1.85rem;
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.65);
+    transition: all 0.3s ease;
+  }
+
+  .detail-breadcrumb a {
+    color: var(--text-sub);
+    text-decoration: none;
+    font-size: 0.82rem;
+    transition: color 0.2s ease;
+  }
+  .detail-breadcrumb a:hover {
+    color: var(--accent-cyan);
+  }
+  .detail-breadcrumb span {
+    color: var(--text-pure);
+    font-size: 0.82rem;
+  }
+
+  .video-frame-box {
+    position: relative;
+    border-radius: 16px;
+    background: #04070D;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+    box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.85);
+  }
+
+  .video-frame-box iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  .video-fallback-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(6, 182, 212, 0.12), #04070D 70%);
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .spec-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+  }
+
+  .spec-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 12px 14px;
+    text-align: center;
+  }
+
+  .spec-item .label {
+    font-size: 0.72rem;
+    color: var(--text-sub);
+    display: block;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+  }
+
+  .spec-item .val {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text-pure);
+  }
+
+  .checkout-side-card {
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.95), rgba(7, 11, 20, 0.98));
+    border: 1px solid var(--border-glow);
+    border-radius: 24px;
+    padding: 2rem 1.85rem;
+    box-shadow: 0 25px 60px -15px rgba(6, 182, 212, 0.25);
+  }
+
+  .price-tag {
+    font-family: var(--font-mono);
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+
+  .price-sub {
+    font-size: 0.78rem;
+    color: var(--accent-emerald);
+    font-family: var(--font-mono);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    margin-bottom: 1.25rem;
+  }
+
+  .feature-bullet {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.88rem;
+    color: var(--text-body);
+    line-height: 1.5;
+  }
+
+  .feature-bullet i {
+    color: var(--accent-emerald);
+    font-size: 0.95rem;
+    margin-top: 3px;
+  }
+
+  .detail-desc-text {
+    font-size: 0.95rem;
+    color: var(--text-body);
+    line-height: 1.8;
+  }
+
+  .guarantee-box {
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px dashed rgba(99, 102, 241, 0.35);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* Plan Switcher Pills */
+  .plan-type-toggle {
+    display: flex;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 1.25rem;
+  }
+
+  .plan-type-btn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: var(--text-sub);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    transition: all 0.25s ease;
+  }
+
+  .plan-type-btn.active {
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
+    color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+  }
+
+  /* Payment Mode Selection Card Styles */
+  .payment-method-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .payment-method-card:hover, .payment-method-card.active {
+    border-color: var(--accent-cyan);
+    background: rgba(6, 182, 212, 0.08);
+  }
+
+  .payment-method-card input[type="radio"] {
+    accent-color: var(--accent-cyan);
+  }
+</style>
+
+<div class="container detail-wrapper my-4">
+  <!-- Breadcrumbs & Navigation -->
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    <div class="detail-breadcrumb font-mono d-flex align-items-center gap-2">
+      <a href="{{ url_for('home.index') }}"><i class="fa-solid fa-house"></i> Home</a>
+      <span class="text-secondary">/</span>
+      <a href="{{ url_for('products.list_products') }}">Ready-Made Tools</a>
+      <span class="text-secondary">/</span>
+      <span class="text-info">{{ product.name }}</span>
+    </div>
+    <a href="{{ url_for('products.list_products') }}" class="btn-nexus-outline py-2 px-3 small font-mono">
+      <i class="fa-solid fa-arrow-left me-1"></i> Back to Catalog
+    </a>
+  </div>
+
+  <div class="row g-4 g-lg-5 align-items-start">
+    <!-- LEFT COLUMN: Media Player & Specs -->
+    <div class="col-lg-7">
+      <div class="detail-card mb-4 p-2 p-md-3">
+        <div class="d-flex align-items-center justify-content-between px-2 pt-1 pb-3">
+          <span class="font-mono small text-info fw-bold">
+            <i class="fa-solid fa-play-circle me-1"></i> Video Walkthrough & Implementation Manual
+          </span>
+          <span class="badge bg-dark border border-secondary font-mono small text-white">
+            HD Tutorial
+          </span>
+        </div>
+
+        <div class="video-frame-box ratio ratio-16x9">
+          <div id="videoContainer" data-url="{{ product.video_url | default('', true) }}">
+            <div class="video-fallback-box">
+              <i class="fa-solid fa-circle-play text-info mb-3" style="font-size: 3rem;"></i>
+              <h5 class="fw-bold text-white mb-1">Guided Video Included</h5>
+              <p class="text-slate small mb-0" style="max-width: 380px;">
+                A complete screen-recording guide demonstrating deployment, Google Sheet syncing, and credentials setup is bundled with your download package.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Specs & Technical Deliverables -->
+      <div class="detail-card mb-4">
+        <h4 class="fw-bold text-white mb-3 fs-5">
+          <i class="fa-solid fa-cubes text-info me-2"></i> Deliverables & Tech Specs
+        </h4>
+        <div class="spec-grid mb-4">
+          <div class="spec-item">
+            <span class="label">Category</span>
+            <span class="val text-info">{{ product.category | default('Digital Tool', true) }}</span>
+          </div>
+          <div class="spec-item">
+            <span class="label">Trial Option</span>
+            <span class="val text-warning">3 Days Free</span>
+          </div>
+          <div class="spec-item">
+            <span class="label">License</span>
+            <span class="val">Unlimited Personal</span>
+          </div>
+          <div class="spec-item">
+            <span class="label">Support</span>
+            <span class="val">30 Days Included</span>
+          </div>
+        </div>
+
+        <h5 class="fw-bold text-white mb-2 fs-6">Documentation & Overview</h5>
+        <div class="detail-desc-text mb-4">
+          {{ product.description or product.short_description or 'Complete, tested digital package ready for one-click deployment. Zero technical debt, fully commented code, and direct database webhooks.' }}
+        </div>
+
+        <div class="guarantee-box">
+          <i class="fa-solid fa-shield-check text-info fs-3"></i>
+          <div>
+            <span class="fw-bold text-white d-block small">Nexus Verified Architecture</span>
+            <span class="text-slate small" style="font-size: 0.76rem;">Every script is vetted for memory leaks, clean webhook handshakes, and compatibility.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: Commercial License & Checkout -->
+    <div class="col-lg-5">
+      <div class="checkout-side-card">
+        <span class="badge bg-dark border border-info text-info font-mono px-3 py-2 rounded-pill mb-3">
+          <i class="fa-solid fa-bolt me-1"></i> Instant Digital Delivery
+        </span>
+
+        <h1 class="fw-bolder text-white mb-3" style="font-size: 1.85rem; line-height: 1.25;">
+          {{ product.name }}
+        </h1>
+
+        <div class="d-flex align-items-baseline gap-2 mb-1">
+          <span class="price-tag">₹{{ product.price }}</span>
+          <span class="text-slate font-mono small">/ One-time fee</span>
+        </div>
+
+        <div class="price-sub">
+          <i class="fa-solid fa-circle-check"></i> Lifetime Updates & Direct Script Ownership
+        </div>
+
+        <hr class="border-secondary-subtle my-3">
+
+        <h6 class="text-uppercase font-mono text-slate small fw-bold mb-3">Package Contents:</h6>
+        <div class="d-flex flex-column gap-3 mb-4">
+          <div class="feature-bullet">
+            <i class="fa-solid fa-file-code"></i>
+            <span><strong>Full Source Code:</strong> Unminified, clean codebase with zero external lock-in.</span>
+          </div>
+          <div class="feature-bullet">
+            <i class="fa-solid fa-video"></i>
+            <span><strong>Setup Video Manual:</strong> Step-by-step guidance on API keys & installation.</span>
+          </div>
+          <div class="feature-bullet">
+            <i class="fa-solid fa-headset"></i>
+            <span><strong>Dedicated WhatsApp Assistance:</strong> Chat directly with developers if you get stuck.</span>
+          </div>
+          <div class="feature-bullet">
+            <i class="fa-solid fa-arrows-rotate"></i>
+            <span><strong>Free Sandbox Period:</strong> Test fully active with our 3-day test trial.</span>
+          </div>
+        </div>
+
+        <!-- Dynamic Unlock & Buy Button with Login Check -->
+        {% if session.get('status') %}
+          <button type="button" 
+                  class="btn-nexus-primary w-100 justify-content-center py-3 fs-5 fw-bold mb-3 border-0" 
+                  data-bs-toggle="modal" 
+                  data-bs-target="#paymentModal">
+            <i class="fa-solid fa-lock-open"></i> Unlock & Buy Now
+          </button>
+        {% else %}
+          <button type="button" 
+                  class="btn-nexus-primary w-100 justify-content-center py-3 fs-5 fw-bold mb-3 border-0" 
+                  data-bs-toggle="modal" 
+                  data-bs-target="#loginRequiredModal">
+            <i class="fa-solid fa-lock-open"></i> Unlock & Buy Now
+          </button>
+        {% endif %}
+
+        <a href="{{ url_for('interactions.custom_order') }}" class="btn-nexus-outline w-100 text-center py-2 fs-6">
+          <i class="fa-solid fa-code-fork me-1"></i> Request Custom Modifications
+        </a>
+
+        <div class="text-center mt-3">
+          <small class="text-slate font-mono" style="font-size: 0.72rem;">
+            <i class="fa-solid fa-shield-halved me-1 text-success"></i> 256-bit Encrypted Checkout Powered by Cashfree Payments
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Payment & 3-Day Trial Selection Modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background: var(--card-surface); border: 1px solid var(--border-glow); border-radius: 20px; color: #F8FAFC;">
+      <div class="modal-header border-bottom border-secondary-subtle">
+        <h5 class="modal-title font-mono fw-bold text-white d-flex align-items-center gap-2" id="paymentModalLabel">
+          <i class="fa-solid fa-bolt text-info"></i> Choose Access Mode
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <div class="modal-body py-4">
+        <!-- Plan Type Switcher (Trial vs Subscribe) -->
+        <div class="plan-type-toggle">
+          <button type="button" class="plan-type-btn active" id="btnModeTrial" onclick="switchMode('trial')">
+            <i class="fa-solid fa-clock-rotate-left me-1"></i> 3-Day Free Trial
+          </button>
+          <button type="button" class="plan-type-btn" id="btnModeSubscribe" onclick="switchMode('subscribe')">
+            <i class="fa-solid fa-credit-card me-1"></i> Instant Subscribe (₹{{ product.price }})
+          </button>
+        </div>
+
+        <!-- Summary Box -->
+        <div class="p-3 rounded-3 bg-dark border border-secondary border-opacity-25 mb-4 font-mono small d-flex justify-content-between align-items-center">
+          <div>
+            <span class="text-slate d-block" style="font-size: 0.75rem;">PRODUCT</span>
+            <span class="text-white fw-bold">{{ product.name }}</span>
+          </div>
+          <div class="text-end">
+            <span class="text-slate d-block" style="font-size: 0.75rem;">PAYABLE NOW</span>
+            <span class="text-info fw-bold fs-5" id="displayModalAmount">₹0 (Free Trial)</span>
+          </div>
+        </div>
+
+        <!-- 1. TRIAL VIEW -->
+        <div id="trialSection">
+          <div class="p-3 rounded-3 bg-secondary bg-opacity-10 border border-secondary border-opacity-25 mb-4 small font-mono">
+            <div class="text-warning fw-bold mb-2">
+              <i class="fa-solid fa-shield-halved me-1"></i> 3-Day Evaluation Access:
+            </div>
+            <ul class="text-slate ps-3 mb-0" style="line-height: 1.6; font-size: 0.8rem;">
+              <li>Full access to source code and Google Sheets web app.</li>
+              <li>Includes 3-day WhatsApp and AI engine token test quota.</li>
+              <li>No upfront charges. Auto-logs your trial into our central database.</li>
+            </ul>
+          </div>
+
+          <button type="button" 
+                  id="btnActivateTrial" 
+                  onclick="activateTrialProcess('{{ product.id }}', '{{ product.name | escape }}')" 
+                  class="btn-nexus-primary w-100 justify-content-center py-3 fs-6 fw-bold">
+            <i class="fa-solid fa-rocket me-2"></i> Activate 3-Day Trial Now
+          </button>
+        </div>
+
+        <!-- 2. SUBSCRIBE / CASHFREE PAYMENT VIEW -->
+        <div id="subscribeSection" style="display: none;">
+          <label class="font-mono text-slate small fw-bold mb-3 d-block">SELECT PAYMENT METHOD:</label>
+
+          <!-- Method 1: Instant UPI QR & Apps -->
+          <label class="payment-method-card mb-2" onclick="selectPaymentMethod('upi')">
+            <div class="d-flex align-items-center gap-3">
+              <div class="fs-4 text-success"><i class="fa-solid fa-qrcode"></i></div>
+              <div>
+                <div class="text-white fw-bold small">UPI & Dynamic QR Code</div>
+                <div class="text-slate font-mono" style="font-size: 0.72rem;">GPay, PhonePe, Paytm, BHIM</div>
+              </div>
+            </div>
+            <input type="radio" name="pay_mode" value="upi" checked>
+          </label>
+
+          <!-- Method 2: Debit / Credit Card -->
+          <label class="payment-method-card mb-2" onclick="selectPaymentMethod('card')">
+            <div class="d-flex align-items-center gap-3">
+              <div class="fs-4 text-info"><i class="fa-regular fa-credit-card"></i></div>
+              <div>
+                <div class="text-white fw-bold small">Debit / Credit Card</div>
+                <div class="text-slate font-mono" style="font-size: 0.72rem;">Visa, MasterCard, RuPay</div>
+              </div>
+            </div>
+            <input type="radio" name="pay_mode" value="card">
+          </label>
+
+          <!-- Method 3: Net Banking -->
+          <label class="payment-method-card mb-3" onclick="selectPaymentMethod('netbanking')">
+            <div class="d-flex align-items-center gap-3">
+              <div class="fs-4 text-warning"><i class="fa-solid fa-building-columns"></i></div>
+              <div>
+                <div class="text-white fw-bold small">Net Banking</div>
+                <div class="text-slate font-mono" style="font-size: 0.72rem;">All Major Indian Banks Supported</div>
+              </div>
+            </div>
+            <input type="radio" name="pay_mode" value="netbanking">
+          </label>
+
+          <button type="button" 
+                  id="btnProceedCashfree" 
+                  onclick="initiateCashfreeCheckout('{{ product.id }}', '{{ product.name | escape }}', '{{ product.price }}')" 
+                  class="btn-nexus-primary w-100 justify-content-center py-3 fs-6 fw-bold">
+            <i class="fa-solid fa-lock me-2"></i> Pay ₹{{ product.price }} via Cashfree
+          </button>
+        </div>
+
+        <div class="text-center mt-3">
+          <small class="text-slate font-mono" style="font-size: 0.7rem;">
+            <i class="fa-solid fa-shield-halved text-success me-1"></i> Direct encrypted account registration and webhook synchronization.
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Login Required Modal Popup -->
+<div class="modal fade" id="loginRequiredModal" tabindex="-1" aria-labelledby="loginRequiredModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background: var(--card-surface); border: 1px solid var(--border-glow); border-radius: 20px; color: #F8FAFC;">
+      <div class="modal-header border-bottom border-secondary-subtle">
+        <h5 class="modal-title font-mono fw-bold text-info" id="loginRequiredModalLabel">
+          <i class="fa-solid fa-shield-halved me-2"></i> Authentication Required
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <div class="mb-3 text-warning fs-1">
+          <i class="fa-solid fa-user-lock"></i>
+        </div>
+        <h5 class="fw-bold mb-2">Please Login First</h5>
+        <p class="text-slate small mb-0 px-3">
+          You must be logged in to claim free trials or purchase licenses for <strong>{{ product.name }}</strong>.
+        </p>
+      </div>
+      <div class="modal-footer border-top border-secondary-subtle justify-content-center gap-2">
+        <a href="{{ url_for('auth.login') }}" class="btn btn-info text-dark fw-bold px-4 py-2 rounded-3">
+          <i class="fa-solid fa-right-to-bracket me-1"></i> Login Now
+        </a>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light fw-bold px-4 py-2 rounded-3">
+          <i class="fa-solid fa-user-plus me-1"></i> Register
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cashfree SDK & JS Scripts -->
+<script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+<script>
+  // Mode Switcher: 3-Day Trial vs Subscribe
+  function switchMode(mode) {
+    const btnTrial = document.getElementById('btnModeTrial');
+    const btnSub = document.getElementById('btnModeSubscribe');
+    const trialSec = document.getElementById('trialSection');
+    const subSec = document.getElementById('subscribeSection');
+    const displayAmount = document.getElementById('displayModalAmount');
+
+    if (mode === 'trial') {
+      btnTrial.classList.add('active');
+      btnSub.classList.remove('active');
+      trialSec.style.display = 'block';
+      subSec.style.display = 'none';
+      displayAmount.textContent = '₹0 (Free Trial)';
+      displayAmount.className = 'text-warning fw-bold fs-5';
+    } else {
+      btnSub.classList.add('active');
+      btnTrial.classList.remove('active');
+      trialSec.style.display = 'none';
+      subSec.style.display = 'block';
+      displayAmount.textContent = '₹{{ product.price }}';
+      displayAmount.className = 'text-info fw-bold fs-5';
+    }
+  }
+
+  // Payment Selection Active State
+  function selectPaymentMethod(mode) {
+    document.querySelectorAll('.payment-method-card').forEach(el => el.classList.remove('active'));
+    const targetRadio = document.querySelector(`input[name="pay_mode"][value="${mode}"]`);
+    if (targetRadio) {
+      targetRadio.checked = true;
+      targetRadio.closest('.payment-method-card').classList.add('active');
+    }
+  }
+
+  // Activate 3-Day Trial Function
+  async function activateTrialProcess(productId, productName) {
+    const btn = document.getElementById('btnActivateTrial');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Registering Trial...`;
+    btn.disabled = true;
+
+    try {
+      const response = await fetch("{{ url_for('recharge.activate_trial') }}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          product_id: productId,
+          product_name: productName
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.status === "success") {
+        alert("3-Day Trial Activated Successfully! Redirecting to Dashboard...");
+        window.location.href = "{{ url_for('home.dashboard') }}";
+      } else {
+        alert(data.message || "Failed to register trial. Please try again.");
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Network error while connecting to trial service.");
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }
+  }
+
+  // Cashfree Order Checkout
+  async function initiateCashfreeCheckout(productId, productName, amount) {
+    const btn = document.getElementById('btnProceedCashfree');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Initializing Payment Gateway...`;
+    btn.disabled = true;
+
+    try {
+      const response = await fetch("{{ url_for('recharge.create_cashfree_order') }}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          product_id: productId,
+          product_name: productName,
+          amount: amount
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.status === "success" && data.payment_session_id) {
+        const cashfree = Cashfree({
+          mode: "sandbox" // change to "production" when using live keys
+        });
+
+        cashfree.checkout({
+          paymentSessionId: data.payment_session_id,
+          redirectTarget: "_self"
+        });
+      } else {
+        alert(data.message || "Failed to initialize payment gateway. Please try again.");
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error connecting to server. Please check your network.");
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }
+  }
+
+  // Video Embed Processor
+  document.addEventListener('DOMContentLoaded', function () {
+    const container = document.getElementById('videoContainer');
+    const rawUrl = container.getAttribute('data-url').trim();
+
+    if (!rawUrl) return;
+
+    let embedUrl = '';
+    const ytRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+    const match = rawUrl.match(ytRegex);
+
+    if (match && match[1]) {
+      embedUrl = `https://www.youtube-nocookie.com/embed/${match[1]}?rel=0&modestbranding=1&autoplay=0`;
+    } else if (rawUrl.includes('drive.google.com') && rawUrl.includes('/view')) {
+      embedUrl = rawUrl.replace('/view', '/preview');
+    } else if (rawUrl.startsWith('http')) {
+      embedUrl = rawUrl;
+    }
+
+    if (embedUrl) {
+      container.innerHTML = `
+        <iframe 
+          src="${embedUrl}" 
+          title="Video Manual" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowfullscreen>
+        </iframe>
+      `;
+    }
+  });
+</script>
+{% endblock %}

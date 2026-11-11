@@ -1,0 +1,707 @@
+{% extends "base.html" %}
+
+{% block title %}Client Portal // NEXUS Subscriptions{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  
+  <!-- Top Welcome & Account Metric Overview -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="nexus-card p-4 border border-secondary border-opacity-25 position-relative overflow-hidden">
+        <div class="position-absolute top-0 end-0 translate-middle-y opacity-10 pe-4 pt-3 d-none d-lg-block" style="font-size: 7.5rem; color: var(--accent-cyan);">
+          <i class="fa-solid fa-microchip"></i>
+        </div>
+        <div class="row align-items-center position-relative z-1">
+          <div class="col-lg-8 mb-3 mb-lg-0">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <span class="badge bg-info bg-opacity-10 text-info font-mono border border-info border-opacity-25 px-3 py-1 rounded-pill">
+                <i class="fa-solid fa-fingerprint me-1"></i> Client ID: #NX-{{ session.get('user_id', '7217') }}
+              </span>
+              <span class="badge bg-success bg-opacity-10 text-success font-mono border border-success border-opacity-25 px-3 py-1 rounded-pill">
+                <i class="fa-solid fa-circle-check me-1"></i> 5 Active Subscriptions
+              </span>
+            </div>
+            <h2 class="text-white fw-bold font-mono mb-1">Developer Subscription Portal</h2>
+            <p class="text-muted small mb-0 font-mono">
+              Monitor active tools, WhatsApp webhook tokens, and AI token quota validity with unified dual-engine management.
+            </p>
+          </div>
+          <div class="col-lg-4 text-lg-end">
+            <a href="{{ url_for('products.list_products') }}" class="btn-nexus-primary">
+              <i class="fa-solid fa-bolt"></i> Deploy More Tools
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section Header -->
+  <div class="row mb-3 align-items-center">
+    <div class="col">
+      <h5 class="text-white fw-bold font-mono mb-0 d-flex align-items-center gap-2">
+        <i class="fa-solid fa-cubes text-info"></i> Managed Products & Connected Services
+      </h5>
+    </div>
+  </div>
+
+  <!-- 5 Unified Product Cards -->
+  <div class="row g-4 mb-5">
+
+    <!-- 1. Google Sheets ERP + WhatsApp Billing & Voice AI -->
+    <div class="col-12">
+      <div class="nexus-card p-4 border border-secondary border-opacity-25">
+        <!-- Product Header Bar -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pb-3 mb-3 border-bottom border-secondary border-opacity-25">
+          <div class="d-flex align-items-center gap-3">
+            <div class="fs-4 text-info bg-info bg-opacity-10 p-2 px-3 rounded-3 border border-info border-opacity-25">
+              <i class="fa-solid fa-table"></i>
+            </div>
+            <div>
+              <h5 class="text-white fw-bold mb-0 font-mono">Google Sheets ERP & Inventory Suite</h5>
+              <small class="text-muted font-mono">Apps Script Core • Automated Voice Invoicing • Multi-Branch Sync</small>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-success bg-opacity-10 text-success font-mono border border-success border-opacity-25 px-3 py-1">Running</span>
+            <!-- Three Dot Menu -->
+            <div class="dropdown">
+              <button class="btn btn-sm btn-nexus-outline border-0 text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-ellipsis-vertical fs-5"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end nexus-dropdown-menu font-mono">
+                <li>
+                  <button class="dropdown-item nexus-dropdown-item d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="Google Sheets ERP" data-service="WhatsApp Gateway" data-base-price="199">
+                    <i class="fa-brands fa-whatsapp text-success"></i> Recharge WhatsApp (₹199)
+                  </button>
+                </li>
+                <li>
+                  <button class="dropdown-item nexus-dropdown-item d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="Google Sheets ERP" data-service="AI Voice Engine" data-base-price="149">
+                    <i class="fa-solid fa-brain text-info"></i> Recharge AI (₹149)
+                  </button>
+                </li>
+                <li><hr class="dropdown-divider border-secondary opacity-25"></li>
+                <li>
+                  <a class="dropdown-item nexus-dropdown-item d-flex align-items-center gap-2" href="https://wa.me/917217723569" target="_blank">
+                    <i class="fa-solid fa-headset text-success"></i> Instant Developer Support
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Integrated Dual Engines Sub-Grid -->
+        <div class="row g-3 font-mono">
+          <!-- WhatsApp Engine -->
+          <div class="col-md-6">
+            <div class="p-3 rounded-3 bg-dark border border-secondary border-opacity-25 h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="text-white fw-bold small"><i class="fa-brands fa-whatsapp text-success me-1"></i> WhatsApp Gateway</span>
+                  <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">34 Days Left</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Recharged:</span>
+                  <span class="text-white">Nov 15, 2025</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Expires:</span>
+                  <span class="text-warning fw-bold">Dec 15, 2026</span>
+                </div>
+              </div>
+              <div class="mt-3 pt-2 border-top border-secondary border-opacity-25 d-flex gap-2">
+                <button class="btn btn-sm btn-info text-dark fw-bold w-100 py-1" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="Google Sheets ERP" data-service="WhatsApp Gateway" data-base-price="199">
+                  <i class="fa-solid fa-rotate me-1"></i> Recharge WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Engine -->
+          <div class="col-md-6">
+            <div class="p-3 rounded-3 bg-dark border border-secondary border-opacity-25 h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="text-white fw-bold small"><i class="fa-solid fa-brain text-info me-1"></i> Gemini AI Voice Parsing</span>
+                  <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25">52 Days Left</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Recharged:</span>
+                  <span class="text-white">Jan 02, 2026</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Expires:</span>
+                  <span class="text-warning fw-bold">Jan 02, 2027</span>
+                </div>
+              </div>
+              <div class="mt-3 pt-2 border-top border-secondary border-opacity-25 d-flex gap-2">
+                <button class="btn btn-sm btn-nexus-outline text-info fw-bold w-100 py-1" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="Google Sheets ERP" data-service="Gemini AI Voice Engine" data-base-price="149">
+                  <i class="fa-solid fa-rotate me-1"></i> Recharge AI Engine
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. WhatsApp AI Automated Customer Support Bot -->
+    <div class="col-12">
+      <div class="nexus-card p-4 border border-secondary border-opacity-25">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pb-3 mb-3 border-bottom border-secondary border-opacity-25">
+          <div class="d-flex align-items-center gap-3">
+            <div class="fs-4 text-success bg-success bg-opacity-10 p-2 px-3 rounded-3 border border-success border-opacity-25">
+              <i class="fa-solid fa-robot"></i>
+            </div>
+            <div>
+              <h5 class="text-white fw-bold mb-0 font-mono">WhatsApp AI Concierge & Chatbot</h5>
+              <small class="text-muted font-mono">Meta Cloud API • Credit-Based Billing • 24/7 Context Memory</small>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-success bg-opacity-10 text-success font-mono border border-success border-opacity-25 px-3 py-1">Running</span>
+            <div class="dropdown">
+              <button class="btn btn-sm btn-nexus-outline border-0 text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-ellipsis-vertical fs-5"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end nexus-dropdown-menu font-mono">
+                <li>
+                  <button class="dropdown-item nexus-dropdown-item d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="WhatsApp AI Concierge" data-service="WhatsApp Meta Cloud API" data-base-price="199">
+                    <i class="fa-brands fa-whatsapp text-success"></i> Recharge WhatsApp (₹199)
+                  </button>
+                </li>
+                <li>
+                  <button class="dropdown-item nexus-dropdown-item d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="WhatsApp AI Concierge" data-service="AI Token Quota" data-base-price="149">
+                    <i class="fa-solid fa-brain text-info"></i> Recharge AI Quota (₹149)
+                  </button>
+                </li>
+                <li><hr class="dropdown-divider border-secondary opacity-25"></li>
+                <li>
+                  <a class="dropdown-item nexus-dropdown-item d-flex align-items-center gap-2" href="https://wa.me/917217723569" target="_blank">
+                    <i class="fa-solid fa-headset text-success"></i> Support
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3 font-mono">
+          <div class="col-md-6">
+            <div class="p-3 rounded-3 bg-dark border border-secondary border-opacity-25 h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="text-white fw-bold small"><i class="fa-brands fa-whatsapp text-success me-1"></i> WhatsApp Meta Cloud API</span>
+                  <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25">12 Days Left</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Recharged:</span>
+                  <span class="text-white">Oct 20, 2026</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Expires:</span>
+                  <span class="text-warning fw-bold">Nov 22, 2026</span>
+                </div>
+              </div>
+              <div class="mt-3 pt-2 border-top border-secondary border-opacity-25">
+                <button class="btn btn-sm btn-info text-dark fw-bold w-100 py-1" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="WhatsApp AI Concierge" data-service="WhatsApp Meta Cloud API" data-base-price="199">
+                  <i class="fa-solid fa-rotate me-1"></i> Recharge WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="p-3 rounded-3 bg-dark border border-secondary border-opacity-25 h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="text-white fw-bold small"><i class="fa-solid fa-brain text-info me-1"></i> Gemini 2.5 AI Reasoning Engine</span>
+                  <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">68 Days Left</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Recharged:</span>
+                  <span class="text-white">Sep 15, 2026</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Expires:</span>
+                  <span class="text-warning fw-bold">Jan 17, 2027</span>
+                </div>
+              </div>
+              <div class="mt-3 pt-2 border-top border-secondary border-opacity-25">
+                <button class="btn btn-sm btn-nexus-outline text-info fw-bold w-100 py-1" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="WhatsApp AI Concierge" data-service="Gemini 2.5 AI Reasoning Engine" data-base-price="149">
+                  <i class="fa-solid fa-rotate me-1"></i> Recharge AI Quota
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Inbound Warehouse & Vendor Requisition Portal -->
+    <div class="col-12">
+      <div class="nexus-card p-4 border border-secondary border-opacity-25">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pb-3 mb-3 border-bottom border-secondary border-opacity-25">
+          <div class="d-flex align-items-center gap-3">
+            <div class="fs-4 text-warning bg-warning bg-opacity-10 p-2 px-3 rounded-3 border border-warning border-opacity-25">
+              <i class="fa-solid fa-warehouse"></i>
+            </div>
+            <div>
+              <h5 class="text-white fw-bold mb-0 font-mono">PaceCourt Logistics & Warehouse Inward</h5>
+              <small class="text-muted font-mono">Dynamic Line Items • Debit/Credit Notes • Multi-Step Inspection</small>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-success bg-opacity-10 text-success font-mono border border-success border-opacity-25 px-3 py-1">Running</span>
+            <div class="dropdown">
+              <button class="btn btn-sm btn-nexus-outline border-0 text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-ellipsis-vertical fs-5"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end nexus-dropdown-menu font-mono">
+                <li>
+                  <button class="dropdown-item nexus-dropdown-item d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="PaceCourt Logistics" data-service="Vendor WhatsApp Alerts" data-base-price="199">
+                    <i class="fa-brands fa-whatsapp text-success"></i> Recharge WhatsApp (₹199)
+                  </button>
+                </li>
+                <li>
+                  <button class="dropdown-item nexus-dropdown-item d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="PaceCourt Logistics" data-service="OCR Invoice AI Parser" data-base-price="149">
+                    <i class="fa-solid fa-brain text-info"></i> Recharge AI Parser (₹149)
+                  </button>
+                </li>
+                <li><hr class="dropdown-divider border-secondary opacity-25"></li>
+                <li>
+                  <a class="dropdown-item nexus-dropdown-item d-flex align-items-center gap-2" href="https://wa.me/917217723569" target="_blank">
+                    <i class="fa-solid fa-headset text-success"></i> Support
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3 font-mono">
+          <div class="col-md-6">
+            <div class="p-3 rounded-3 bg-dark border border-secondary border-opacity-25 h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="text-white fw-bold small"><i class="fa-brands fa-whatsapp text-success me-1"></i> WhatsApp Dispatch Alerts</span>
+                  <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">44 Days Left</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Recharged:</span>
+                  <span class="text-white">Oct 24, 2026</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Expires:</span>
+                  <span class="text-warning fw-bold">Dec 24, 2026</span>
+                </div>
+              </div>
+              <div class="mt-3 pt-2 border-top border-secondary border-opacity-25">
+                <button class="btn btn-sm btn-info text-dark fw-bold w-100 py-1" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="PaceCourt Logistics" data-service="Vendor WhatsApp Alerts" data-base-price="199">
+                  <i class="fa-solid fa-rotate me-1"></i> Recharge WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="p-3 rounded-3 bg-dark border border-secondary border-opacity-25 h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="text-white fw-bold small"><i class="fa-solid fa-brain text-info me-1"></i> OCR Bill Parsing Engine</span>
+                  <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25">4 Days Left</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Recharged:</span>
+                  <span class="text-white">Oct 14, 2026</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Expires:</span>
+                  <span class="text-danger fw-bold">Nov 14, 2026</span>
+                </div>
+              </div>
+              <div class="mt-3 pt-2 border-top border-secondary border-opacity-25">
+                <button class="btn btn-sm btn-nexus-outline text-danger fw-bold w-100 py-1" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="PaceCourt Logistics" data-service="OCR Invoice AI Parser" data-base-price="149">
+                  <i class="fa-solid fa-triangle-exclamation me-1"></i> Urgent: Recharge AI
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Flutter Billing & Invoicing App -->
+    <div class="col-12">
+      <div class="nexus-card p-4 border border-secondary border-opacity-25">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pb-3 mb-3 border-bottom border-secondary border-opacity-25">
+          <div class="d-flex align-items-center gap-3">
+            <div class="fs-4 text-primary bg-primary bg-opacity-10 p-2 px-3 rounded-3 border border-primary border-opacity-25">
+              <i class="fa-solid fa-mobile-screen-button"></i>
+            </div>
+            <div>
+              <h5 class="text-white fw-bold mb-0 font-mono">Cross-Platform Flutter Smart POS</h5>
+              <small class="text-muted font-mono">SQLite Local Sync • Thermal Printer Engine • Voice Item Auto-Fill</small>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-success bg-opacity-10 text-success font-mono border border-success border-opacity-25 px-3 py-1">Running</span>
+            <div class="dropdown">
+              <button class="btn btn-sm btn-nexus-outline border-0 text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-ellipsis-vertical fs-5"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end nexus-dropdown-menu font-mono">
+                <li>
+                  <button class="dropdown-item nexus-dropdown-item d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="Flutter Smart POS" data-service="WhatsApp Invoice Dispatch" data-base-price="199">
+                    <i class="fa-brands fa-whatsapp text-success"></i> Recharge WhatsApp (₹199)
+                  </button>
+                </li>
+                <li>
+                  <button class="dropdown-item nexus-dropdown-item d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="Flutter Smart POS" data-service="Speech-to-Invoice AI" data-base-price="149">
+                    <i class="fa-solid fa-brain text-info"></i> Recharge AI (₹149)
+                  </button>
+                </li>
+                <li><hr class="dropdown-divider border-secondary opacity-25"></li>
+                <li>
+                  <a class="dropdown-item nexus-dropdown-item d-flex align-items-center gap-2" href="https://wa.me/917217723569" target="_blank">
+                    <i class="fa-solid fa-headset text-success"></i> Support
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3 font-mono">
+          <div class="col-md-6">
+            <div class="p-3 rounded-3 bg-dark border border-secondary border-opacity-25 h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="text-white fw-bold small"><i class="fa-brands fa-whatsapp text-success me-1"></i> WhatsApp PDF Invoice Dispatch</span>
+                  <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">81 Days Left</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Recharged:</span>
+                  <span class="text-white">Oct 30, 2026</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Expires:</span>
+                  <span class="text-warning fw-bold">Jan 30, 2027</span>
+                </div>
+              </div>
+              <div class="mt-3 pt-2 border-top border-secondary border-opacity-25">
+                <button class="btn btn-sm btn-info text-dark fw-bold w-100 py-1" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="Flutter Smart POS" data-service="WhatsApp Invoice Dispatch" data-base-price="199">
+                  <i class="fa-solid fa-rotate me-1"></i> Recharge WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="p-3 rounded-3 bg-dark border border-secondary border-opacity-25 h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="text-white fw-bold small"><i class="fa-solid fa-brain text-info me-1"></i> Voice-to-Billing AI Engine</span>
+                  <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">21 Days Left</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Recharged:</span>
+                  <span class="text-white">Nov 01, 2026</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Expires:</span>
+                  <span class="text-warning fw-bold">Dec 01, 2026</span>
+                </div>
+              </div>
+              <div class="mt-3 pt-2 border-top border-secondary border-opacity-25">
+                <button class="btn btn-sm btn-nexus-outline text-info fw-bold w-100 py-1" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="Flutter Smart POS" data-service="Speech-to-Invoice AI" data-base-price="149">
+                  <i class="fa-solid fa-rotate me-1"></i> Recharge AI Voice
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Abc Seekho Kids Bilingual Learning Platform -->
+    <div class="col-12">
+      <div class="nexus-card p-4 border border-secondary border-opacity-25">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pb-3 mb-3 border-bottom border-secondary border-opacity-25">
+          <div class="d-flex align-items-center gap-3">
+            <div class="fs-4 text-danger bg-danger bg-opacity-10 p-2 px-3 rounded-3 border border-danger border-opacity-25">
+              <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <div>
+              <h5 class="text-white fw-bold mb-0 font-mono">Abc Seekho Bilingual Learning Engine</h5>
+              <small class="text-muted font-mono">English-Hindi Phonetics • Text-to-Speech Engine • Student Tracking</small>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-success bg-opacity-10 text-success font-mono border border-success border-opacity-25 px-3 py-1">Running</span>
+            <div class="dropdown">
+              <button class="btn btn-sm btn-nexus-outline border-0 text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-ellipsis-vertical fs-5"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end nexus-dropdown-menu font-mono">
+                <li>
+                  <button class="dropdown-item nexus-dropdown-item d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="Abc Seekho Engine" data-service="Parent WhatsApp Reports" data-base-price="199">
+                    <i class="fa-brands fa-whatsapp text-success"></i> Recharge WhatsApp (₹199)
+                  </button>
+                </li>
+                <li>
+                  <button class="dropdown-item nexus-dropdown-item d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="Abc Seekho Engine" data-service="AI Pronunciation Evaluator" data-base-price="149">
+                    <i class="fa-solid fa-brain text-info"></i> Recharge AI (₹149)
+                  </button>
+                </li>
+                <li><hr class="dropdown-divider border-secondary opacity-25"></li>
+                <li>
+                  <a class="dropdown-item nexus-dropdown-item d-flex align-items-center gap-2" href="https://wa.me/917217723569" target="_blank">
+                    <i class="fa-solid fa-headset text-success"></i> Support
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3 font-mono">
+          <div class="col-md-6">
+            <div class="p-3 rounded-3 bg-dark border border-secondary border-opacity-25 h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="text-white fw-bold small"><i class="fa-brands fa-whatsapp text-success me-1"></i> WhatsApp Parent Progress Reports</span>
+                  <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">94 Days Left</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Recharged:</span>
+                  <span class="text-white">Nov 03, 2026</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Expires:</span>
+                  <span class="text-warning fw-bold">Feb 12, 2027</span>
+                </div>
+              </div>
+              <div class="mt-3 pt-2 border-top border-secondary border-opacity-25">
+                <button class="btn btn-sm btn-info text-dark fw-bold w-100 py-1" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="Abc Seekho Engine" data-service="Parent WhatsApp Reports" data-base-price="199">
+                  <i class="fa-solid fa-rotate me-1"></i> Recharge WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="p-3 rounded-3 bg-dark border border-secondary border-opacity-25 h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="text-white fw-bold small"><i class="fa-solid fa-brain text-info me-1"></i> AI Pronunciation & Audio Engine</span>
+                  <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">38 Days Left</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Recharged:</span>
+                  <span class="text-white">Oct 18, 2026</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small py-1">
+                  <span>Expires:</span>
+                  <span class="text-warning fw-bold">Dec 18, 2026</span>
+                </div>
+              </div>
+              <div class="mt-3 pt-2 border-top border-secondary border-opacity-25">
+                <button class="btn btn-sm btn-nexus-outline text-info fw-bold w-100 py-1" data-bs-toggle="modal" data-bs-target="#rechargeModal" data-product="Abc Seekho Engine" data-service="AI Pronunciation Evaluator" data-base-price="149">
+                  <i class="fa-solid fa-rotate me-1"></i> Recharge AI Voice
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Unified Instant Recharge & Payment Modal -->
+<div class="modal fade" id="rechargeModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content nexus-card bg-dark border border-secondary shadow-lg">
+      <div class="modal-header border-bottom border-secondary opacity-75">
+        <h5 class="modal-title text-white font-mono fw-bold fs-5">
+          <i class="fa-solid fa-bolt text-info me-2"></i> Instant Service Recharge
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body py-4 font-mono">
+        <form id="rechargeForm">
+          <!-- Summary Box -->
+          <div class="p-3 rounded-3 bg-secondary bg-opacity-10 border border-secondary border-opacity-25 mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="text-muted small">Target Product:</span>
+              <span class="text-white fw-bold small text-end" id="displayProductName">-</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="text-muted small">Service Engine:</span>
+              <span class="text-info fw-bold small text-end" id="displayServiceName">-</span>
+            </div>
+            <hr class="border-secondary opacity-25 my-2">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="text-muted small">Payable Amount:</span>
+              <span class="text-success fw-bold fs-5" id="displayTotalAmount">₹199</span>
+            </div>
+          </div>
+
+          <!-- Hidden Form Values -->
+          <input type="hidden" id="modalProductName" name="product_name">
+          <input type="hidden" id="modalServiceName" name="service_name">
+          <input type="hidden" id="modalBasePrice" value="199">
+          <input type="hidden" id="modalCalculatedAmount" value="199">
+
+          <!-- Plan Selection -->
+          <div class="mb-3">
+            <label class="form-label text-muted small fw-bold">Select Extension Duration</label>
+            <select class="form-select bg-dark text-white border-secondary font-mono py-2" id="planDurationSelect" onchange="calculatePlanTotal()">
+              <option value="1" selected>1 Month (+30 Days) - Standard Rate</option>
+              <option value="3">3 Months (+90 Days) - 15% OFF</option>
+              <option value="12">12 Months Annual Pass (+365 Days) - Best Value</option>
+            </select>
+          </div>
+
+          <!-- Payment Mode Selection -->
+          <div class="mb-4">
+            <label class="form-label text-muted small fw-bold mb-2">Select Payment Method</label>
+            <div class="d-flex flex-column gap-2">
+              <label class="d-flex align-items-center justify-content-between p-2 rounded-3 border border-secondary border-opacity-50 cursor-pointer" style="background: rgba(255,255,255,0.03);">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="fa-solid fa-qrcode text-success fs-5"></i>
+                  <div>
+                    <div class="text-white small fw-bold">Instant UPI & QR Code</div>
+                    <div class="text-muted" style="font-size: 0.68rem;">GPay, PhonePe, Paytm, BHIM</div>
+                  </div>
+                </div>
+                <input type="radio" name="pay_mode" value="upi" checked class="form-check-input" style="accent-color: var(--accent-cyan);">
+              </label>
+
+              <label class="d-flex align-items-center justify-content-between p-2 rounded-3 border border-secondary border-opacity-50 cursor-pointer" style="background: rgba(255,255,255,0.03);">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="fa-regular fa-credit-card text-info fs-5"></i>
+                  <div>
+                    <div class="text-white small fw-bold">Debit / Credit Cards</div>
+                    <div class="text-muted" style="font-size: 0.68rem;">Visa, MasterCard, RuPay</div>
+                  </div>
+                </div>
+                <input type="radio" name="pay_mode" value="card" class="form-check-input" style="accent-color: var(--accent-cyan);">
+              </label>
+
+              <label class="d-flex align-items-center justify-content-between p-2 rounded-3 border border-secondary border-opacity-50 cursor-pointer" style="background: rgba(255,255,255,0.03);">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="fa-solid fa-building-columns text-warning fs-5"></i>
+                  <div>
+                    <div class="text-white small fw-bold">Net Banking</div>
+                    <div class="text-muted" style="font-size: 0.68rem;">All Indian Banks Supported</div>
+                  </div>
+                </div>
+                <input type="radio" name="pay_mode" value="netbanking" class="form-check-input" style="accent-color: var(--accent-cyan);">
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" id="btnSubmitRecharge" class="btn-nexus-primary w-100 justify-content-center py-3 fw-bold">
+            <i class="fa-solid fa-lock me-1"></i> Proceed to Payment
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cashfree SDK -->
+<script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+
+<script>
+  // Calculate price based on duration plan
+  function calculatePlanTotal() {
+    const base = parseFloat(document.getElementById('modalBasePrice').value) || 199;
+    const months = parseInt(document.getElementById('planDurationSelect').value) || 1;
+    let finalAmount = base * months;
+
+    if (months === 3) {
+      finalAmount = Math.round(finalAmount * 0.85); // 15% discount
+    } else if (months === 12) {
+      finalAmount = Math.round(finalAmount * 0.70); // 30% discount
+    }
+
+    document.getElementById('modalCalculatedAmount').value = finalAmount;
+    document.getElementById('displayTotalAmount').textContent = '₹' + finalAmount;
+  }
+
+  // Populate modal data dynamically when triggered
+  const rechargeModal = document.getElementById('rechargeModal');
+  rechargeModal.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+    const productName = button.getAttribute('data-product');
+    const serviceName = button.getAttribute('data-service');
+    const basePrice = button.getAttribute('data-base-price') || "199";
+
+    document.getElementById('modalProductName').value = productName;
+    document.getElementById('modalServiceName').value = serviceName;
+    document.getElementById('displayProductName').textContent = productName;
+    document.getElementById('displayServiceName').textContent = serviceName;
+    document.getElementById('modalBasePrice').value = basePrice;
+    document.getElementById('planDurationSelect').value = "1";
+
+    calculatePlanTotal();
+  });
+
+  // Handle payment processing via Cashfree
+  document.getElementById('rechargeForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btnSubmitRecharge');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Initializing Gateway...`;
+    btn.disabled = true;
+
+    const productName = document.getElementById('modalProductName').value;
+    const serviceName = document.getElementById('modalServiceName').value;
+    const amount = document.getElementById('modalCalculatedAmount').value;
+    const fullItemName = `${productName} (${serviceName} Recharge)`;
+
+    try {
+      const response = await fetch("{{ url_for('recharge.create_cashfree_order') }}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          product_name: fullItemName,
+          amount: amount
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.status === "success" && data.payment_session_id) {
+        // Initialize Cashfree SDK (Use "sandbox" for test keys, "production" for live keys)
+        const cashfree = Cashfree({
+          mode: "sandbox"
+        });
+
+        cashfree.checkout({
+          paymentSessionId: data.payment_session_id,
+          redirectTarget: "_self"
+        });
+      } else {
+        alert(data.message || "Failed to initialize payment gateway. Please verify your connection.");
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error connecting to payment server. Please verify your network.");
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }
+  });
+</script>
+{% endblock %}

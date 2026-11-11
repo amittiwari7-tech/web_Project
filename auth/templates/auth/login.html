@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login // NEXUS</title>
+    
+    <!-- Bootstrap 5.3 + FontAwesome 6 + Google Fonts -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #070B13;
+            --bg-card: #0F172A;
+            --bg-card-hover: #162038;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-cyan: #06B6D4;
+            --accent-violet: #6366F1;
+            --accent-emerald: #10B981;
+            --text-muted: #94A3B8;
+            --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #F8FAFC;
+            font-family: 'Space Grotesk', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 0;
+        }
+
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        .nexus-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid var(--border-color) !important;
+            color: #F8FAFC !important;
+            border-radius: 12px;
+            padding: 0.75rem 1rem 0.75rem 2.8rem;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .form-control::placeholder {
+            color: #64748B !important;
+            opacity: 1;
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border-color: var(--accent-cyan) !important;
+            color: #F8FAFC !important;
+            box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.15) !important;
+        }
+
+        .input-group-icon {
+            position: relative;
+        }
+
+        .input-group-icon .field-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            z-index: 10;
+        }
+
+        .form-label {
+            color: #CBD5E1;
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-nexus-primary {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.8rem 1.4rem;
+            border-radius: 12px;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .btn-nexus-primary:hover:not(:disabled) {
+            opacity: 0.92;
+            transform: translateY(-2px);
+            color: white;
+            box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.4);
+        }
+
+        .back-home {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .back-home:hover {
+            color: var(--accent-cyan);
+        }
+    </style>
+</head>
+<body>
+
+    <a href="{{ url_for('home.index') }}" class="back-home font-mono">
+        <i class="fa-solid fa-arrow-left"></i> Back to Home
+    </a>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="nexus-card">
+                    <div class="text-center mb-4">
+                        <a href="{{ url_for('home.index') }}" class="text-decoration-none">
+                            <span class="fs-3 fw-bold text-white font-mono"><i class="fa-solid fa-shapes text-info"></i> NEXUS</span>
+                        </a>
+                        <p class="text-muted small mt-2">Sign in to your enterprise account</p>
+                    </div>
+
+                    <!-- Flash Messages -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                      {% if messages %}
+                        {% for category, message in messages %}
+                          <div class="alert alert-{{ category }} alert-dismissible fade show py-2 small border-0 rounded-3 shadow-sm mb-3" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close py-2" data-bs-dismiss="alert"></button>
+                          </div>
+                        {% endfor %}
+                      {% endif %}
+                    {% endwith %}
+
+                    <!-- Added id="loginForm" -->
+                    <form method="POST" id="loginForm">
+                        <div class="mb-3">
+                            <label class="form-label font-mono">Email Address</label>
+                            <div class="input-group-icon">
+                                <i class="fa-solid fa-envelope field-icon"></i>
+                                <input type="email" name="email" class="form-control" required placeholder="name@business.com">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label font-mono">Password</label>
+                            <div class="input-group-icon">
+                                <i class="fa-solid fa-lock field-icon"></i>
+                                <input type="password" name="password" class="form-control" required placeholder="••••••••">
+                            </div>
+                        </div>
+
+                        <!-- Added id="submitBtn" -->
+                        <button type="submit" id="submitBtn" class="btn-nexus-primary">
+                            <i class="fa-solid fa-right-to-bracket me-2"></i> Login to Portal
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <p class="small text-slate">Don't have an account? <a href="{{ url_for('auth.register') }}" class="text-info text-decoration-none fw-semibold">Register here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Simple loader script on form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            const btn = document.getElementById('submitBtn');
+            // Disable button and swap inner HTML to a spinner
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Authenticating...`;
+        });
+    </script>
+</body>
+</html>

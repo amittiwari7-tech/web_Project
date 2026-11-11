@@ -1,0 +1,26 @@
+/* Dark Theme के लिए स्पष्ट टेक्स्ट रंग */
+:root {
+  --text-muted: #94A3B8; /* हल्का स्लेटी रंग, जो डार्क बैकग्राउंड पर साफ दिखता है */
+  --text-light: #F1F5F9; /* ऑफ-व्हाइट */
+}
+
+/* सभी पैराग्राफ, हेडिंग्स और कार्ड टेक्स्ट */
+p {
+  color: #CBD5E1 !important; /* साफ और पठनीय हल्का रंग */
+}
+
+.text-muted {
+  color: #94A3B8 !important; /* Bootstrap के काले रंग को ओवरराइड करें */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #FFFFFF !important;
+}
+
+.nexus-card p {
+  color: #94A3B8 !important;
+}
+
+.nexus-card h4, .nexus-card h5 {
+  color: #FFFFFF !important;
+}

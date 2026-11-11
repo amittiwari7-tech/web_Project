@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% block title %}Checkout & Recharge // {{ product_name }}{% endblock %}
+
+{% block content %}
+<style>
+  :root {
+    --text-pure: #FFFFFF;
+    --text-body: #E2E8F0;
+    --text-sub: #94A3B8;
+    --card-surface: #0B1220;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-glow: rgba(6, 182, 212, 0.45);
+    --accent-cyan: #06B6D4;
+    --accent-emerald: #10B981;
+  }
+
+  .checkout-container {
+    max-width: 860px;
+    margin: 2rem auto;
+  }
+
+  .checkout-card {
+    background: var(--card-surface);
+    border: 1px solid var(--border-glow);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.75);
+  }
+
+  .pay-option-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .pay-option-card:hover, .pay-option-card.active {
+    border-color: var(--accent-cyan);
+    background: rgba(6, 182, 212, 0.08);
+  }
+
+  .pay-option-card input[type="radio"] {
+    accent-color: var(--accent-cyan);
+  }
+</style>
+
+<div class="container checkout-container">
+  <!-- Breadcrumb -->
+  <div class="mb-4 font-mono small">
+    <a href="{{ url_for('products.list_products') }}" class="text-slate text-decoration-none hover-cyan">
+      <i class="fa-solid fa-arrow-left me-1"></i> Back to Products
+    </a>
+  </div>
+
+  <div class="checkout-card">
+    <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom border-secondary border-opacity-25">
+      <div>
+        <span class="badge bg-info bg-opacity-10 text-info font-mono mb-1 border border-info border-opacity-25">
+          <i class="fa-solid fa-shield-halved me-1"></i> Secure Cashfree Gateway
+        </span>
+        <h3 class="text-white fw-bold font-mono mb-0">Recharge & Instant License Checkout</h3>
+      </div>
+      <div class="text-end font-mono">
+        <span class="text-slate small d-block">TOTAL PAYABLE</span>
+        <span class="fs-3 fw-bold text-info">₹{{ amount }}</span>
+      </div>
+    </div>
+
+    <!-- Product Summary Box -->
+    <div class="p-3 rounded-3 bg-dark border border-secondary border-opacity-25 mb-4 font-mono small">
+      <div class="row g-2">
+        <div class="col-sm-6">
+          <span class="text-slate d-block">PRODUCT / SERVICE:</span>
+          <span class="text-white fw-bold">{{ product_name }}</span>
+        </div>
+        <div class="col-sm-6 text-sm-end">
+          <span class="text-slate d-block">ACCOUNT / DEVELOPER:</span>
+          <span class="text-white">{{ session.get('user_name', 'Developer') }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Modes Selection -->
+    <h6 class="text-white font-mono small fw-bold mb-3">SELECT PAYMENT METHOD:</h6>
+
+    <div class="d-flex flex-column gap-2 mb-4">
+      <!-- 1. UPI QR -->
+      <label class="pay-option-card active" onclick="setPaymentMode('upi')">
+        <div class="d-flex align-items-center gap-3">
+          <div class="fs-4 text-success"><i class="fa-solid fa-qrcode"></i></div>
+          <div>
+            <div class="text-white fw-bold small">Instant UPI & QR Code</div>
+            <div class="text-slate font-mono" style="font-size: 0.72rem;">Google Pay, PhonePe, Paytm, CRED, BHIM</div>
+          </div>
+        </div>
+        <input type="radio" name="payment_mode" value="upi" checked>
+      </label>
+
+      <!-- 2. Debit / Credit Card -->
+      <label class="pay-option-card" onclick="setPaymentMode('card')">
+        <div class="d-flex align-items-center gap-3">
+          <div class="fs-4 text-info"><i class="fa-regular fa-credit-card"></i></div>
+          <div>
+            <div class="text-white fw-bold small">Debit / Credit Card</div>
+            <div class="text-slate font-mono" style="font-size: 0.72rem;">Visa, MasterCard, RuPay, Corporate Cards</div>
+          </div>
+        </div>
+        <input type="radio" name="payment_mode" value="card">
+      </label>
+
+      <!-- 3. Net Banking -->
+      <label class="pay-option-card" onclick="setPaymentMode('netbanking')">
+        <div class="d-flex align-items-center gap-3">
+          <div class="fs-4 text-warning"><i class="fa-solid fa-building-columns"></i></div>
+          <div>
+            <div class="text-white fw-bold small">Net Banking</div>
+            <div class="text-slate font-mono" style="font-size: 0.72rem;">All Indian Public & Private Banks Supported</div>
+          </div>
+        </div>
+        <input type="radio" name="payment_mode" value="netbanking">
+      </label>
+    </div>
+
+    <!-- Pay Button -->
+    <button type="button" 
+            id="btnCashfreePay" 
+            onclick="triggerCashfreePayment('{{ product_id }}', '{{ product_name | escape }}', '{{ amount }}')" 
+            class="btn-nexus-primary w-100 justify-content-center py-3 fs-5 fw-bold">
+      <i class="fa-solid fa-lock me-2"></i> Pay ₹{{ amount }} via Cashfree
+    </button>
+
+    <div class="text-center mt-3 font-mono">
+      <small class="text-slate" style="font-size: 0.72rem;">
+        <i class="fa-solid fa-bolt text-success me-1"></i> Immediate token sync and invoice download right after transaction confirmation.
+      </small>
+    </div>
+  </div>
+</div>
+
+<!-- Cashfree SDK & JS Handler -->
+<script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+<script>
+  function setPaymentMode(mode) {
+    document.querySelectorAll('.pay-option-card').forEach(card => card.classList.remove('active'));
+    const radio = document.querySelector(`input[name="payment_mode"][value="${mode}"]`);
+    if (radio) {
+      radio.checked = true;
+      radio.closest('.pay-option-card').classList.add('active');
+    }
+  }
+
+  async function triggerCashfreePayment(productId, productName, amount) {
+    const btn = document.getElementById('btnCashfreePay');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Creating Cashfree Session...`;
+    btn.disabled = true;
+
+    try {
+      const response = await fetch("{{ url_for('recharge.create_cashfree_order') }}", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          product_id: productId,
+          product_name: productName,
+          amount: amount
+        })
+      });
+
+      const res = await response.json();
+
+      if (res.status === "success" && res.payment_session_id) {
+        // Change to "production" when live credentials are configured
+        const cashfree = Cashfree({ mode: "sandbox" });
+
+        cashfree.checkout({
+          paymentSessionId: res.payment_session_id,
+          redirectTarget: "_self"
+        });
+      } else {
+        alert(res.message || "Failed to initialize Cashfree. Please retry.");
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Network error while connecting to payment service.");
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }
+  }
+</script>
+{% endblock %}

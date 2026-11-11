@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% block title %}Custom Services // Enterprise ERP, CRM, Bots & Automation{% endblock %}
+
+{% block content %}
+<style>
+  :root {
+    --text-pure: #FFFFFF;
+    --text-body: #CBD5E1;
+    --text-sub: #94A3B8;
+    --card-surface: #0E1626;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --accent-cyan: #06B6D4;
+    --accent-emerald: #10B981;
+    --accent-violet: #6366F1;
+  }
+
+  .services-scope {
+    color: var(--text-body);
+  }
+
+  .services-scope h1,
+  .services-scope h2,
+  .services-scope h3,
+  .services-scope h4,
+  .services-scope h5 {
+    color: var(--text-pure) !important;
+    font-weight: 700;
+  }
+
+  .services-scope p {
+    color: var(--text-body) !important;
+  }
+
+  .services-scope .text-muted,
+  .services-scope small.text-muted {
+    color: var(--text-sub) !important;
+  }
+
+  .service-card {
+    background: var(--card-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: 2rem;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .service-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 16px 36px -10px rgba(6, 182, 212, 0.22);
+  }
+
+  .service-icon-box {
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .feature-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-body);
+  }
+
+  .feature-pill i {
+    color: var(--accent-cyan);
+  }
+
+  .service-price-tag {
+    font-family: var(--font-mono, monospace);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--accent-emerald);
+  }
+</style>
+
+<div class="container services-scope py-3">
+
+  <!-- Header Section -->
+  <div class="text-center mb-5">
+    <span class="font-mono text-info small text-uppercase" style="letter-spacing: 2px;">
+      Bespoke Architecture & Engineering
+    </span>
+    <h1 class="display-5 fw-bold text-white mt-1">Enterprise Services & Development</h1>
+    <p class="text-muted mx-auto" style="max-width: 650px; font-size: 1rem; line-height: 1.7;">
+      From custom Google Sheets ERP pipelines and PostgreSQL backends to WhatsApp Cloud API bots and Android/Flutter frontend engineering.
+    </p>
+  </div>
+
+  <!-- Services Grid -->
+  <div class="row g-4 mb-5">
+    {% for service in services %}
+    <div class="col-lg-4 col-md-6">
+      <div class="service-card">
+        <div>
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <div class="service-icon-box" style="background: rgba(6, 182, 212, 0.12); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3);">
+              <i class="fa-solid {{ service.icon | default('fa-cubes') }}"></i>
+            </div>
+            <span class="badge bg-dark border border-secondary font-mono small text-white px-2 py-1">
+              {{ service.category | default('Engineering') }}
+            </span>
+          </div>
+
+          <h4 class="fs-5 mb-2">{{ service.title }}</h4>
+          <p class="small mb-4" style="line-height: 1.7;">
+            {{ service.description }}
+          </p>
+
+          <h6 class="text-uppercase font-mono small text-muted mb-2" style="font-size: 0.72rem; letter-spacing: 1px;">
+            Included Capabilities
+          </h6>
+          <div class="d-flex flex-wrap gap-2 mb-4">
+            {% for feat in service.features %}
+            <span class="feature-pill">
+              <i class="fa-solid fa-check"></i> {{ feat }}
+            </span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="pt-3 border-top border-secondary-subtle d-flex align-items-center justify-content-between">
+          <div>
+            <small class="d-block text-muted font-mono" style="font-size: 0.68rem;">INVESTMENT</small>
+            <span class="service-price-tag">{{ service.price }}</span>
+          </div>
+          <a href="https://wa.me/917217723569?text=Hello%20NEXUS,%20I%20am%20interested%20in%20your%20{{ service.title|urlencode }}%20service." 
+             target="_blank" 
+             rel="noopener"
+             class="btn-nexus-primary">
+            <span>Inquire</span> <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Bottom CTA: Custom Scope -->
+  <div class="service-card p-4 p-md-5 text-center" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(6, 182, 212, 0.12)); border-color: rgba(6, 182, 212, 0.35);">
+    <h3 class="fw-bold text-white mb-2">Have a Different Scope or Specific Stack Requirement?</h3>
+    <p class="mx-auto mb-4" style="max-width: 620px; font-size: 0.95rem; color: #CBD5E1 !important;">
+      We construct end-to-end custom systems based on your exact requirements, schemas, and API credentials.
+    </p>
+    <div class="d-flex justify-content-center flex-wrap gap-3">
+      <a href="{{ url_for('interactions.custom_order') }}" class="btn-nexus-primary px-4 py-2">
+        <i class="fa-solid fa-file-invoice"></i> Submit Custom Project Brief
+      </a>
+      <a href="https://wa.me/917217723569?text=Hi%20NEXUS,%20I%20want%20to%20discuss%20a%20custom%20architecture" 
+         target="_blank" 
+         rel="noopener" 
+         class="btn-nexus-outline px-4 py-2">
+        <i class="fa-brands fa-whatsapp text-success"></i> Direct Tech Call on WhatsApp
+      </a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

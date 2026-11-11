@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block title %}Ready-to-Use Digital Products // NEXUS{% endblock %}
+
+{% block content %}
+<style>
+  /* ========================================================
+     PRODUCT CARDS HIGH-CONTRAST DARK THEME OVERRIDES
+     ======================================================== */
+  .product-catalog-scope {
+    color: #F8FAFC;
+  }
+
+  /* Force all card headings to bright white */
+  .product-catalog-scope .nexus-card h4,
+  .product-catalog-scope .nexus-card h5,
+  .product-catalog-scope .nexus-card h3 {
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+  }
+
+  /* Force descriptions and paragraphs to readable light slate */
+  .product-catalog-scope .nexus-card p,
+  .product-catalog-scope .nexus-card .card-desc {
+    color: #CBD5E1 !important; /* Soft high-contrast text */
+  }
+
+  /* Override Bootstrap's dark text-slate class */
+  .product-catalog-scope .text-slate,
+  .product-catalog-scope small.text-slate,
+  .product-catalog-scope span.text-slate {
+    color: #94A3B8 !important; /* Crisp light grayish blue */
+  }
+
+  /* Card footer labels & currency badges */
+  .product-catalog-scope .price-label {
+    color: #94A3B8 !important;
+    font-size: 0.7rem;
+    font-family: var(--font-mono, monospace);
+  }
+
+  .product-catalog-scope .price-amount {
+    color: #06B6D4 !important; /* Vibrant Cyan */
+    font-weight: 800;
+  }
+
+  .product-catalog-scope .nexus-card {
+    background: #0F172A !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 18px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .product-catalog-scope .nexus-card:hover {
+    border-color: #06B6D4 !important;
+    box-shadow: 0 16px 36px -10px rgba(6, 182, 212, 0.25);
+    transform: translateY(-6px);
+  }
+</style>
+
+<div class="container product-catalog-scope py-3">
+  <div class="text-center mb-5">
+    <span class="font-mono text-info small text-uppercase">Direct Downloads & Source Packages</span>
+    <h1 class="display-5 fw-bold text-white mt-1">Ready-Made Software & Automations</h1>
+    <p class="text-slate mx-auto" style="max-width: 620px;">
+      Pre-tested Google Sheets ERP bridges, Python web backends, and WhatsApp automation bots. Click any item to inspect features and the full video guide.
+    </p>
+  </div>
+
+  <div class="row g-4">
+    {% for product in products %}
+    <div class="col-md-6 col-lg-4">
+      <div class="nexus-card d-flex flex-column justify-content-between h-100">
+        <div>
+          <!-- Thumbnail & Category Badge -->
+          <div class="rounded-4 overflow-hidden mb-3 position-relative" style="height: 195px; background: #05080E;">
+            <img src="{{ product.image_url or product.Image or product.image or 'https://placehold.co/600x400/0f172a/06b6d4?text=Nexus+Tool' }}" 
+                 alt="{{ product.name or product.Title or 'Product' }}" 
+                 class="w-100 h-100 object-fit-cover">
+            <span class="badge bg-dark border border-secondary position-absolute top-0 end-0 m-3 font-mono small text-white">
+              {{ product.category or product.Category or 'Digital Tool' }}
+            </span>
+          </div>
+
+          <!-- Product Title -->
+          <h4 class="fs-5 mb-2">
+            {{ product.name or product.Title or product.title or 'Unnamed Product' }}
+          </h4>
+
+          <!-- Product Description -->
+          <p class="card-desc small mb-3" style="line-height: 1.6;">
+            {{ product.short_description or product.Description or product.description or 'No description provided.' }}
+          </p>
+        </div>
+
+        <!-- Card Footer: Pricing and Action -->
+        <div class="pt-3 border-top border-secondary-subtle d-flex align-items-center justify-content-between">
+          <div>
+            <span class="price-label d-block text-uppercase">ONE-TIME ASSET</span>
+            <span class="fs-4 price-amount font-mono">₹{{ product.price or product.Price or '0' }}</span>
+          </div>
+          <a href="{{ url_for('products.detail', product_id=product.id or product.ID) }}" class="btn-nexus-primary">
+            <span>Details & Guide</span> <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-5">
+      <p class="text-slate-400 ">
+        No products found in the catalog. Check connection or clear cache.
+      </p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

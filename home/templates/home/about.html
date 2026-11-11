@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}About Us // NEXUS Platforms{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <!-- Hero Section -->
+  <div class="row align-items-center mb-5">
+    <div class="col-lg-8 mx-auto text-center">
+      <span class="badge bg-info text-dark font-mono mb-3 px-3 py-2 rounded-pill">
+        <i class="fa-solid fa-code-merge me-1"></i> Engineering Excellence
+      </span>
+      <h1 class="display-4 fw-bold text-white mb-3 font-mono">
+        Empowering Scale Through <span class="text-info">Smart Automation</span>
+      </h1>
+      <p class="text-slate lead mb-4">
+        NEXUS is engineered to bridge the gap between complex enterprise workflows and rapid, lightweight deployment. We build production-ready Google Sheets ERPs, Flask microservices, and WhatsApp AI bridges.
+      </p>
+    </div>
+  </div>
+
+  <!-- Core Pillars Grid -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-4">
+      <div class="nexus-card">
+        <div class="text-info fs-3 mb-3">
+          <i class="fa-solid fa-bolt"></i>
+        </div>
+        <h4 class="text-white fw-bold mb-2">Rapid Deployment</h4>
+        <p class="text-slate small mb-0">
+          Get fully functional automation tools, source code packages, and live setup video guides within minutes of acquisition.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="nexus-card">
+        <div class="text-info fs-3 mb-3">
+          <i class="fa-solid fa-database"></i>
+        </div>
+        <h4 class="text-white fw-bold mb-2">Lightweight Backends</h4>
+        <p class="text-slate small mb-0">
+          Leverage Google Sheets as a high-speed database backed by Python Flask, optimized with custom caching and batch fetching strategies.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="nexus-card">
+        <div class="text-info fs-3 mb-3">
+          <i class="fa-solid fa-headset"></i>
+        </div>
+        <h4 class="text-white fw-bold mb-2">Direct Developer Support</h4>
+        <p class="text-slate small mb-0">
+          Work directly with builders and engineers via our WhatsApp concierge for custom enterprise integrations and bespoke builds.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Call to Action Banner -->
+  <div class="row">
+    <div class="col-12">
+      <div class="nexus-card text-center p-5 position-relative overflow-hidden">
+        <div class="position-relative z-1">
+          <h3 class="text-white fw-bold mb-3 font-mono">Ready to Automate Your Workflow?</h3>
+          <p class="text-slate mb-4 max-w-500 mx-auto">
+            Explore our catalog of ready-made tools or request a custom architecture built specifically for your business operations.
+          </p>
+          <div class="d-flex justify-content-center gap-3">
+            <a href="{{ url_for('products.list_products') }}" class="btn-nexus-primary">
+              <i class="fa-solid fa-box-open"></i> Browse Catalog
+            </a>
+            <a href="{{ url_for('interactions.custom_order') }}" class="btn-nexus-outline">
+              <i class="fa-solid fa-hammer"></i> Request Custom Build
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

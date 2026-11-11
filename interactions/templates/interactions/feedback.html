@@ -1,0 +1,318 @@
+{% extends 'base.html' %}
+{% block title %}Product Feedback & Feature Suggestions // NEXUS{% endblock %}
+
+{% block content %}
+<style>
+  :root {
+    --text-pure: #FFFFFF;
+    --text-body: #CBD5E1;
+    --text-sub: #94A3B8;
+    --card-surface: #0E1626;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-glow: rgba(6, 182, 212, 0.35);
+    --accent-cyan: #06B6D4;
+    --accent-emerald: #10B981;
+    --accent-violet: #6366F1;
+  }
+
+  .feedback-scope {
+    color: var(--text-body);
+  }
+
+  .feedback-scope h1,
+  .feedback-scope h2,
+  .feedback-scope h3,
+  .feedback-scope h4,
+  .feedback-scope h5 {
+    color: var(--text-pure) !important;
+    font-weight: 700;
+  }
+
+  .feedback-scope p {
+    color: var(--text-body) !important;
+  }
+
+  .feedback-card {
+    background: var(--card-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: 2.25rem;
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Input fields */
+  .form-control-nexus {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid var(--border-subtle) !important;
+    color: #FFFFFF !important;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    transition: all 0.25s ease;
+  }
+
+  .form-control-nexus:focus {
+    background: rgba(255, 255, 255, 0.07) !important;
+    border-color: var(--accent-cyan) !important;
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.2) !important;
+    color: #FFFFFF !important;
+    outline: none;
+  }
+
+  /* Fixed Dropdown Selection Styling */
+  .form-select-nexus {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid var(--border-subtle) !important;
+    color: #FFFFFF !important;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    transition: all 0.25s ease;
+  }
+
+  .form-select-nexus:focus {
+    background-color: rgba(255, 255, 255, 0.07) !important;
+    border-color: var(--accent-cyan) !important;
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.2) !important;
+    color: #FFFFFF !important;
+    outline: none;
+  }
+
+  /* High-contrast options inside the dropdown popup across all OS/Browsers */
+  .form-select-nexus option {
+    background-color: #0E1626 !important;
+    color: #F8FAFC !important;
+    padding: 10px;
+  }
+
+  .form-label-nexus {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-pure);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-mono, monospace);
+  }
+
+  /* Rating Selector Component */
+  .rating-options {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .rating-radio {
+    display: none;
+  }
+
+  .rating-label {
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-body);
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .rating-label:hover {
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+  }
+
+  .rating-radio:checked + .rating-label {
+    background: rgba(6, 182, 212, 0.15);
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+    box-shadow: 0 0 14px rgba(6, 182, 212, 0.3);
+  }
+
+  .info-bullet {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .info-bullet-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(99, 102, 241, 0.12);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    color: var(--accent-violet);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.95rem;
+  }
+
+  /* Submit Button Disabled State */
+  .btn-nexus-primary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+</style>
+
+<div class="container feedback-scope py-4">
+  <div class="text-center mb-5">
+    <span class="font-mono text-info small text-uppercase" style="letter-spacing: 2px;">
+      Community Driven Evolution
+    </span>
+    <h1 class="display-5 fw-bold text-white mt-1">Platform Feedback & Ideas</h1>
+    <p class="text-muted mx-auto" style="max-width: 620px; font-size: 1rem; line-height: 1.7; color: #94A3B8 !important;">
+      Encountered a bug, need an update on a Google Sheet ERP template, or want a new tool added to our catalog? We read every submission.
+    </p>
+  </div>
+
+  <div class="row g-5 align-items-start">
+    <!-- Left Column: Form -->
+    <div class="col-lg-7">
+      <div class="feedback-card">
+        <form method="POST" action="{{ url_for('interactions.feedback') }}" id="feedbackForm">
+          
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label form-label-nexus">Your Name</label>
+              <input type="text" name="name" class="form-control form-control-nexus" placeholder="Alex Dev" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label form-label-nexus">Email Address (Optional)</label>
+              <input type="email" name="email" class="form-control form-control-nexus" placeholder="alex@company.com">
+            </div>
+          </div>
+
+          <!-- Rating Selector -->
+          <div class="mb-4">
+            <label class="form-label form-label-nexus d-block">Overall Satisfaction</label>
+            <div class="rating-options">
+              <input type="radio" id="rate5" name="rating" value="5 Stars" class="rating-radio" checked>
+              <label for="rate5" class="rating-label"><i class="fa-solid fa-star text-warning"></i> 5.0 (Exceptional)</label>
+
+              <input type="radio" id="rate4" name="rating" value="4 Stars" class="rating-radio">
+              <label for="rate4" class="rating-label"><i class="fa-solid fa-star text-warning"></i> 4.0 (Good)</label>
+
+              <input type="radio" id="rate3" name="rating" value="3 Stars" class="rating-radio">
+              <label for="rate3" class="rating-label"><i class="fa-solid fa-star text-warning"></i> 3.0 (Average)</label>
+
+              <input type="radio" id="rate1" name="rating" value="Needs Work" class="rating-radio">
+              <label for="rate1" class="rating-label"><i class="fa-solid fa-triangle-exclamation text-danger"></i> Needs Work</label>
+            </div>
+          </div>
+
+          <!-- Feedback Type -->
+          <div class="mb-4">
+            <label class="form-label form-label-nexus">Feedback Category</label>
+            <select name="category" class="form-select form-select-nexus" required>
+              <option value="Product Improvement">Product Improvement / Code Patch</option>
+              <option value="New Script Request">New Script / Tool Request</option>
+              <option value="Google Sheet ERP Suggestion">Google Sheet ERP Suggestion</option>
+              <option value="Bug Report">Bug Report</option>
+              <option value="General Testimonial">General Review / Testimonial</option>
+            </select>
+          </div>
+
+          <!-- Message -->
+          <div class="mb-4">
+            <label class="form-label form-label-nexus">Your Suggestions or Review</label>
+            <textarea name="message" rows="5" class="form-control form-control-nexus" placeholder="Tell us what worked smoothly, what needs improvement, or what product we should build next..." required></textarea>
+          </div>
+
+          <!-- Submit Button with Dynamic Loader State -->
+          <button type="submit" id="feedbackSubmitBtn" class="btn-nexus-primary w-100 justify-content-center py-3 fs-6">
+            <span id="btnIcon" class="me-2"><i class="fa-solid fa-paper-plane"></i></span>
+            <span id="btnText">Send Feedback to Product Board</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Right Column: Context Information -->
+    <div class="col-lg-5">
+      <div class="feedback-card mb-4" style="border-color: var(--border-glow);">
+        <h4 class="fs-5 mb-4">
+          <i class="fa-solid fa-bolt text-info me-2"></i> How Your Feedback Shapes NEXUS
+        </h4>
+
+        <div class="d-flex flex-column gap-4">
+          <div class="info-bullet">
+            <div class="info-bullet-icon"><i class="fa-solid fa-code-merge"></i></div>
+            <div>
+              <h6 class="text-white mb-1 fs-6">Direct Backlog Sync</h6>
+              <p class="small mb-0" style="color: #94A3B8 !important;">Every verified feature suggestion is imported directly to our development roadmap.</p>
+            </div>
+          </div>
+
+          <div class="info-bullet">
+            <div class="info-bullet-icon"><i class="fa-solid fa-bug-slash"></i></div>
+            <div>
+              <h6 class="text-white mb-1 fs-6">Same-Day Patch Delivery</h6>
+              <p class="small mb-0" style="color: #94A3B8 !important;">Discovered an issue with a Google Sheet macro or webhook endpoint? We issue patches directly to repository buyers.</p>
+            </div>
+          </div>
+
+          <div class="info-bullet">
+            <div class="info-bullet-icon"><i class="fa-solid fa-certificate"></i></div>
+            <div>
+              <h6 class="text-white mb-1 fs-6">Top Contributor Credit</h6>
+              <p class="small mb-0" style="color: #94A3B8 !important;">Significant product ideas qualify for free access to new template versions upon release.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Emergency Assistance Box -->
+      <div class="feedback-card text-center p-4">
+        <i class="fa-solid fa-headset text-info mb-3" style="font-size: 2.25rem;"></i>
+        <h5 class="fs-6 mb-2">Facing an urgent deployment issue?</h5>
+        <p class="small mb-3" style="color: #94A3B8 !important;">
+          If an automation script is failing in production, reach our emergency WhatsApp engineering desk directly.
+        </p>
+        <a href="https://wa.me/917217723569?text=Hello%20NEXUS,%20I%20need%20urgent%20support%20regarding%20a%20purchased%20tool." 
+           target="_blank" 
+           rel="noopener" 
+           class="btn-nexus-outline w-100 justify-content-center py-2">
+          <i class="fa-brands fa-whatsapp text-success me-1"></i> Emergency Tech Desk
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Form Submission Loader Script -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('feedbackForm');
+    const submitBtn = document.getElementById('feedbackSubmitBtn');
+    const btnIcon = document.getElementById('btnIcon');
+    const btnText = document.getElementById('btnText');
+
+    form.addEventListener('submit', function (e) {
+      // Validate HTML5 required fields before applying loader
+      if (!form.checkValidity()) {
+        return; // Allow native validation tooltips to appear
+      }
+
+      // 1. Disable button to prevent multi-clicks
+      submitBtn.disabled = true;
+
+      // 2. Replace icon with Bootstrap spinning loader
+      btnIcon.innerHTML = `<span class="spinner-border spinner-border-sm text-light" role="status" aria-hidden="true"></span>`;
+
+      // 3. Update button text
+      btnText.textContent = 'Logging Feedback to Sheets...';
+
+      // Note: form submits naturally via POST to interactions.feedback
+    });
+  });
+</script>
+{% endblock %}

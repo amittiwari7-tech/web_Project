@@ -1,0 +1,351 @@
+{% extends 'base.html' %}
+{% block title %}NEXUS // Production-Ready Digital Tools, ERPs & Automation{% endblock %}
+
+{% block content %}
+<style>
+  /* ========================================================
+     TEXT COLOR FIXES & THEME OVERRIDES
+     ======================================================== */
+  :root {
+    --text-muted: #94A3B8;
+    --text-light: #F8FAFC;
+  }
+
+  p {
+    color: #CBD5E1 !important;
+  }
+
+  .text-muted {
+    color: #94A3B8 !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #FFFFFF !important;
+  }
+
+  /* ========================================================
+     HERO & INTERACTIVE ELEMENTS
+     ======================================================== */
+  .hero-container {
+    position: relative;
+    border-radius: 28px;
+    border: 1px solid var(--border-color);
+    background: radial-gradient(circle at 85% 15%, rgba(99, 102, 241, 0.18), transparent 50%),
+                radial-gradient(circle at 15% 85%, rgba(6, 182, 212, 0.15), transparent 50%),
+                var(--bg-card);
+    padding: 4.5rem 3rem;
+    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 50px;
+    background: rgba(6, 182, 212, 0.1);
+    border: 1px solid rgba(6, 182, 212, 0.35);
+    color: var(--accent-cyan);
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  .pulse-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--accent-cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent-cyan);
+    animation: pulseGlow 2s infinite ease-in-out;
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.5; }
+  }
+
+  .stat-badge {
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.25rem;
+    text-align: center;
+    transition: var(--transition);
+  }
+
+  .stat-badge:hover {
+    border-color: var(--accent-cyan);
+    transform: translateY(-4px);
+  }
+
+  .category-icon-box {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #38BDF8, #818CF8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+</style>
+
+<div class="container my-3">
+
+  <!-- ========================================================
+       1. HERO SHOWCASE
+       ======================================================== -->
+  <div class="hero-container mb-5">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-8">
+        <div class="status-pill mb-3">
+          <span class="pulse-dot"></span>
+          <span>100% Verified Digital Assets &bull; Direct Source Code &bull; Video Setup</span>
+        </div>
+        <h1 class="display-4 fw-bolder text-white mb-3" style="line-height: 1.15; letter-spacing: -1.5px;">
+          Deploy <span class="text-gradient">Ready-Made Software & Automations</span> in Minutes
+        </h1>
+        <p class="mb-4 lead fs-6" style="max-width: 650px; line-height: 1.8; color: #E2E8F0 !important;">
+          Skip months of development. Grab fully functional Google Sheets ERP bridges, Python web applications, Flutter mobile kits, and WhatsApp conversational AI tools—complete with video manuals and setup code.
+        </p>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="{{ url_for('products.list_products') }}" class="btn-nexus-primary px-4 py-3 fs-6">
+            <i class="fa-solid fa-bolt"></i> Explore Ready Tools
+          </a>
+          <a href="{{ url_for('interactions.custom_order') }}" class="btn-nexus-outline px-4 py-3 fs-6">
+            <i class="fa-solid fa-wand-magic-sparkles text-info"></i> Request Custom Build
+          </a>
+        </div>
+      </div>
+
+      <!-- Hero Visual Card -->
+      <div class="col-lg-4 d-none d-lg-block">
+        <div class="p-4 rounded-4" style="background: rgba(7, 11, 20, 0.85); border: 1px solid var(--border-color);">
+          <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-secondary-subtle">
+            <span class="font-mono small text-info"><i class="fa-solid fa-box-archive me-1"></i> Delivery Guarantee</span>
+            <span class="badge bg-success font-mono">Live Sync</span>
+          </div>
+          <ul class="list-unstyled mb-0 d-flex flex-column gap-3 small text-light">
+            <li class="d-flex align-items-center"><i class="fa-solid fa-circle-check text-success me-2"></i> Instant GitHub / Drive Archive Access</li>
+            <li class="d-flex align-items-center"><i class="fa-solid fa-circle-check text-success me-2"></i> Step-by-Step Video Implementation Guide</li>
+            <li class="d-flex align-items-center"><i class="fa-solid fa-circle-check text-success me-2"></i> Clean Architecture & Zero Third-Party Lock-in</li>
+            <li class="d-flex align-items-center"><i class="fa-solid fa-circle-check text-success me-2"></i> Direct Setup Support on WhatsApp</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       2. PLATFORM METRICS
+       ======================================================== -->
+  <div class="row g-3 mb-5">
+    <div class="col-6 col-md-3">
+      <div class="stat-badge">
+        <h3 class="fw-bold font-mono text-white mb-1">50+</h3>
+        <span class="small text-muted">Tested Scripts & Tools</span>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-badge">
+        <h3 class="fw-bold font-mono mb-1" style="color: var(--accent-cyan);">100%</h3>
+        <span class="small text-muted">Guided Video Manuals</span>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-badge">
+        <h3 class="fw-bold font-mono mb-1" style="color: var(--accent-emerald);">&lt; 10s</h3>
+        <span class="small text-muted">Instant Asset Access</span>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-badge">
+        <h3 class="fw-bold font-mono mb-1" style="color: var(--accent-violet);">24/7</h3>
+        <span class="small text-muted">Active WhatsApp Support</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       3. SPECIALIZED PRODUCT CATEGORIES
+       ======================================================== -->
+  <div class="mb-5">
+    <div class="mb-4">
+      <span class="font-mono text-uppercase small" style="color: var(--accent-cyan); letter-spacing: 2px;">Architectures</span>
+      <h2 class="h3 fw-bold text-white mb-0">What You Can Buy & Deploy Today</h2>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="nexus-card">
+          <div class="category-icon-box" style="background: rgba(16, 185, 129, 0.12); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3);">
+            <i class="fa-solid fa-table"></i>
+          </div>
+          <h5 class="fw-bold text-white fs-6 mb-2">Google Sheets & Apps Script</h5>
+          <p class="mb-0 text-muted small" style="line-height: 1.7;">
+            Automated ERP ledgers, real-time sync with SQL, dynamic PDF invoice generators, and webhook web apps.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="nexus-card">
+          <div class="category-icon-box" style="background: rgba(99, 102, 241, 0.12); color: var(--accent-violet); border: 1px solid rgba(99, 102, 241, 0.3);">
+            <i class="fa-brands fa-python"></i>
+          </div>
+          <h5 class="fw-bold text-white fs-6 mb-2">Python & Flask Web Portals</h5>
+          <p class="mb-0 text-muted small" style="line-height: 1.7;">
+            Production-ready admin consoles, CRM microservices, PostgreSQL architectures, and JWT auth workflows.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="nexus-card">
+          <div class="category-icon-box" style="background: rgba(6, 182, 212, 0.12); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3);">
+            <i class="fa-brands fa-whatsapp"></i>
+          </div>
+          <h5 class="fw-bold text-white fs-6 mb-2">WhatsApp Bots & Automation</h5>
+          <p class="mb-0 text-muted small" style="line-height: 1.7;">
+            Automated lead capturing engines, order notification dispatchers, and conversational customer-support bots.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="nexus-card">
+          <div class="category-icon-box" style="background: rgba(245, 158, 11, 0.12); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3);">
+            <i class="fa-solid fa-mobile-screen"></i>
+          </div>
+          <h5 class="fw-bold text-white fs-6 mb-2">Mobile & App UI Templates</h5>
+          <p class="mb-0 text-muted small" style="line-height: 1.7;">
+            Cross-platform Flutter templates, local SQLite synchronizers, camera scanners, and modern dark-mode layouts.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       4. FEATURED PRODUCTS (DYNAMIC DATA FROM GOOGLE SHEETS)
+       ======================================================== -->
+  <div class="mb-5">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+      <div>
+        <span class="font-mono text-uppercase small" style="color: var(--accent-cyan); letter-spacing: 2px;">Pre-Built Assets</span>
+        <h2 class="h3 fw-bold text-white mb-0">Featured Ready-to-Use Products</h2>
+      </div>
+      <a href="{{ url_for('products.list_products') }}" class="btn-nexus-outline py-2 px-3 small font-mono">
+        <span>View Full Catalog</span> <i class="fa-solid fa-arrow-right ms-1"></i>
+      </a>
+    </div>
+
+    <div class="row g-4">
+      {% for product in products %}
+      <div class="col-md-6 col-lg-4">
+        <div class="nexus-card d-flex flex-column justify-content-between">
+          <div>
+            <div class="rounded-4 overflow-hidden mb-3 position-relative" style="height: 195px; background: #05080E;">
+             <img src="{{ product.image_url }}=s0" alt="{{ product.name }}" class="w-100 h-100 object-fit-cover">
+              <span class="badge bg-dark border border-secondary position-absolute top-0 end-0 m-3 font-mono small text-white">
+                {{ product.category }}
+              </span>
+            </div>
+            <h4 class="fw-bold text-white fs-5 mb-2">{{ product.name }}</h4>
+            <p class="text-muted small mb-3" style="line-height: 1.6;">
+              {{ product.short_description }}
+            </p>
+          </div>
+
+          <div class="pt-3 border-top border-secondary-subtle d-flex align-items-center justify-content-between">
+            <div>
+              <span class="font-mono text-muted d-block small" style="font-size: 0.65rem;">ONE-TIME UNLOCK</span>
+              <span class="fs-4 fw-bold font-mono text-white">₹{{ product.price }}</span>
+            </div>
+            <a href="{{ url_for('products.detail', product_id=product.id) }}" class="btn-nexus-primary">
+              <span>View Guide</span> <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="col-12">
+        <div class="nexus-card text-center py-5">
+          <i class="fa-solid fa-cloud-arrow-down fs-1 text-info mb-3"></i>
+          <h4 class="fw-bold text-white">Connecting to Database...</h4>
+          <p class="text-muted small mb-0">Ensure your Apps Script URL is set in <code>config.py</code>.</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- ========================================================
+       5. STEP-BY-STEP WORKFLOW
+       ======================================================== -->
+  <div class="mb-5">
+    <div class="text-center mb-4">
+      <span class="font-mono text-uppercase small" style="color: var(--accent-cyan); letter-spacing: 2px;">Quick Onboarding</span>
+      <h2 class="h3 fw-bold text-white mt-1">How Instant Access Works</h2>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="nexus-card">
+          <span class="badge bg-dark border border-info text-info font-mono mb-3">STEP 01</span>
+          <h5 class="fw-bold text-white mb-2">Select Your Pre-Built Tool</h5>
+          <p class="text-muted small mb-0" style="line-height: 1.6;">
+            Browse verified scripts, ERP templates, or WhatsApp bots. Inspect code features and watch the live video demo right on the product page.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="nexus-card">
+          <span class="badge bg-dark border border-info text-info font-mono mb-3">STEP 02</span>
+          <h5 class="fw-bold text-white mb-2">Automated Code Unlock</h5>
+          <p class="text-muted small mb-0" style="line-height: 1.6;">
+            Click buy to connect directly via our automated WhatsApp/payment pipeline to receive your immediate source link, script key, and asset bundle.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="nexus-card">
+          <span class="badge bg-dark border border-info text-info font-mono mb-3">STEP 03</span>
+          <h5 class="fw-bold text-white mb-2">Watch Guide & Deploy</h5>
+          <p class="text-muted small mb-0" style="line-height: 1.6;">
+            Follow the included video guide to plug in your environment variables and start running. Need a custom tweak? Our team handles adjustments.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       6. CUSTOM BUILD CTA BANNER
+       ======================================================== -->
+  <div class="nexus-card p-4 p-md-5 text-center" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(6, 182, 212, 0.12)); border-color: rgba(6, 182, 212, 0.35);">
+    <h3 class="fw-bold text-white mb-2">Need a Bespoke Script or Enterprise ERP Solution?</h3>
+    <p class="mx-auto mb-4 text-light" style="max-width: 600px; font-size: 0.95rem; color: #CBD5E1 !important;">
+      We engineer custom Google Sheets automations, Python Flask backends, and WhatsApp AI bots tailored directly to your business workflow.
+    </p>
+    <div class="d-flex justify-content-center flex-wrap gap-3">
+      <a href="{{ url_for('interactions.custom_order') }}" class="btn-nexus-primary px-4 py-2">
+        <i class="fa-solid fa-code"></i> Request Custom Project
+      </a>
+      <a href="https://wa.me/917217723569?text=Hi%20NEXUS,%20I%20am%20interested%20in%20a%20custom%20build" target="_blank" class="btn-nexus-outline px-4 py-2">
+        <i class="fa-brands fa-whatsapp text-success"></i> Direct Chat on WhatsApp
+      </a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

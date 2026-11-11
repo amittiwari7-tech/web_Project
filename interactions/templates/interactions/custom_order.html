@@ -1,0 +1,260 @@
+{% extends 'base.html' %}
+{% block title %}Request Custom Build // Enterprise ERP, Bots & Software{% endblock %}
+
+{% block content %}
+<style>
+  :root {
+    --text-pure: #FFFFFF;
+    --text-body: #CBD5E1;
+    --text-sub: #94A3B8;
+    --card-surface: #0E1626;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-glow: rgba(6, 182, 212, 0.35);
+    --accent-cyan: #06B6D4;
+    --accent-emerald: #10B981;
+    --accent-violet: #6366F1;
+  }
+
+  .order-scope {
+    color: var(--text-body);
+  }
+
+  .order-scope h1,
+  .order-scope h2,
+  .order-scope h3,
+  .order-scope h4,
+  .order-scope h5 {
+    color: var(--text-pure) !important;
+    font-weight: 700;
+  }
+
+  .order-scope p {
+    color: var(--text-body) !important;
+  }
+
+  .order-card {
+    background: var(--card-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: 2.25rem;
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+  }
+
+  .form-control-nexus,
+  .form-select-nexus {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid var(--border-subtle) !important;
+    color: #FFFFFF !important;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    transition: all 0.25s ease;
+  }
+
+  .form-control-nexus:focus,
+  .form-select-nexus:focus {
+    background: rgba(255, 255, 255, 0.07) !important;
+    border-color: var(--accent-cyan) !important;
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.2) !important;
+    color: #FFFFFF !important;
+    outline: none;
+  }
+
+  .form-select-nexus option {
+    background-color: #0E1626 !important;
+    color: #FFFFFF !important;
+    padding: 10px;
+  }
+
+  .form-label-nexus {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-pure);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-mono, monospace);
+  }
+
+  .sidebar-step {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .step-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(6, 182, 212, 0.12);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    color: var(--accent-cyan);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+  }
+
+  /* Submit Button Disabled State */
+  .btn-nexus-primary:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+</style>
+
+<div class="container order-scope py-4">
+  <div class="text-center mb-5">
+    <span class="font-mono text-info small text-uppercase" style="letter-spacing: 2px;">
+      Tailored Engineering & Builds
+    </span>
+    <h1 class="display-5 fw-bold text-white mt-1">Request a Custom Project</h1>
+    <p class="text-muted mx-auto" style="max-width: 620px; font-size: 1rem; line-height: 1.7; color: #94A3B8 !important;">
+      Need a customized Google Sheet ERP bridge, a WhatsApp Cloud API notification engine, or a full-stack Python portal? Provide your details below for a quote within 24 hours.
+    </p>
+  </div>
+
+  <div class="row g-5 align-items-start">
+    <!-- Left Column: Inquiry Form -->
+    <div class="col-lg-7">
+      <div class="order-card">
+        <form method="POST" action="{{ url_for('interactions.custom_order') }}" id="customOrderForm">
+          
+          <div class="mb-4">
+            <label class="form-label form-label-nexus">Your Full Name</label>
+            <input type="text" name="name" class="form-control form-control-nexus" placeholder="e.g., Alex Johnson" required>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label form-label-nexus">Work Email</label>
+              <input type="email" name="email" class="form-control form-control-nexus" placeholder="alex@company.com" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label form-label-nexus">WhatsApp / Phone</label>
+              <input type="text" name="phone" class="form-control form-control-nexus" placeholder="+91 98765 43210" required>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label form-label-nexus">Project Type</label>
+              <select name="service_type" class="form-select form-select-nexus" required>
+                <option value="" disabled selected>Select an architecture...</option>
+                <option value="Google Sheets ERP / Automation">Google Sheets ERP / Automation</option>
+                <option value="WhatsApp Cloud API / Bot">WhatsApp Cloud API / Bot</option>
+                <option value="Python Flask / FastAPI Backend">Python Flask / FastAPI Backend</option>
+                <option value="Mobile App (Flutter / Android)">Mobile App (Flutter / Android)</option>
+                <option value="Web Scraper / Data Pipeline">Web Scraper / Data Pipeline</option>
+                <option value="Other Custom Solution">Other Custom Solution</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label form-label-nexus">Estimated Budget</label>
+              <select name="budget" class="form-select form-select-nexus" required>
+                <option value="" disabled selected>Select budget range...</option>
+                <option value="₹2,500 – ₹5,000">₹2,500 – ₹5,000 (Small script/macro)</option>
+                <option value="₹5,000 – ₹15,000">₹5,000 – ₹15,000 (Bot/Dashboard)</option>
+                <option value="₹15,000 – ₹35,000">₹15,000 – ₹35,000 (Full ERP/App build)</option>
+                <option value="₹35,000+">₹35,000+ (Enterprise scope)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label form-label-nexus">Detailed Requirements</label>
+            <textarea name="description" rows="5" class="form-control form-control-nexus" placeholder="Explain your current workflow, expected inputs/outputs, preferred timelines, and any third-party APIs you want connected..." required></textarea>
+          </div>
+
+          <!-- Submit Button with Dynamic Loader Container -->
+          <button type="submit" id="orderSubmitBtn" class="btn-nexus-primary w-100 justify-content-center py-3 fs-6">
+            <span id="orderBtnIcon" class="me-2"><i class="fa-solid fa-paper-plane"></i></span>
+            <span id="orderBtnText">Submit Brief & Dispatch Quote</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Right Column: What Happens Next & Direct WhatsApp -->
+    <div class="col-lg-5">
+      <div class="order-card mb-4" style="border-color: var(--border-glow);">
+        <h4 class="fs-5 mb-4">
+          <i class="fa-solid fa-timeline text-info me-2"></i> How We Handle Your Build
+        </h4>
+        
+        <div class="d-flex flex-column gap-4">
+          <div class="sidebar-step">
+            <div class="step-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+            <div>
+              <h6 class="text-white mb-1 fs-6">1. Scope Review within 6 Hours</h6>
+              <p class="small mb-0" style="color: #94A3B8 !important;">Our lead engineer reviews your technical requirement and validates feasibility.</p>
+            </div>
+          </div>
+
+          <div class="sidebar-step">
+            <div class="step-icon"><i class="fa-solid fa-file-contract"></i></div>
+            <div>
+              <h6 class="text-white mb-1 fs-6">2. Fixed Quote & Timeline</h6>
+              <p class="small mb-0" style="color: #94A3B8 !important;">We send you a transparent quote with milestones—no unexpected costs or billing surprises.</p>
+            </div>
+          </div>
+
+          <div class="sidebar-step">
+            <div class="step-icon"><i class="fa-solid fa-terminal"></i></div>
+            <div>
+              <h6 class="text-white mb-1 fs-6">3. Build, Walkthrough Video & Handoff</h6>
+              <p class="small mb-0" style="color: #94A3B8 !important;">You receive clean source code, installation scripts, and a private recorded setup guide.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick WhatsApp Alternative Box -->
+      <div class="order-card text-center p-4">
+        <i class="fa-brands fa-whatsapp text-success mb-3" style="font-size: 2.5rem;"></i>
+        <h5 class="fs-6 mb-2">Need to discuss right now?</h5>
+        <p class="small mb-3" style="color: #94A3B8 !important;">
+          Skip the form and start a direct conversation with our engineering lead on WhatsApp.
+        </p>
+        <a href="https://wa.me/917217723569?text=Hi%20NEXUS,%20I%20have%20an%20urgent%20custom%20development%20requirement." 
+           target="_blank" 
+           rel="noopener" 
+           class="btn-nexus-outline w-100 justify-content-center py-2">
+          <i class="fa-brands fa-whatsapp text-success me-1"></i> Quick WhatsApp Ping
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Form Submission Loader Script -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('customOrderForm');
+    const submitBtn = document.getElementById('orderSubmitBtn');
+    const btnIcon = document.getElementById('orderBtnIcon');
+    const btnText = document.getElementById('orderBtnText');
+
+    form.addEventListener('submit', function (e) {
+      // Check HTML5 validity (required fields, valid email pattern, etc.)
+      if (!form.checkValidity()) {
+        return; // Allow native validation tooltips to appear without locking the button
+      }
+
+      // 1. Disable button to prevent duplicate submissions
+      submitBtn.disabled = true;
+
+      // 2. Insert Bootstrap spinner animation
+      btnIcon.innerHTML = `<span class="spinner-border spinner-border-sm text-light" role="status" aria-hidden="true"></span>`;
+
+      // 3. Update button action text
+      btnText.textContent = 'Logging Brief to Google Sheets...';
+
+      // 4. Submit form
+      form.submit();
+    });
+  });
+</script>
+{% endblock %}
