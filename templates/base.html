@@ -3,178 +3,287 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}NEXUS // Digital Solutions & Automation{% endblock %}</title>
-  
-  <!-- Bootstrap 5.3 + FontAwesome 6 + Google Fonts -->
+  <meta name="theme-color" content="#070B19">
+
+  <title>{% block title %}Tech Gyan Amit | Products, Tools & Custom Services{% endblock %}</title>
+
+  <!-- Bootstrap 5.3 + Font Awesome + Google Fonts -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --bg-dark: #070B13;
-      --bg-card: #0F172A;
-      --bg-card-hover: #162038;
-      --border-color: rgba(255, 255, 255, 0.08);
-      --accent-cyan: #06B6D4;
-      --accent-violet: #6366F1;
-      --accent-emerald: #10B981;
-      --text-muted: #94A3B8;
-      --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      --brand-blue: #0066FF;
+      --brand-cyan: #00D2FF;
+      --brand-red: #FF2E4C;
+      --dark-bg: #070B19;          /* Deep Immersive Black/Navy Background */
+      --dark-card: #0F172A;        /* Surface Card Background */
+      --dark-border: rgba(255, 255, 255, 0.12); /* Sharp visible borders */
+      --text-main: #F8FAFC;        /* High-contrast bright white */
+      --text-muted: #94A3B8;       /* Clear readable secondary text */
+      --transition: all .25s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
-      background-color: var(--bg-dark);
-      color: #F8FAFC;
-      font-family: 'Space Grotesk', sans-serif;
-      overflow-x: hidden;
+      margin: 0;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
+      background: var(--dark-bg);
+      color: var(--text-main);
+      font-family: 'DM Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     main {
       flex: 1 0 auto;
+      min-width: 0;
     }
 
-    .font-mono { font-family: 'JetBrains Mono', monospace; }
-
-    /* ========================================================
-        NAVBAR & DROPDOWN STYLING
-        ======================================================== */
-    .nexus-nav {
-      background: rgba(7, 11, 19, 0.85);
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .nav-link {
+    a {
       transition: var(--transition);
-      font-weight: 500;
+      text-decoration: none;
     }
 
-    .nav-link:hover {
-      color: var(--accent-cyan) !important;
+    .font-mono {
+      font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
-    .nexus-dropdown-menu {
-      background: rgba(15, 23, 42, 0.95) !important;
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--border-color) !important;
-      border-radius: 12px;
-      padding: 8px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    /* ==================================
+       NAVBAR (Dark Theme & High Contrast)
+    ================================== */
+    .tga-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1030;
+      width: 100%;
+      padding: 0 !important;
+      background: rgba(7, 11, 25, 0.95);
+      border-bottom: 1px solid var(--dark-border);
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(15px);
     }
 
-    .nexus-dropdown-item {
-      color: #94A3B8;
-      border-radius: 8px;
-      padding: 8px 12px;
-      transition: var(--transition);
-      font-size: 0.9rem;
+    .tga-navbar .container {
+      min-height: 76px;
+      max-width: 1440px;
     }
 
-    .nexus-dropdown-item:hover {
-      background: rgba(6, 182, 212, 0.1);
-      color: var(--accent-cyan);
-    }
-
-    /* ========================================================
-        BUTTONS & UTILITIES
-        ======================================================== */
-    .btn-nexus-primary {
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
-      border: none;
-      color: white;
-      font-weight: 600;
-      padding: 0.65rem 1.4rem;
-      border-radius: 10px;
-      transition: var(--transition);
+    .tga-brand {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       text-decoration: none;
+      flex-shrink: 0;
     }
 
-    .btn-nexus-primary:hover {
-      opacity: 0.92;
+    .tga-brand img {
+      width: 46px;
+      height: 52px;
+      object-fit: contain;
+    }
+
+    .tga-brand-copy {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .tga-brand-name {
+      color: #FFFFFF;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 15px !important;
+      font-weight: 800;
+      letter-spacing: -.3px;
+      white-space: nowrap;
+    }
+
+    .tga-brand-tag {
+      color: var(--brand-cyan);
+      font-size: 9px !important;
+      font-weight: 700;
+      letter-spacing: .8px;
+      margin-top: 4px;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+
+    .tga-navbar .navbar-nav .nav-link {
+      display: block !important;
+      color: #CBD5E1 !important;
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: 13.5px !important;
+      font-weight: 600 !important;
+      padding: 10px 12px !important;
+      border-radius: 8px;
+      white-space: nowrap;
+      transition: var(--transition);
+    }
+
+    .tga-navbar .navbar-nav .nav-link:hover,
+    .tga-navbar .navbar-nav .nav-link:focus {
+      color: var(--brand-cyan) !important;
+      background: rgba(0, 210, 255, 0.08);
+    }
+
+    /* Buttons */
+    .btn-tga-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 10px 14px;
+      background: linear-gradient(135deg, var(--brand-blue), var(--brand-cyan));
+      color: white !important;
+      font-size: 12.5px;
+      font-weight: 700;
+      border: none;
+      border-radius: 9px;
+      white-space: nowrap;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+      transition: var(--transition);
+    }
+
+    .btn-tga-primary:hover {
       transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 210, 255, 0.4);
       color: white;
-      box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.4);
     }
 
-    .btn-nexus-outline {
-      background: transparent;
-      border: 1px solid var(--border-color);
-      color: #F8FAFC;
-      font-weight: 500;
-      padding: 0.65rem 1.4rem;
-      border-radius: 10px;
-      transition: var(--transition);
-      text-decoration: none;
+    .btn-tga-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 9px 13px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      border: 1px solid var(--dark-border);
+      border-radius: 9px;
+      font-size: 12.5px;
+      font-weight: 600;
+      white-space: nowrap;
     }
 
-    .btn-nexus-outline:hover {
-      border-color: var(--accent-cyan);
-      color: var(--accent-cyan);
+    .btn-tga-outline:hover {
+      color: var(--brand-cyan);
+      border-color: var(--brand-cyan);
+      background: rgba(0, 210, 255, 0.05);
     }
 
-    .nexus-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 18px;
-      padding: 1.8rem;
-      transition: var(--transition);
+    .tga-toggler {
+      color: white;
+      border: 1px solid var(--dark-border);
+      border-radius: 9px;
+      padding: 8px 12px;
+      font-size: 19px;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    /* Dropdown */
+    .tga-dropdown {
+      min-width: 220px;
+      padding: 8px;
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: 12px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+    }
+
+    .tga-dropdown .dropdown-item {
+      padding: 10px 12px;
+      color: var(--text-muted);
+      font-size: 13.5px;
+      font-weight: 600;
+      border-radius: 8px;
+    }
+
+    .tga-dropdown .dropdown-item:hover {
+      color: var(--brand-cyan);
+      background: rgba(0, 210, 255, 0.1);
+    }
+
+    /* Cards */
+    .nexus-card,
+    .tga-card {
       height: 100%;
+      padding: 24px;
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      transition: var(--transition);
+      color: var(--text-main);
     }
 
-    .nexus-card:hover {
-      transform: translateY(-6px);
-      border-color: var(--accent-cyan);
-      box-shadow: 0 16px 36px -10px rgba(6, 182, 212, 0.18);
+    .nexus-card:hover,
+    .tga-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--brand-cyan);
+      box-shadow: 0 12px 30px rgba(0, 210, 255, 0.2);
     }
 
-    /* ========================================================
-        LEFT FLOATING SOCIAL DRAWER
-        ======================================================== */
+    /* Flash Messages */
+    .tga-flash-area {
+      padding-top: 15px;
+    }
+
+    .tga-flash-area .alert {
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      color: var(--text-main);
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+      font-weight: 600;
+    }
+
+    /* ==================================
+       FLOATING WIDGETS
+    ================================== */
     .floating-social-wrapper {
       position: fixed;
       left: 20px;
-      bottom: 30px;
-      z-index: 1050;
+      bottom: 25px;
+      z-index: 1040;
       display: flex;
       flex-direction: column-reverse;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .social-trigger-btn {
-      width: 52px;
-      height: 52px;
+      width: 50px;
+      height: 50px;
+      border: none;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
+      background: linear-gradient(135deg, var(--brand-blue), var(--brand-red));
       color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: none;
-      font-size: 1.3rem;
+      font-size: 20px;
       cursor: pointer;
-      box-shadow: 0 8px 24px rgba(6, 182, 212, 0.35);
-      transition: var(--transition);
-    }
-
-    .social-trigger-btn:hover {
-      transform: scale(1.08) rotate(15deg);
+      box-shadow: 0 8px 22px rgba(0, 102, 255, 0.4);
     }
 
     .social-menu {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 9px;
       opacity: 0;
       visibility: hidden;
-      transform: translateY(20px);
+      transform: translateY(15px);
       transition: var(--transition);
     }
 
@@ -185,251 +294,352 @@
     }
 
     .social-icon-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      color: white;
+      width: 43px;
+      height: 43px;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: var(--dark-card);
+      color: var(--text-main);
+      border: 1px solid var(--dark-border);
+      border-radius: 50%;
+      font-size: 18px;
       text-decoration: none;
-      font-size: 1.1rem;
-      transition: var(--transition);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
     }
 
     .social-icon-btn:hover {
-      transform: translateX(6px);
-      color: var(--accent-cyan);
-      border-color: var(--accent-cyan);
+      color: var(--brand-cyan);
+      border-color: var(--brand-cyan);
+      transform: translateX(4px);
     }
 
-    /* ========================================================
-        RIGHT FLOATING AI AGENT ASSISTANT & CHAT DRAWER
-        ======================================================== */
     .floating-ai-wrapper {
       position: fixed;
-      right: 24px;
-      bottom: 30px;
-      z-index: 1060;
+      right: 22px;
+      bottom: 25px;
+      z-index: 1050;
     }
 
     .ai-agent-btn {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #38BDF8, #6366F1);
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      color: white;
+      position: relative;
+      width: 55px;
+      height: 55px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
+      color: white;
+      font-size: 22px;
+      background: radial-gradient(circle at 30% 30%, var(--brand-cyan), var(--brand-blue));
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      box-shadow: 0 8px 25px rgba(0, 102, 255, 0.4);
       cursor: pointer;
-      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.45);
-      transition: var(--transition);
-      position: relative;
     }
 
     .ai-agent-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 12px 35px rgba(6, 182, 212, 0.6);
+      transform: scale(1.07);
     }
 
     .ai-badge {
       position: absolute;
-      top: -2px;
-      right: -2px;
-      background: #10B981;
-      border: 2px solid var(--bg-dark);
-      width: 14px;
-      height: 14px;
+      top: 0;
+      right: 0;
+      width: 13px;
+      height: 13px;
+      border: 2px solid var(--dark-bg);
       border-radius: 50%;
+      background: #10B981;
     }
 
     .ai-chat-box {
       position: fixed;
-      right: 24px;
-      bottom: 100px;
-      width: 360px;
-      max-width: calc(100vw - 48px);
-      height: 480px;
-      background: rgba(15, 23, 42, 0.94);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+      right: 22px;
+      bottom: 92px;
+      z-index: 1050;
+      width: 365px;
+      max-width: calc(100vw - 32px);
+      height: min(490px, calc(100dvh - 125px));
       display: none;
       flex-direction: column;
-      z-index: 1060;
       overflow: hidden;
-      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: 18px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
     }
 
     .ai-chat-header {
-      background: rgba(7, 11, 19, 0.7);
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--border-color);
+      padding: 14px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      color: white;
+      background: rgba(7, 11, 25, 0.9);
+      border-bottom: 1px solid var(--dark-border);
+    }
+
+    .ai-chat-header .ai-agent-btn {
+      width: 36px;
+      height: 36px;
+      font-size: 15px;
+      box-shadow: none;
+      border-width: 1px;
+    }
+
+    .ai-chat-header small {
+      color: var(--brand-cyan);
     }
 
     .ai-chat-messages {
       flex: 1;
+      min-height: 0;
       padding: 16px;
-      overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 11px;
+      overflow-y: auto;
+      background: rgba(4, 6, 15, 0.5);
     }
 
     .chat-msg {
-      max-width: 82%;
-      padding: 10px 14px;
-      border-radius: 14px;
-      font-size: 0.85rem;
-      line-height: 1.5;
+      max-width: 86%;
+      padding: 10px 13px;
+      border-radius: 12px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
     }
 
     .chat-msg.bot {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-color);
-      color: #E2E8F0;
       align-self: flex-start;
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--dark-border);
       border-bottom-left-radius: 4px;
     }
 
     .chat-msg.user {
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
-      color: white;
       align-self: flex-end;
+      color: white;
+      background: linear-gradient(135deg, var(--brand-blue), var(--brand-red));
       border-bottom-right-radius: 4px;
     }
 
     .ai-chat-input-area {
-      padding: 12px;
-      border-top: 1px solid var(--border-color);
-      background: rgba(7, 11, 19, 0.8);
       display: flex;
       gap: 8px;
+      padding: 12px;
+      border-top: 1px solid var(--dark-border);
+      background: var(--dark-card);
     }
 
     .ai-chat-input {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--border-color);
-      color: white;
-      border-radius: 10px;
-      padding: 8px 12px;
-      font-size: 0.85rem;
       flex: 1;
+      min-width: 0;
+      padding: 10px 12px;
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--dark-border);
+      border-radius: 9px;
       outline: none;
+      font-size: 13.5px;
     }
 
     .ai-chat-input:focus {
-      border-color: var(--accent-cyan);
+      border-color: var(--brand-cyan);
     }
 
-    /* ========================================================
-        GLOBAL FOOTER TEXT COLOR FIX (HIGH CONTRAST)
-        ======================================================== */
-    .nexus-footer {
-      background-color: #04070D !important;
-      color: #E2E8F0 !important;
-      border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    .ai-send-btn {
+      padding: 0 15px;
+      color: white;
+      background: var(--brand-cyan);
+      color: #070B19;
+      font-weight: 700;
+      border: none;
+      border-radius: 9px;
     }
 
-    .nexus-footer h6,
-    .nexus-footer .footer-col-title {
-      color: #FFFFFF !important;
-      font-weight: 700 !important;
+    /* ==================================
+       FOOTER (Deep Black/Navy Theme)
+    ================================== */
+    .tga-footer {
+      margin-top: 45px;
+      padding-top: 50px;
+      padding-bottom: 25px;
+      color: var(--text-muted);
+      background: #03050C;
+      border-top: 2px solid var(--brand-cyan);
     }
 
-    .nexus-footer p,
-    .nexus-footer small,
-    .nexus-footer span:not(.badge):not(.footer-status-pill) {
-      color: #94A3B8 !important;
+    .tga-footer h6 {
+      color: #ffffff !important;
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 18px;
     }
 
-    .nexus-footer .text-muted {
-      color: #94A3B8 !important;
+    .tga-footer p,
+    .tga-footer small {
+      color: var(--text-muted) !important;
     }
 
-    .nexus-footer .footer-links a,
-    .nexus-footer a.text-muted {
+    .footer-brand-logo {
+      width: 48px;
+      height: 55px;
+      object-fit: contain;
+    }
+
+    .tga-footer .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .tga-footer .footer-links li {
+      margin-bottom: 11px;
+    }
+
+    .tga-footer .footer-links a {
       color: #CBD5E1 !important;
       text-decoration: none;
-      transition: color 0.2s ease, transform 0.2s ease;
+      font-size: 13.5px;
+      font-weight: 500;
     }
 
-    .nexus-footer .footer-links a:hover,
-    .nexus-footer a.text-muted:hover {
-      color: #06B6D4 !important;
+    .tga-footer .footer-links a:hover {
+      color: var(--brand-cyan) !important;
       transform: translateX(3px);
     }
 
-    .nexus-footer .border-top p {
-      color: #94A3B8 !important;
+    .footer-social {
+      display: flex;
+      gap: 9px;
+    }
+
+    .footer-social .social-icon-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--dark-border);
+      color: white;
+      box-shadow: none;
+    }
+
+    .footer-social .social-icon-btn:hover {
+      background: var(--brand-blue);
+      color: white;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--dark-border);
+    }
+
+    .footer-bottom a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .footer-bottom a:hover {
+      color: var(--brand-cyan);
+    }
+
+    /* Responsive Navbar Viewport Fix */
+    @media (max-width: 1199.98px) {
+      .tga-navbar .container {
+        min-height: 70px;
+      }
+      .tga-navbar .navbar-collapse {
+        padding: 12px 0 18px;
+        background: var(--dark-card);
+        border-bottom: 1px solid var(--dark-border);
+        border-radius: 0 0 14px 14px;
+      }
+      .tga-navbar .navbar-nav {
+        display: flex;
+        align-items: stretch;
+        flex-direction: column;
+        gap: 2px !important;
+      }
+      .tga-navbar .navbar-nav .nav-item {
+        width: 100%;
+      }
+      .tga-navbar .navbar-nav .nav-link {
+        display: block !important;
+        width: 100%;
+        padding: 11px 13px !important;
+        font-size: 14px !important;
+      }
+      .tga-nav-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px !important;
+        margin-top: 12px;
+      }
+      .tga-nav-actions > a,
+      .tga-nav-actions .dropdown,
+      .tga-nav-actions .dropdown button {
+        width: 100%;
+      }
     }
   </style>
 </head>
+
 <body>
 
-  <!-- Top Navigation -->
-  <nav class="navbar navbar-expand-lg nexus-nav sticky-top py-3">
+  <!-- ==================================
+     NAVBAR
+  ================================== -->
+  <nav class="navbar navbar-expand-xl tga-navbar">
     <div class="container">
-      <a class="navbar-brand fw-bold fs-4 text-white font-mono d-flex align-items-center gap-2" href="{{ url_for('home.index') }}">
-        <i class="fa-solid fa-shapes text-info"></i> NEXUS
+      <a class="tga-brand" href="{{ url_for('home.index') }}" aria-label="Tech Gyan Amit Home">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Tech Gyan Amit Logo">
+        <span class="tga-brand-copy">
+          <span class="tga-brand-name">TECH GYAN AMIT</span>
+          <span class="tga-brand-tag">Products, Tools & Services</span>
+        </span>
       </a>
-      <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-        <i class="fa-solid fa-bars"></i>
+
+      <button class="navbar-toggler tga-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars-staggered"></i>
       </button>
 
       <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav mx-auto gap-lg-2 align-items-lg-center">
-          <li class="nav-item"><a class="nav-link text-light px-2" href="{{ url_for('home.index') }}">Home</a></li>
-          <li class="nav-item"><a class="nav-link text-light px-2" href="{{ url_for('products.list_products') }}">Ready-Made Tools</a></li>
-          <li class="nav-item"><a class="nav-link text-light px-2" href="{{ url_for('services.list_services') }}">Custom Services</a></li>
-          <li class="nav-item"><a class="nav-link text-light px-2" href="{{ url_for('interactions.custom_order') }}">Request Build</a></li>
-          <li class="nav-item"><a class="nav-link text-light px-2" href="{{ url_for('interactions.feedback') }}">Feedback</a></li>
-          <li class="nav-item"><a class="nav-link text-light px-2" href="{{ url_for('home.about') }}">About Us</a></li>
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('home.index') }}">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('products.list_products') }}">Ready-Made Tools</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('services.list_services') }}">Custom Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('interactions.custom_order') }}">Request Build</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('interactions.feedback') }}">Feedback</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('home.about') }}">About Us</a></li>
         </ul>
 
-        <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
-          <a href="{{ url_for('products.list_products') }}" class="btn-nexus-primary">
-            <i class="fa-solid fa-bolt"></i> Explore Catalog
+        <div class="d-flex align-items-center gap-2 tga-nav-actions">
+          <a href="{{ url_for('products.list_products') }}" class="btn-tga-primary">
+            <i class="fa-solid fa-layer-group"></i> Explore Tools
           </a>
 
-          <!-- Horizontal Menu Icon Dropdown for Auth & Dashboard -->
           <div class="dropdown">
-            <button class="btn btn-nexus-outline dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fa-solid fa-bars-staggered text-info"></i>
-              <span class="d-none d-xl-inline">Menu</span>
+            <button class="btn-tga-outline dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-user-circle"></i> Account
             </button>
-            <ul class="dropdown-menu dropdown-menu-end nexus-dropdown-menu">
+            <ul class="dropdown-menu dropdown-menu-end tga-dropdown">
               {% if session.get('status') %}
                 <li>
-                  <a class="dropdown-item nexus-dropdown-item d-flex align-items-center gap-2" href="{{ url_for('home.dashboard') }}">
-                    <i class="fa-solid fa-gauge-high text-info"></i> Dashboard & Subscriptions
+                  <a class="dropdown-item" href="{{ url_for('home.dashboard') }}">
+                    <i class="fa-solid fa-gauge-high me-2"></i> Dashboard & Subscriptions
                   </a>
                 </li>
                 <li><hr class="dropdown-divider border-secondary opacity-25"></li>
                 <li>
-                  <a class="dropdown-item nexus-dropdown-item d-flex align-items-center gap-2 text-danger" href="{{ url_for('auth.logout') }}">
-                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                  <a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}">
+                    <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
                   </a>
                 </li>
               {% else %}
                 <li>
-                  <a class="dropdown-item nexus-dropdown-item d-flex align-items-center gap-2" href="{{ url_for('auth.login') }}">
-                    <i class="fa-solid fa-right-to-bracket text-info"></i> Login
+                  <a class="dropdown-item" href="{{ url_for('auth.login') }}">
+                    <i class="fa-solid fa-right-to-bracket me-2"></i> Login
                   </a>
                 </li>
               {% endif %}
@@ -440,178 +650,175 @@
     </div>
   </nav>
 
-  <!-- Left Floating Social Hub Drawer -->
+  <!-- ==================================
+     SOCIAL DRAWER
+  ================================== -->
   <div class="floating-social-wrapper">
-    <button class="social-trigger-btn" id="socialTrigger" title="Quick Connect">
+    <button class="social-trigger-btn" id="socialTrigger" type="button" aria-label="Open social links">
       <i class="fa-solid fa-share-nodes"></i>
     </button>
     <div class="social-menu" id="socialMenu">
-      <a href="https://wa.me/917217723569" target="_blank" rel="noopener" class="social-icon-btn" title="WhatsApp">
+      <a href="https://wa.me/917217723569" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="WhatsApp">
         <i class="fa-brands fa-whatsapp text-success"></i>
       </a>
-      <a href="https://t.me/" target="_blank" rel="noopener" class="social-icon-btn" title="Telegram">
+      <a href="https://t.me/" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="Telegram">
         <i class="fa-brands fa-telegram text-info"></i>
       </a>
-      <a href="https://linkedin.com" target="_blank" rel="noopener" class="social-icon-btn" title="LinkedIn">
+      <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="LinkedIn">
         <i class="fa-brands fa-linkedin text-primary"></i>
       </a>
-      <a href="https://github.com" target="_blank" rel="noopener" class="social-icon-btn" title="GitHub">
+      <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="GitHub">
         <i class="fa-brands fa-github"></i>
       </a>
     </div>
   </div>
 
-  <!-- Right Floating AI Agent Widget Button -->
+  <!-- ==================================
+     AI CHAT BUTTON
+  ================================== -->
   <div class="floating-ai-wrapper">
-    <button class="ai-agent-btn" id="aiAgentTrigger" title="Chat with NEXUS AI">
-      <i class="fa-solid fa-brain"></i>
+    <button class="ai-agent-btn" id="aiAgentTrigger" type="button" aria-label="Open AI Assistant">
+      <i class="fa-solid fa-robot"></i>
       <span class="ai-badge"></span>
     </button>
   </div>
 
-  <!-- AI Chat Window Drawer -->
-  <div class="ai-chat-box" id="aiChatBox">
+  <section class="ai-chat-box" id="aiChatBox">
     <div class="ai-chat-header">
       <div class="d-flex align-items-center gap-2">
-        <div class="ai-agent-btn" style="width: 32px; height: 32px; font-size: 0.85rem; box-shadow: none;">
+        <div class="ai-agent-btn">
           <i class="fa-solid fa-robot"></i>
         </div>
         <div>
-          <span class="fw-bold text-white fs-6 d-block" style="line-height: 1.2;">NEXUS Copilot</span>
-          <small class="text-success font-mono" style="font-size: 0.68rem;">● Online &bull; Sheets & Python Expert</small>
+          <span class="fw-bold d-block text-white">Tech Gyan Amit Assistant</span>
+          <small>● Online · Tools & Automation Help</small>
         </div>
       </div>
-      <button class="btn btn-sm text-secondary" id="closeChatBtn"><i class="fa-solid fa-xmark fs-6"></i></button>
+      <button class="btn btn-sm text-white" id="closeChatBtn" type="button" aria-label="Close chat">
+        <i class="fa-solid fa-xmark fs-5"></i>
+      </button>
     </div>
+
     <div class="ai-chat-messages" id="chatMessages">
       <div class="chat-msg bot">
-        Hi there! I am your NEXUS Assistant. Looking for a custom Google Sheets ERP, WhatsApp automation, or Flask source code? Ask me anything!
+        Namaste! Welcome to Tech Gyan Amit. Need a Google Sheets ERP, Python automation, or custom software tool? Tell me what you're looking for.
       </div>
     </div>
+
     <div class="ai-chat-input-area">
-      <input type="text" id="chatInput" class="ai-chat-input" placeholder="Ask about tools, code, pricing..." />
-      <button id="sendChatBtn" class="btn btn-sm btn-info px-3 text-dark fw-bold rounded-3">
+      <input type="text" id="chatInput" class="ai-chat-input" placeholder="Type your question..." aria-label="Your message">
+      <button id="sendChatBtn" class="ai-send-btn" type="button" aria-label="Send message">
         <i class="fa-solid fa-paper-plane"></i>
       </button>
     </div>
-  </div>
+  </section>
 
-  <!-- Flash Messages -->
-  <div class="container mt-4">
+  <!-- ==================================
+     FLASH MESSAGES
+  ================================== -->
+  <div class="container tga-flash-area">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         {% for category, message in messages %}
-          <div class="alert alert-{{ category }} alert-dismissible fade show border-0 rounded-3 shadow" role="alert">
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
             {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
           </div>
         {% endfor %}
       {% endif %}
     {% endwith %}
   </div>
 
-  <!-- Dynamic Content Block -->
+  <!-- ==================================
+     MAIN CONTENT
+  ================================== -->
   <main class="py-4">
     {% block content %}{% endblock %}
   </main>
 
-  <!-- Modern 4-Column Responsive Footer -->
-  <footer class="nexus-footer pt-5 pb-4">
+  <!-- ==================================
+     FOOTER
+  ================================== -->
+  <footer class="tga-footer">
     <div class="container">
-      <div class="row g-4 mb-5">
+      <div class="row g-4 g-lg-5 mb-4">
         
-        <!-- Column 1: Brand & Mission -->
         <div class="col-lg-4 col-md-6">
-          <div class="mb-3 d-flex align-items-center gap-2">
-            <span class="fs-4 fw-bold text-white font-mono"><i class="fa-solid fa-shapes text-info"></i> NEXUS</span>
-            <span class="footer-status-pill font-mono">v2.4 Production</span>
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <img class="footer-brand-logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="Tech Gyan Amit">
+            <div>
+              <div class="fw-bold text-white font-mono">TECH GYAN AMIT</div>
+              <small style="color: var(--brand-cyan);"></small>
+            </div>
           </div>
-          <p class="text-muted small mb-4" style="line-height: 1.8; max-width: 320px;">
-            Engineered digital tools, Google Sheets automation bridges, enterprise ERP microservices, and AI chatbots built to unlock scale in minutes.
+          <p class="small mb-4" style="line-height:1.8;max-width:340px">
+            Practical digital products, business automation, custom ERP systems, web applications and technology,solutions designed to make work simpler.
           </p>
-          <div class="d-flex align-items-center gap-2">
-            <a href="https://github.com" target="_blank" rel="noopener" class="social-icon-btn" style="width: 36px; height: 36px; font-size: 0.95rem;">
-              <i class="fa-brands fa-github"></i>
-            </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener" class="social-icon-btn" style="width: 36px; height: 36px; font-size: 0.95rem;">
-              <i class="fa-brands fa-linkedin"></i>
-            </a>
-            <a href="https://wa.me/917217723569" target="_blank" rel="noopener" class="social-icon-btn" style="width: 36px; height: 36px; font-size: 0.95rem;">
-              <i class="fa-brands fa-whatsapp text-success"></i>
-            </a>
+          <div class="footer-social">
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn"><i class="fa-brands fa-github"></i></a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="https://wa.me/917217723569" target="_blank" rel="noopener noreferrer" class="social-icon-btn"><i class="fa-brands fa-whatsapp"></i></a>
           </div>
         </div>
 
-        <!-- Column 2: Digital Catalog -->
         <div class="col-lg-2 col-md-6 col-6">
-          <h6 class="footer-col-title font-mono"><i class="fa-solid fa-box text-info"></i> Catalog</h6>
+          <h6><i class="fa-solid fa-cubes me-2" style="color: var(--brand-cyan);"></i> Catalog</h6>
           <ul class="footer-links">
-            <li><a href="{{ url_for('products.list_products') }}">Google Sheets ERPs</a></li>
+            <li><a href="{{ url_for('products.list_products') }}">Software Products</a></li>
+            <li><a href="{{ url_for('products.list_products') }}">Developer Tools</a></li>
+            <li><a href="{{ url_for('products.list_products') }}">Google Sheets ERP</a></li>
             <li><a href="{{ url_for('products.list_products') }}">Python Flask Apps</a></li>
-            <li><a href="{{ url_for('products.list_products') }}">WhatsApp Bots</a></li>
-            <li><a href="{{ url_for('products.list_products') }}">Flutter Templates</a></li>
-            <li><a href="{{ url_for('products.list_products') }}">Chrome Extensions</a></li>
           </ul>
         </div>
 
-        <!-- Column 3: Custom Architecture & Support -->
         <div class="col-lg-2 col-md-6 col-6">
-          <h6 class="footer-col-title font-mono"><i class="fa-solid fa-code text-info"></i> Services</h6>
+          <h6><i class="fa-solid fa-code me-2" style="color: var(--brand-cyan);"></i> Services</h6>
           <ul class="footer-links">
             <li><a href="{{ url_for('services.list_services') }}">Custom ERP Systems</a></li>
-            <li><a href="{{ url_for('services.list_services') }}">Cloud Automations</a></li>
-            <li><a href="{{ url_for('interactions.custom_order') }}">Request Bespoke Build</a></li>
-            <li><a href="{{ url_for('interactions.feedback') }}">Submit Feedback</a></li>
-            <li><a href="https://wa.me/917217723569" target="_blank" rel="noopener">WhatsApp Concierge</a></li>
+            <li><a href="{{ url_for('services.list_services') }}">Cloud Automation</a></li>
+            <li><a href="{{ url_for('interactions.custom_order') }}">Request a Build</a></li>
+            <li><a href="{{ url_for('interactions.feedback') }}">Share Feedback</a></li>
           </ul>
         </div>
 
-        <!-- Column 4: Direct Inquiries & Newsletter -->
         <div class="col-lg-4 col-md-6">
-          <h6 class="footer-col-title font-mono"><i class="fa-solid fa-envelope text-info"></i> Stay Ahead</h6>
-          <p class="text-muted small mb-3">
-            Subscribe to get immediate ping notifications whenever new scripts, source packages, or updates drop.
+          <h6><i class="fa-solid fa-comments me-2" style="color: var(--brand-cyan);"></i> Let's Build Something</h6>
+          <p class="small mb-3">
+            Have an idea or a repetitive business task you'd like to automate? Let's discuss a practical solution.
           </p>
-          <div class="d-flex gap-2 mb-3">
-            <input type="email" class="newsletter-input" placeholder="developer@business.com">
-            <button class="btn btn-info text-dark fw-bold px-3" style="border-radius: 10px;">
-              <i class="fa-solid fa-paper-plane"></i>
-            </button>
-          </div>
-          <small class="text-muted font-mono" style="font-size: 0.72rem;">
-            <i class="fa-solid fa-shield-halved text-success me-1"></i> Zero spam. Instant setup codes only.
-          </small>
+          <a href="{{ url_for('interactions.custom_order') }}" class="btn-tga-primary">
+            <i class="fa-solid fa-paper-plane"></i> Discuss Your Project
+          </a>
         </div>
 
       </div>
 
-      <!-- Bottom Bar -->
-      <div class="pt-4 border-top border-secondary-subtle d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-        <p class="text-muted small mb-0 font-mono">
-          &copy; 2026 NEXUS Platforms & Automation Inc. All rights reserved.
-        </p>
-        <div class="d-flex align-items-center gap-4 text-muted small font-mono" style="font-size: 0.78rem;">
-          <a href="#" class="text-muted text-decoration-none hover-cyan">Terms of License</a>
-          <a href="#" class="text-muted text-decoration-none hover-cyan">Privacy Policy</a>
-          <a href="#" class="text-muted text-decoration-none hover-cyan">Refund Guarantee</a>
+      <div class="footer-bottom pt-4 mt-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+        <p class="small mb-0">© 2026 Tech Gyan Amit. All rights reserved.</p>
+        <div class="d-flex align-items-center gap-4 flex-wrap justify-content-center small">
+          <a href="#">Terms of License</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Support</a>
         </div>
       </div>
     </div>
   </footer>
 
-  <!-- Scripts -->
+  <!-- ==================================
+     JAVASCRIPT
+  ================================== -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // 1. Left Floating Social Drawer Interaction
     const socialTrigger = document.getElementById('socialTrigger');
     const socialMenu = document.getElementById('socialMenu');
-    socialTrigger.addEventListener('click', () => {
-      socialMenu.classList.toggle('active');
-      socialTrigger.querySelector('i').classList.toggle('fa-xmark');
-      socialTrigger.querySelector('i').classList.toggle('fa-share-nodes');
+    socialTrigger.addEventListener('click', function() {
+      const isOpen = socialMenu.classList.toggle('active');
+      socialTrigger.setAttribute('aria-expanded', String(isOpen));
+      const icon = socialTrigger.querySelector('i');
+      icon.classList.toggle('fa-xmark', isOpen);
+      icon.classList.toggle('fa-share-nodes', !isOpen);
     });
 
-    // 2. Right Floating AI Agent Chat Interaction
     const aiTrigger = document.getElementById('aiAgentTrigger');
     const aiBox = document.getElementById('aiChatBox');
     const closeChatBtn = document.getElementById('closeChatBtn');
@@ -619,51 +826,57 @@
     const chatInput = document.getElementById('chatInput');
     const chatMessages = document.getElementById('chatMessages');
 
-    function toggleChat() {
-      if (aiBox.style.display === 'flex') {
-        aiBox.style.display = 'none';
-      } else {
-        aiBox.style.display = 'flex';
-        chatInput.focus();
-      }
+    function toggleChat(forceOpen) {
+      const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : aiBox.style.display !== 'flex';
+      aiBox.style.display = shouldOpen ? 'flex' : 'none';
+      aiBox.setAttribute('aria-hidden', String(!shouldOpen));
+      aiTrigger.setAttribute('aria-expanded', String(shouldOpen));
+      if (shouldOpen) chatInput.focus();
     }
 
-    aiTrigger.addEventListener('click', toggleChat);
-    closeChatBtn.addEventListener('click', () => { aiBox.style.display = 'none'; });
+    aiTrigger.addEventListener('click', () => toggleChat());
+    closeChatBtn.addEventListener('click', () => toggleChat(false));
 
-    // Quick Automated Reply Handler
-    function handleSendMessage() {
-      const text = chatInput.value.trim();
-      if (!text) return;
-
-      const userBubble = document.createElement('div');
-      userBubble.className = 'chat-msg user';
-      userBubble.textContent = text;
-      chatMessages.appendChild(userBubble);
-      chatInput.value = '';
+    function addChatMessage(message, type) {
+      const bubble = document.createElement('div');
+      bubble.className = 'chat-msg ' + type;
+      bubble.textContent = message;
+      chatMessages.appendChild(bubble);
       chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
 
-      setTimeout(() => {
-        const botBubble = document.createElement('div');
-        botBubble.className = 'chat-msg bot';
-        
-        const lower = text.toLowerCase();
+    function addBotReply(html) {
+      const bubble = document.createElement('div');
+      bubble.className = 'chat-msg bot';
+      bubble.innerHTML = html;
+      chatMessages.appendChild(bubble);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function handleSendMessage() {
+      const message = chatInput.value.trim();
+      if (!message) return;
+      addChatMessage(message, 'user');
+      chatInput.value = '';
+      const lower = message.toLowerCase();
+
+      window.setTimeout(function() {
         if (lower.includes('price') || lower.includes('cost') || lower.includes('buy')) {
-          botBubble.innerHTML = "Our tools start at just ₹99 - ₹199 with full source code & setup video included! Check out our <a href='{{ url_for('products.list_products') }}' class='text-info'>Products catalog</a>.";
-        } else if (lower.includes('sheet') || lower.includes('erp') || lower.includes('script')) {
-          botBubble.innerHTML = "We build custom Google Sheets ERPs synced with external APIs or WhatsApp notifications. Would you like to <a href='{{ url_for('interactions.custom_order') }}' class='text-info'>request a custom build</a>?";
+          addBotReply(`Our ready-made tools and packages are listed in <a href="{{ url_for('products.list_products') }}" style="color:var(--brand-cyan)">Products Catalog</a>.`);
+        } else if (lower.includes('sheet') || lower.includes('erp') || lower.includes('script') || lower.includes('automation')) {
+          addBotReply(`We can help plan a custom Google Sheets ERP or business automation. <a href="{{ url_for('interactions.custom_order') }}" style="color:var(--brand-cyan)">Request a Custom Build</a>.`);
         } else {
-          botBubble.innerHTML = "I have noted that down! For immediate project discussion, you can also reach our engineering lead directly on <a href='https://wa.me/917217723569' target='_blank' class='text-success'>WhatsApp here</a>.";
+          addBotReply(`Thanks for your message! Contact us on <a href="https://wa.me/917217723569" target="_blank" rel="noopener noreferrer" style="color:#22c55e">WhatsApp</a> or submit a <a href="{{ url_for('interactions.custom_order') }}" style="color:var(--brand-cyan)">Project Request</a>.`);
         }
-        
-        chatMessages.appendChild(botBubble);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }, 700);
+      }, 500);
     }
 
     sendChatBtn.addEventListener('click', handleSendMessage);
-    chatInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') handleSendMessage();
+    chatInput.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') handleSendMessage();
+    });
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') toggleChat(false);
     });
   </script>
 </body>
