@@ -556,7 +556,7 @@
     btn.disabled = true;
 
     try {
-      const response = await fetch("{{ url_for('recharge.activate_trial') }}", {
+      const response = await fetch("{{ url_for('recharge.activate_trial',type='appRechargeTrial') }}", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -564,7 +564,8 @@
         },
         body: JSON.stringify({
           product_id: productId,
-          product_name: productName
+          product_name: productName,
+          recharge_type: "appRechargeTrial"
         })
       });
 
@@ -587,14 +588,14 @@
   }
 
   // Cashfree Order Checkout
-  async function initiateCashfreeCheckout(productId, productName, amount) {
+  async function initiateCashfreeCheckout(productId, productName, amount,type) {
     const btn = document.getElementById('btnProceedCashfree');
     const originalText = btn.innerHTML;
     btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Initializing Payment Gateway...`;
     btn.disabled = true;
 
     try {
-      const response = await fetch("{{ url_for('recharge.create_cashfree_order') }}", {
+      const response = await fetch("{{ url_for('recharge.create_cashfree_order',type='appRecharge') }}", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -603,7 +604,9 @@
         body: JSON.stringify({
           product_id: productId,
           product_name: productName,
-          amount: amount
+          amount: amount,
+          recharge_type: type,
+          recharge_Duration: 1
         })
       });
 

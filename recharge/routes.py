@@ -16,8 +16,8 @@ CASHFREE_BASE_URL = os.environ.get(
 ).strip()
 
 
-@recharge_bp.route('/create-cashfree-order', methods=['POST'])
-def create_cashfree_order():
+@recharge_bp.route('/create-cashfree-order/<string:type>', methods=['POST'])
+def create_cashfree_order(type):
     try:
         if not session.get('status'):
             return jsonify({
@@ -26,6 +26,7 @@ def create_cashfree_order():
             }), 401
 
         data = request.get_json(silent=True) or {}
+        print(f"Received data for Cashfree order creation: {data}")
 
         # 1. Sanitize & parse Amount
         raw_amount = data.get('amount', 199)
@@ -38,14 +39,18 @@ def create_cashfree_order():
         except (ValueError, TypeError):
             order_amount = 199.00
 
-        product_name = str(data.get('product_name') or 'NEXUS Digital License')[:40]
+        product_name = str(data.get('product_name') or 'Tech Gyan Amit Digital License')[:40]
         order_id = f"ORDER_{uuid.uuid4().hex[:10].upper()}"
+        
+        # Safe duration parsing supporting string or number
+        try:
+            recharge_Duration = int(float(data.get('recharge_Duration', 1)))
+        except (ValueError, TypeError):
+            recharge_Duration = 1
 
         # 2. Format customer details
-        raw_uid = session.get('user_id') or session.get('user_name') or '7217'
-        customer_id = f"CUST_{re.sub(r'[^a-zA-Z0-9_-]', '_', str(raw_uid))}"[:50]
+        customer_id = session.get('user_id') or 7217
         customer_name = str(session.get('user_name') or 'Developer')[:50]
-
         customer_email = str(session.get('email') or 'developer@nexus.local').strip()
         if '@' not in customer_email:
             customer_email = "developer@nexus.local"
@@ -55,11 +60,11 @@ def create_cashfree_order():
         digits = re.sub(r'\D', '', raw_phone)
         customer_phone = digits[-10:] if len(digits) >= 10 else "9999999999"
 
-        # 4. Callback URL (Fixed f-string interpolation)
+        # 4. Callback URL
         try:
-            return_url = f"{request.host_url.rstrip('/')}{url_for('recharge.payment_callback')}?order_id={order_id}"
+            return_url = f"{request.host_url.rstrip('/')}{url_for('recharge.payment_callback')}?order_id={order_id}&type={type}&duration={recharge_Duration}"
         except Exception:
-            return_url = f"{request.host_url.rstrip('/')}/recharge/payment-callback?order_id={order_id}"
+            return_url = f"{request.host_url.rstrip('/')}/recharge/payment-callback?order_id={order_id}&type={type}&duration={recharge_Duration}"
 
         # 5. Build Cashfree Headers & Payload
         headers = {
@@ -74,6 +79,8 @@ def create_cashfree_order():
             "order_id": order_id,
             "order_amount": order_amount,
             "order_currency": "INR",
+            "order_Type": type,
+            "duration_month": recharge_Duration,
             "customer_details": {
                 "customer_id": customer_id,
                 "customer_name": customer_name,
@@ -83,38 +90,50 @@ def create_cashfree_order():
             "order_meta": {
                 "return_url": return_url
             },
-            "order_note": f"Payment for {product_name}"[:40]
+            "order_note": f"{product_name}"[:40]
         }
+        
+        print("Payload for Cashfree Order Creation:", payload)
 
         # 6. Execute API request
         response = requests.post(CASHFREE_BASE_URL, json=payload, headers=headers, timeout=12)
-        print(response.status_code, response.text, response)  # Debugging output
-        res_data = response.json()
-        post_to_sheets('appSubscription', res_data)
+        
+        if not response.text or response.text.strip() == "":
+            return jsonify({
+                "status": "error",
+                "message": f"Payment Gateway returned an empty response (Status: {response.status_code})"
+            }), 400
 
-        if response.status_code == 200 and "payment_session_id" in res_data:
+        try:
+            res_data = response.json()
+        except Exception as json_err:
+            return jsonify({
+                "status": "error",
+                "message": "Invalid response received from Payment Gateway."
+            }), 500
+
+        # NOTE: Yahan se post_to_sheets hata diya gaya hai taaki order bante hi data save na ho.
+        # Ab data sirf payment complete hone ke baad callback par save hoga.
+
+        if response.status_code == 200 and isinstance(res_data, dict) and "payment_session_id" in res_data:
             return jsonify({
                 "status": "success",
                 "payment_session_id": res_data["payment_session_id"],
-                "order_id": order_id
+                "order_id": order_id,
+                "order_Type": type
             })
         else:
-            print("\n" + "="*50)
-            print(f"[CASHFREE REJECTED {response.status_code}]: {res_data}")
-            print(f"Payload sent: {payload}")
-            print("="*50 + "\n")
+            err_msg = "Payment session creation failed."
+            if isinstance(res_data, dict):
+                err_msg = res_data.get("message") or res_data.get("sub_code") or err_msg
             
-            err_msg = res_data.get("message") or res_data.get("sub_code") or "Payment session creation failed."
             return jsonify({
                 "status": "error",
                 "message": err_msg
             }), 400
 
     except Exception as e:
-        print("\n" + "!"*50)
-        print("[CRITICAL EXCEPTION IN create_cashfree_order]:")
         traceback.print_exc()
-        print("!"*50 + "\n")
         return jsonify({
             "status": "error", 
             "message": f"Server Error: {str(e)}"
@@ -124,18 +143,52 @@ def create_cashfree_order():
 @recharge_bp.route('/payment-callback', methods=['GET'])
 def payment_callback():
     order_id = request.args.get('order_id', 'UNKNOWN')
+    order_type = request.args.get('type', 'Productrecharge')
+    duration = request.args.get('duration', 1)
+
+    headers = {
+        "accept": "application/json",
+        "x-api-version": "2023-08-01",
+        "x-client-id": CASHFREE_APP_ID,
+        "x-client-secret": CASHFREE_SECRET_KEY
+    }
+
+    verified_data = {}
+
+    try:
+        # Cashfree se order ka status check karne ki request (Verify Order Status)
+        status_url = f"{CASHFREE_BASE_URL.rstrip('/')}/{order_id}"
+        response = requests.get(status_url, headers=headers, timeout=10)
+
+        if response.status_code == 200:
+            res_json = response.json()
+            order_status = res_json.get("order_status")
+
+            # Check karein ki payment 100% successful hui hai ya nahi
+            if order_status == "PAID":
+                res_json["order_Type"] = order_type
+                res_json["recharge_duration"] = duration
+                
+                # 🟢 Sirf SUCCESS / PAID hone par hi Google Sheet par data save hoga!
+                post_to_sheets('appSubscription', res_json)
+                verified_data = res_json
+            else:
+                print(f"Order {order_id} status is {order_status}, not saved to sheet.")
+    except Exception as err:
+        print(f"Error verifying payment status for {order_id}: {err}")
+
     return render_template('recharge/success.html', order_id=order_id)
 
 
-@recharge_bp.route('/activate-trial', methods=['POST'])
-def activate_trial():
+@recharge_bp.route('/activate-trial/<string:type>', methods=['POST'])
+def activate_trial(type):
     if not session.get('status'):
         return jsonify({"status": "error", "message": "User not authenticated. Please log in first."}), 401
 
     data = request.get_json(silent=True) or {}
     product_name = str(data.get('product_name') or 'NEXUS Digital License')
 
-    customer_id = str(session.get('user_id') or session.get('user_name') or '7217')
+    customer_id = str(session.get('user_id') or '7217')
     customer_name = str(session.get('user_name') or 'Developer')
     customer_email = str(session.get('email') or 'developer@nexus.local')
     customer_phone = str(session.get('phone') or '9999999999')
@@ -153,10 +206,9 @@ def activate_trial():
         'Currency': 'INR',
         'Order Status': 'trial',
         'Created At': '',
-        'Order Note': f"3-Day Evaluation for {product_name}"
+        'Order Note': f"{product_name}",
+        "order_Type": type,
     }
-    
-    print(trial_data)
 
     sheets_response = post_to_sheets('trial', {
         'username': trial_data

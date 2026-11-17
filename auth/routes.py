@@ -11,9 +11,20 @@ def login():
         password = request.form.get('password')
         result = authUser(email, password)  # Call the authUser function to validate credentials
         
+        print("Auth result:", result)  # Debugging output
+        # {'status': 'success', 'name': 'Amit', 'email': 'amit.tiwari726@gmail.com', 'phone': 7217723569}
         # TODO: Add your actual database or Google Sheets validation check here
-        if result == "success":  # Assuming authUser returns "success" for valid credentials
+        if result['status'] == "success":  # Assuming authUser returns "success" for valid credentials
             session['status'] = True
+            session['user_name'] = result.get('name')
+            session['email'] = result.get('email')
+            session['phone'] = result.get('phone')
+            session['user_id'] = result.get('user_id')
+            
+            
+
+            print("Session Data:", dict(session))
+            
             flash('Logged in successfully!', 'success')
             return redirect(url_for('services.list_services'))
         else:

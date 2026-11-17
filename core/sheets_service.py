@@ -78,11 +78,20 @@ def authUser(email, password):
             timeout=10
         )
         
+       
+        print(response.status_code, response.text)  # Debugging output
+        
         if response.status_code == 200:
             data = response.json()
             # Expecting Apps Script to return something like: {"status": "success", "user": {...}} 
             if data.get("status") == "success":
-                return data.get("status")
+                return {
+                    "status": data.get("status"),
+                    "name": data.get("name"),  # Return user details if needed
+                    "email": data.get("email"),
+                    "phone": data.get("phone"),
+                    "user_id": data.get("customer_Id")  # Assuming Apps Script returns this
+                }
             else:
                 return None
         else:

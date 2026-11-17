@@ -1,13 +1,10 @@
+
 {% extends "base.html" %}
 
 {% block title %}My Subscriptions | Tech Gyan Amit{% endblock %}
 
 {% block content %}
-{# ---------------------------------------------------------------
-   Data. Replace with backend data when ready.
-   Main row = product's own recharged / expires / days
-   chips    = WhatsApp, AI and any other recharge for that product
----------------------------------------------------------------- #}
+
 {% set products = [
   {
     'name': 'Google Sheets ERP & Inventory Suite',
@@ -63,114 +60,111 @@
 
 {% set ns = namespace(soon=0) %}
 {% for p in products %}
-  {% if p.days <= 15 %}{% set ns.soon = ns.soon + 1 %}{% endif %}
-  {% for c in p.chips %}{% if c.days <= 15 %}{% set ns.soon = ns.soon + 1 %}{% endif %}{% endfor %}
+  {% if p.days <= 15 %}
+    {% set ns.soon = ns.soon + 1 %}
+  {% endif %}
+  {% for c in p.chips %}
+    {% if c.days <= 15 %}
+      {% set ns.soon = ns.soon + 1 %}
+    {% endif %}
+  {% endfor %}
 {% endfor %}
 
 <style>
-  .sub-page { max-width: 1100px; color: #F8FAFC; }
+.sub-page { max-width:1100px; color:#F8FAFC; }
+.sub-head { display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:24px; }
+.sub-head h1 { font-family:'Plus Jakarta Sans',sans-serif; font-size:clamp(1.6rem,2.6vw,2.2rem); font-weight:800; letter-spacing:-.5px; color:#fff; margin:0 0 6px; }
+.sub-head p { margin:0; color:#94A3B8; font-size:15px; }
+.sub-stats { display:flex; gap:12px; flex-wrap:wrap; }
+.sub-stat { background:#0F172A; border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:12px 18px; min-width:130px; box-shadow:0 8px 24px rgba(0,0,0,.3); }
+.sub-stat b { display:block; font-size:24px; line-height:1.1; color:#00D2FF; font-family:'Plus Jakarta Sans',sans-serif; }
+.sub-stat span { font-size:13px; color:#94A3B8; }
+.sub-stat.alert-stat b { color:#EF4444; }
+.sub-notice { display:flex; align-items:center; gap:14px; padding:14px 18px; margin-bottom:22px; background:rgba(245,158,11,.12); border:1px solid rgba(245,158,11,.3); border-radius:14px; color:#FCD34D; font-size:14.5px; font-weight:500; }
+.sub-notice i { font-size:20px; color:#F59E0B; }
 
-  .sub-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
-  .sub-head h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(1.6rem, 2.6vw, 2.2rem); font-weight: 800; letter-spacing: -.5px; color: #FFFFFF; margin: 0 0 6px; }
-  .sub-head p { margin: 0; color: #94A3B8; font-size: 15px; }
+.tone-ok { --t:#10B981; --tb:rgba(16,185,129,.12); }
+.tone-warn { --t:#F59E0B; --tb:rgba(245,158,11,.12); }
+.tone-bad { --t:#EF4444; --tb:rgba(239,68,68,.12); }
 
-  .sub-stats { display: flex; gap: 12px; flex-wrap: wrap; }
-  .sub-stat { background: #0F172A; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 12px 18px; min-width: 130px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
-  .sub-stat b { display: block; font-size: 24px; line-height: 1.1; color: #00D2FF; font-family: 'Plus Jakarta Sans', sans-serif; }
-  .sub-stat span { font-size: 13px; color: #94A3B8; }
-  .sub-stat.alert-stat b { color: #EF4444; }
+.c-blue { --c:#00D2FF; --cb:rgba(0,210,255,.15); }
+.c-green { --c:#10B981; --cb:rgba(16,185,129,.15); }
+.c-amber { --c:#F59E0B; --cb:rgba(245,158,11,.15); }
+.c-violet { --c:#8B5CF6; --cb:rgba(139,92,246,.15); }
+.c-red { --c:#EF4444; --cb:rgba(239,68,68,.15); }
 
-  .sub-notice { display: flex; align-items: center; gap: 14px; padding: 14px 18px; margin-bottom: 22px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 14px; color: #FCD34D; font-size: 14.5px; font-weight: 500; }
-  .sub-notice i { font-size: 20px; color: #F59E0B; }
+.sub-list { background:#0F172A; border:1px solid rgba(255,255,255,.1); border-radius:20px; box-shadow:0 16px 40px rgba(0,0,0,.6); overflow:hidden; }
+.sub-row { display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr) auto; gap:16px 24px; align-items:center; padding:22px 26px; border-bottom:1px solid rgba(255,255,255,.08); transition:background .2s ease; }
+.sub-row:hover { background:rgba(255,255,255,.02); }
+.sub-row:last-child { border-bottom:0; }
 
-  /* Tone colours (days left) */
-  .tone-ok   { --t: #10B981; --tb: rgba(16, 185, 129, 0.12); }
-  .tone-warn { --t: #F59E0B; --tb: rgba(245, 158, 11, 0.12); }
-  .tone-bad  { --t: #EF4444; --tb: rgba(239, 68, 68, 0.12); }
+.sub-prod { display:flex; align-items:center; gap:16px; min-width:0; }
+.sub-ico { flex:0 0 48px; height:48px; border-radius:14px; display:grid; place-items:center; font-size:20px; color:var(--c); background:var(--cb); border:1px solid var(--c); }
+.sub-prod h2 { margin:0 0 3px; font-size:16.5px; font-weight:700; color:#fff; line-height:1.3; font-family:'Plus Jakarta Sans',sans-serif; }
+.sub-prod small { color:#94A3B8; font-size:13px; line-height:1.4; display:block; }
 
-  /* Product badge theme accents */
-  .c-blue   { --c: #00D2FF; --cb: rgba(0, 210, 255, 0.15); }
-  .c-green  { --c: #10B981; --cb: rgba(16, 185, 129, 0.15); }
-  .c-amber  { --c: #F59E0B; --cb: rgba(245, 158, 11, 0.15); }
-  .c-violet { --c: #8B5CF6; --cb: rgba(139, 92, 246, 0.15); }
-  .c-red    { --c: #EF4444; --cb: rgba(239, 68, 68, 0.15); }
+.sub-date label { display:block; font-size:12.5px; color:#94A3B8; margin-bottom:3px; text-transform:uppercase; letter-spacing:.5px; }
+.sub-date strong { font-size:14.5px; font-weight:700; color:#F8FAFC; }
+.sub-expiry strong { color:var(--t); }
+.sub-bar { height:6px; background:rgba(255,255,255,.08); border-radius:99px; margin-top:8px; overflow:hidden; }
+.sub-bar i { display:block; height:100%; background:var(--t); border-radius:99px; }
+.sub-left { font-size:13px; font-weight:700; color:var(--t); margin-top:5px; }
 
-  .sub-list { background: #0F172A; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6); overflow: hidden; }
-  .sub-row { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr) auto; gap: 16px 24px; align-items: center; padding: 22px 26px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); transition: background 0.2s ease; }
-  .sub-row:hover { background: rgba(255, 255, 255, 0.02); }
-  .sub-row:last-child { border-bottom: 0; }
+.sub-actions { display:flex; align-items:center; gap:8px; }
+.sub-recharge, .sub-recharge:hover, .sub-recharge:focus { border:0; cursor:pointer; white-space:nowrap; background:linear-gradient(135deg,#0066FF,#00D2FF); color:#fff; font-weight:700; font-size:13.5px; padding:10px 18px; border-radius:10px; box-shadow:0 4px 15px rgba(0,102,255,.3); transition:all .2s; }
+.sub-recharge:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(0,210,255,.4); }
+.sub-recharge.urgent, .sub-recharge.urgent:hover, .sub-recharge.urgent:focus { background:linear-gradient(135deg,#DC2626,#EF4444); box-shadow:0 4px 15px rgba(220,38,38,.4); color:#fff; }
 
-  .sub-prod { display: flex; align-items: center; gap: 16px; min-width: 0; }
-  .sub-ico { flex: 0 0 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; font-size: 20px; color: var(--c); background: var(--cb); border: 1px solid var(--c); }
-  .sub-prod h2 { margin: 0 0 3px; font-size: 16.5px; font-weight: 700; color: #FFFFFF; line-height: 1.3; font-family: 'Plus Jakarta Sans', sans-serif; }
-  .sub-prod small { color: #94A3B8; font-size: 13px; line-height: 1.4; display: block; }
+.sub-more, .sub-more:hover, .sub-more:focus { width:40px; height:40px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.04); border-radius:10px; color:#CBD5E1; display:grid; place-items:center; }
+.sub-more:hover { border-color:#00D2FF; color:#00D2FF; }
 
-  .sub-date label { display: block; font-size: 12.5px; color: #94A3B8; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .sub-date strong { font-size: 14.5px; font-weight: 700; color: #F8FAFC; }
-  .sub-expiry strong { color: var(--t); }
-  .sub-bar { height: 6px; background: rgba(255, 255, 255, 0.08); border-radius: 99px; margin-top: 8px; overflow: hidden; }
-  .sub-bar i { display: block; height: 100%; background: var(--t); border-radius: 99px; }
-  .sub-left { font-size: 13px; font-weight: 700; color: var(--t); margin-top: 5px; }
+.sub-menu { background:#0F172A !important; border:1px solid rgba(255,255,255,.12) !important; border-radius:12px; padding:8px; box-shadow:0 20px 40px rgba(0,0,0,.8); }
+.sub-menu .dropdown-item, .sub-menu .dropdown-item:hover, .sub-menu .dropdown-item:focus { color:#CBD5E1; background:transparent; font-size:13.5px; font-weight:600; padding:10px 14px; border-radius:8px; }
+.sub-menu .dropdown-item:hover { background:rgba(0,210,255,.1); color:#00D2FF; }
+.sub-menu .dropdown-item i { width:20px; }
 
-  /* Buttons & Actions */
-  .sub-actions { display: flex; align-items: center; gap: 8px; }
-  .sub-recharge, .sub-recharge:hover, .sub-recharge:focus { border: 0; cursor: pointer; white-space: nowrap; background: linear-gradient(135deg, #0066FF, #00D2FF); color: #fff; font-weight: 700; font-size: 13.5px; padding: 10px 18px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3); transition: all 0.2s; }
-  .sub-recharge:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0, 210, 255, 0.4); }
-  .sub-recharge.urgent, .sub-recharge.urgent:hover, .sub-recharge.urgent:focus { background: linear-gradient(135deg, #DC2626, #EF4444); box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4); color: #fff; }
-  
-  .sub-more, .sub-more:hover, .sub-more:focus { width: 40px; height: 40px; border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(255, 255, 255, 0.04); border-radius: 10px; color: #CBD5E1; display: grid; place-items: center; }
-  .sub-more:hover { border-color: #00D2FF; color: #00D2FF; }
+.sub-chips { grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding-top:16px; border-top:1px dashed rgba(255,255,255,.1); }
+.sub-chips > span { font-size:12.5px; color:#94A3B8; text-transform:uppercase; letter-spacing:.5px; font-weight:700; }
+.chip { display:inline-flex; flex-wrap:wrap; align-items:center; gap:6px 12px; padding:6px 8px 6px 14px; border-radius:12px; background:var(--tb); color:var(--t); font-size:13px; font-weight:700; border:1px solid var(--t); }
+.chip em { font-style:normal; font-weight:500; color:#E2E8F0; }
+.chip-btn, .chip-btn:hover, .chip-btn:focus { display:inline-flex; align-items:center; gap:6px; border:0; cursor:pointer; background:var(--t); color:#fff; font-size:12px; font-weight:700; padding:5px 12px; border-radius:8px; white-space:nowrap; }
 
-  /* Menu items dropdown */
-  .sub-menu { background: #0F172A !important; border: 1px solid rgba(255, 255, 255, 0.12) !important; border-radius: 12px; padding: 8px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
-  .sub-menu .dropdown-item, .sub-menu .dropdown-item:hover, .sub-menu .dropdown-item:focus { color: #CBD5E1; background: transparent; font-size: 13.5px; font-weight: 600; padding: 10px 14px; border-radius: 8px; }
-  .sub-menu .dropdown-item:hover { background: rgba(0, 210, 255, 0.1); color: #00D2FF; }
-  .sub-menu .dropdown-item i { width: 20px; }
+.sub-add { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; margin-top:22px; padding:20px 26px; background:#0F172A; border:1px dashed rgba(0,210,255,.3); border-radius:16px; }
+.sub-add p { margin:0; color:#94A3B8; font-size:14.5px; }
+.sub-add p b { color:#fff; }
+.sub-add .btn-tga-primary { background:linear-gradient(135deg,#0066FF,#00D2FF); color:white !important; padding:10px 20px; border-radius:10px; font-weight:700; text-decoration:none; box-shadow:0 4px 15px rgba(0,102,255,.3); }
 
-  /* Chips */
-  .sub-chips { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding-top: 16px; border-top: 1px dashed rgba(255, 255, 255, 0.1); }
-  .sub-chips > span { font-size: 12.5px; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
-  .chip { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 6px 8px 6px 14px; border-radius: 12px; background: var(--tb); color: var(--t); font-size: 13px; font-weight: 700; border: 1px solid var(--t); }
-  .chip em { font-style: normal; font-weight: 500; color: #E2E8F0; }
-  .chip-btn, .chip-btn:hover, .chip-btn:focus { display: inline-flex; align-items: center; gap: 6px; border: 0; cursor: pointer; background: var(--t); color: #fff; font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 8px; white-space: nowrap; }
+@media (max-width:991.98px) {
+  .sub-row { grid-template-columns:1fr 1fr; padding:20px; }
+  .sub-prod, .sub-actions { grid-column:1 / -1; }
+  .sub-recharge { flex:1; text-align:center; justify-content:center; }
+  .chip { border-radius:12px; width:100%; justify-content:space-between; }
+}
 
-  .sub-add { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-top: 22px; padding: 20px 26px; background: #0F172A; border: 1px dashed rgba(0, 210, 255, 0.3); border-radius: 16px; }
-  .sub-add p { margin: 0; color: #94A3B8; font-size: 14.5px; }
-  .sub-add p b { color: #FFFFFF; }
-  .sub-add .btn-tga-primary { background: linear-gradient(135deg, #0066FF, #00D2FF); color: white !important; padding: 10px 20px; border-radius: 10px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 15px rgba(0,102,255,0.3); }
+#rechargeModal .modal-content { background:#0F172A; border:1px solid rgba(255,255,255,.15); border-radius:20px; box-shadow:0 25px 60px rgba(0,0,0,.8); color:#F8FAFC; }
+#rechargeModal .modal-header { border-bottom:1px solid rgba(255,255,255,.1); padding:20px 24px; }
+#rechargeModal .modal-title { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; color:#fff; font-size:19px; }
+#rechargeModal .btn-close { filter:invert(1) grayscale(100%) brightness(200%); }
 
-  @media (max-width: 991.98px) {
-    .sub-row { grid-template-columns: 1fr 1fr; padding: 20px; }
-    .sub-prod, .sub-actions { grid-column: 1 / -1; }
-    .sub-recharge { flex: 1; text-align: center; justify-content: center; }
-    .chip { border-radius: 12px; width: 100%; justify-content: space-between; }
-  }
+.rc-summary { background:rgba(4,8,20,.7); border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:16px 18px; margin-bottom:20px; }
+.rc-summary .r { display:flex; justify-content:space-between; gap:12px; font-size:14px; padding:4px 0; }
+.rc-summary .r span:first-child { color:#94A3B8; }
+.rc-summary .r span:last-child { font-weight:700; text-align:right; color:#F8FAFC; }
+.rc-total { border-top:1px solid rgba(255,255,255,.1); margin-top:10px; padding-top:12px !important; }
+.rc-total span:last-child { color:#10B981; font-size:22px; font-weight:800; }
 
-  /* Modal Dark Theme Overhaul */
-  #rechargeModal .modal-content { background: #0F172A; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; box-shadow: 0 25px 60px rgba(0,0,0,0.8); color: #F8FAFC; }
-  #rechargeModal .modal-header { border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 20px 24px; }
-  #rechargeModal .modal-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: #FFFFFF; font-size: 19px; }
-  #rechargeModal .btn-close { filter: invert(1) grayscale(100%) brightness(200%); }
-  
-  .rc-summary { background: rgba(4, 8, 20, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 16px 18px; margin-bottom: 20px; }
-  .rc-summary .r { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; padding: 4px 0; }
-  .rc-summary .r span:first-child { color: #94A3B8; }
-  .rc-summary .r span:last-child { font-weight: 700; text-align: right; color: #F8FAFC; }
-  .rc-total { border-top: 1px solid rgba(255, 255, 255, 0.1); margin-top: 10px; padding-top: 12px !important; }
-  .rc-total span:last-child { color: #10B981; font-size: 22px; font-weight: 800; }
-  
-  .rc-pay { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; cursor: pointer; background: rgba(255, 255, 255, 0.02); transition: all 0.2s; }
-  .rc-pay:hover { border-color: rgba(0, 210, 255, 0.4); background: rgba(255, 255, 255, 0.04); }
-  .rc-pay:has(input:checked) { border-color: #00D2FF; background: rgba(0, 210, 255, 0.08); }
-  .rc-pay .t { font-size: 14px; font-weight: 700; color: #FFFFFF; }
-  .rc-pay .s { font-size: 12.5px; color: #94A3B8; }
-  .rc-pay input { accent-color: #00D2FF; width: 18px; height: 18px; }
+.rc-pay { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px; border:1px solid rgba(255,255,255,.1); border-radius:12px; cursor:pointer; background:rgba(255,255,255,.02); transition:all .2s; }
+.rc-pay:hover { border-color:rgba(0,210,255,.4); background:rgba(255,255,255,.04); }
+.rc-pay:has(input:checked) { border-color:#00D2FF; background:rgba(0,210,255,.08); }
+.rc-pay .t { font-size:14px; font-weight:700; color:#fff; }
+.rc-pay .s { font-size:12.5px; color:#94A3B8; }
+.rc-pay input { accent-color:#00D2FF; width:18px; height:18px; }
 
-  #planDurationSelect { background: #070B19; border: 1px solid rgba(255, 255, 255, 0.15); color: #FFFFFF; border-radius: 10px; padding: 10px 14px; }
-  #planDurationSelect:focus { border-color: #00D2FF; box-shadow: 0 0 0 3px rgba(0,210,255,0.2); background: #070B19; color: #FFFFFF; }
+#planDurationSelect { background:#070B19; border:1px solid rgba(255,255,255,.15); color:#fff; border-radius:10px; padding:10px 14px; }
+#planDurationSelect:focus { border-color:#00D2FF; box-shadow:0 0 0 3px rgba(0,210,255,.2); background:#070B19; color:#fff; }
 
-  .rc-submit, .rc-submit:hover { width: 100%; padding: 14px; font-size: 15px; border: 0; cursor: pointer; justify-content: center; background: linear-gradient(135deg, #0066FF, #00D2FF); color: #fff !important; font-weight: 700; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,210,255,0.4); }
-  .rc-submit:disabled { opacity: .7; cursor: wait; }
+.rc-submit, .rc-submit:hover { width:100%; padding:14px; font-size:15px; border:0; cursor:pointer; justify-content:center; background:linear-gradient(135deg,#0066FF,#00D2FF); color:#fff !important; font-weight:700; border-radius:12px; box-shadow:0 4px 20px rgba(0,210,255,.4); }
+.rc-submit:disabled { opacity:.7; cursor:wait; }
 </style>
 
 <div class="container sub-page py-4">
@@ -197,9 +191,9 @@
     {% for p in products %}
     {% set d = p.days %}
     {% set tone = 'tone-bad' if d <= 7 else ('tone-warn' if d <= 20 else 'tone-ok') %}
+
     <article class="sub-row c-{{ p.color }} {{ tone }}">
 
-      <!-- Product name -->
       <div class="sub-prod">
         <div class="sub-ico"><i class="fa-solid {{ p.icon }}"></i></div>
         <div>
@@ -208,48 +202,60 @@
         </div>
       </div>
 
-      <!-- Recharge date -->
       <div class="sub-date">
         <label>Last recharged</label>
         <strong>{{ p.recharged }}</strong>
       </div>
 
-      <!-- Expiry date -->
       <div class="sub-date sub-expiry">
         <label>Expires on</label>
         <strong>{{ p.expires }}</strong>
-        <div class="sub-bar"><i style="width: {{ [ (d / 90 * 100)|round|int, 100 ]|min }}%"></i></div>
+        <div class="sub-bar"><i style="width: {{ [(d / 90 * 100)|round|int, 100]|min }}%"></i></div>
         <div class="sub-left">{{ d }} day{{ 's' if d != 1 }} left</div>
       </div>
 
-      <!-- Actions: product recharge + menu with WhatsApp / AI recharge -->
       <div class="sub-actions">
-        <button type="button" class="sub-recharge {{ 'urgent' if d <= 7 }}"
-                data-bs-toggle="modal" data-bs-target="#rechargeModal"
-                data-product="{{ p.name }}" data-service="Product Plan"
+
+        <!-- Product Recharge -->
+        <button type="button"
+                class="sub-recharge {{ 'urgent' if d <= 7 }}"
+                data-bs-toggle="modal"
+                data-bs-target="#rechargeModal"
+                data-product="{{ p.name }}"
+                data-service="Product Plan"
+                data-type="Productrecharge"
                 data-base-price="{{ p.price }}">
           <i class="fa-solid fa-rotate me-1"></i> Recharge product
         </button>
 
         <div class="dropdown">
-          <button type="button" class="sub-more" data-bs-toggle="dropdown" aria-expanded="false" aria-label="More options for {{ p.name }}">
+          <button type="button" class="sub-more"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  aria-label="More options for {{ p.name }}">
             <i class="fa-solid fa-ellipsis-vertical"></i>
           </button>
+
           <ul class="dropdown-menu dropdown-menu-end sub-menu">
             {% for c in p.chips %}
             <li>
               <button type="button" class="dropdown-item"
-                      data-bs-toggle="modal" data-bs-target="#rechargeModal"
-                      data-product="{{ p.name }}" data-service="{{ c.service }}"
+                      data-bs-toggle="modal"
+                      data-bs-target="#rechargeModal"
+                      data-product="{{ p.name }}"
+                      data-service="{{ c.service }}"
+                      data-type="{{ 'Whatsapprecharge' if 'WhatsApp' in c.label else 'AIrecharge' }}"
                       data-base-price="{{ c.price }}">
                 <i class="{{ c.icon }} me-2" style="color:#00D2FF"></i>
                 Recharge {{ c.label }} (&#8377;{{ c.price }})
               </button>
             </li>
             {% endfor %}
+
             <li><hr class="dropdown-divider border-secondary opacity-25"></li>
             <li>
-              <a class="dropdown-item" href="https://wa.me/917217723569" target="_blank" rel="noopener noreferrer">
+              <a class="dropdown-item" href="https://wa.me/917217723569"
+                 target="_blank" rel="noopener noreferrer">
                 <i class="fa-solid fa-headset me-2 text-success"></i> Get support
               </a>
             </li>
@@ -257,19 +263,24 @@
         </div>
       </div>
 
-      <!-- WhatsApp / AI chips, each with its own Recharge button -->
       {% if p.chips %}
       <div class="sub-chips">
         <span>Other recharges:</span>
+
         {% for c in p.chips %}
         {% set ct = 'tone-bad' if c.days <= 7 else ('tone-warn' if c.days <= 20 else 'tone-ok') %}
+
         <div class="chip {{ ct }}">
           <i class="{{ c.icon }}"></i>
           {{ c.label }}
           <em>Recharged {{ c.recharged }} &middot; Expires {{ c.expires }} &middot; {{ c.days }}d left</em>
+
           <button type="button" class="chip-btn"
-                  data-bs-toggle="modal" data-bs-target="#rechargeModal"
-                  data-product="{{ p.name }}" data-service="{{ c.service }}"
+                  data-bs-toggle="modal"
+                  data-bs-target="#rechargeModal"
+                  data-product="{{ p.name }}"
+                  data-service="{{ c.service }}"
+                  data-type="{{ 'Whatsapprecharge' if 'WhatsApp' in c.label else 'AIrecharge' }}"
                   data-base-price="{{ c.price }}">
             <i class="fa-solid fa-rotate"></i> Recharge
           </button>
@@ -290,16 +301,25 @@
   </div>
 </div>
 
-<!-- Recharge modal -->
-<div class="modal fade" id="rechargeModal" tabindex="-1" aria-labelledby="rechargeTitle" aria-hidden="true">
+<!-- Recharge Modal -->
+<div class="modal fade" id="rechargeModal" tabindex="-1"
+     aria-labelledby="rechargeTitle" aria-hidden="true">
+
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
+
       <div class="modal-header">
-        <h5 class="modal-title" id="rechargeTitle"><i class="fa-solid fa-bolt me-2" style="color:#00D2FF"></i>Recharge service</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="rechargeTitle">
+          <i class="fa-solid fa-bolt me-2" style="color:#00D2FF"></i>
+          Recharge service
+        </h5>
+        <button type="button" class="btn-close"
+                data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+
       <div class="modal-body p-4">
         <form id="rechargeForm">
+
           <div class="rc-summary">
             <div class="r"><span>Product</span><span id="displayProductName">-</span></div>
             <div class="r"><span>Service</span><span id="displayServiceName" style="color:#00D2FF">-</span></div>
@@ -308,11 +328,14 @@
 
           <input type="hidden" id="modalProductName" name="product_name">
           <input type="hidden" id="modalServiceName" name="service_name">
+          <input type="hidden" id="modalRechargeType" name="recharge_type">
           <input type="hidden" id="modalBasePrice" value="199">
           <input type="hidden" id="modalCalculatedAmount" value="199">
 
           <div class="mb-3">
-            <label class="form-label fw-semibold small text-light" for="planDurationSelect">Extend by</label>
+            <label class="form-label fw-semibold small text-light" for="planDurationSelect">
+              Extend by
+            </label>
             <select class="form-select" id="planDurationSelect" onchange="calculatePlanTotal()">
               <option value="1" selected>1 month (+30 days)</option>
               <option value="3">3 months (+90 days), 15% off</option>
@@ -322,34 +345,49 @@
 
           <div class="mb-4">
             <div class="form-label fw-semibold small text-light mb-2">Payment method</div>
+
             <div class="d-flex flex-column gap-2">
+
               <label class="rc-pay">
                 <span class="d-flex align-items-center gap-3">
                   <i class="fa-solid fa-qrcode fs-5 text-success"></i>
-                  <span><span class="t d-block">UPI and QR code</span><span class="s">GPay, PhonePe, Paytm, BHIM</span></span>
+                  <span>
+                    <span class="t d-block">UPI and QR code</span>
+                    <span class="s">GPay, PhonePe, Paytm, BHIM</span>
+                  </span>
                 </span>
                 <input type="radio" name="pay_mode" value="upi" checked>
               </label>
+
               <label class="rc-pay">
                 <span class="d-flex align-items-center gap-3">
                   <i class="fa-regular fa-credit-card fs-5" style="color:#00D2FF"></i>
-                  <span><span class="t d-block">Debit or credit card</span><span class="s">Visa, MasterCard, RuPay</span></span>
+                  <span>
+                    <span class="t d-block">Debit or credit card</span>
+                    <span class="s">Visa, MasterCard, RuPay</span>
+                  </span>
                 </span>
                 <input type="radio" name="pay_mode" value="card">
               </label>
+
               <label class="rc-pay">
                 <span class="d-flex align-items-center gap-3">
                   <i class="fa-solid fa-building-columns fs-5 text-warning"></i>
-                  <span><span class="t d-block">Net banking</span><span class="s">All major Indian banks</span></span>
+                  <span>
+                    <span class="t d-block">Net banking</span>
+                    <span class="s">All major Indian banks</span>
+                  </span>
                 </span>
                 <input type="radio" name="pay_mode" value="netbanking">
               </label>
+
             </div>
           </div>
 
           <button type="submit" id="btnSubmitRecharge" class="rc-submit">
             <i class="fa-solid fa-lock me-1"></i> Pay now
           </button>
+
         </form>
       </div>
     </div>
@@ -360,62 +398,124 @@
 <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
 
 <script>
-  function calculatePlanTotal() {
-    const base = parseFloat(document.getElementById('modalBasePrice').value) || 199;
-    const months = parseInt(document.getElementById('planDurationSelect').value) || 1;
-    let total = base * months;
-    if (months === 3) total = Math.round(total * 0.85);   // 15% off
-    if (months === 12) total = Math.round(total * 0.70);  // 30% off
-    document.getElementById('modalCalculatedAmount').value = total;
-    document.getElementById('displayTotalAmount').textContent = '\u20B9' + total;
+
+function calculatePlanTotal() {
+
+  const base = parseFloat(document.getElementById('modalBasePrice').value) || 199;
+  const months = parseInt(document.getElementById('planDurationSelect').value) || 1;
+
+  let total = base * months;
+
+  if (months === 3) total = Math.round(total * 0.85);
+  if (months === 12) total = Math.round(total * 0.70);
+
+  document.getElementById('modalCalculatedAmount').value = total;
+  document.getElementById('displayTotalAmount').textContent = '\u20B9' + total;
+}
+
+
+// Modal open hone par selected button ka data lena
+const rechargeModal = document.getElementById('rechargeModal');
+
+rechargeModal.addEventListener('show.bs.modal', function(event) {
+
+  const btn = event.relatedTarget;
+  if (!btn) return;
+
+  const product = btn.getAttribute('data-product');
+  const service = btn.getAttribute('data-service');
+  const rechargeType = btn.getAttribute('data-type');
+
+  document.getElementById('modalProductName').value = product;
+  document.getElementById('modalServiceName').value = service;
+  document.getElementById('modalRechargeType').value = rechargeType;
+
+  document.getElementById('displayProductName').textContent = product;
+  document.getElementById('displayServiceName').textContent = service;
+
+  document.getElementById('modalBasePrice').value =
+    btn.getAttribute('data-base-price') || '199';
+
+  document.getElementById('planDurationSelect').value = '1';
+
+  calculatePlanTotal();
+});
+
+
+// Payment submit
+document.getElementById('rechargeForm').addEventListener('submit', async function(e) {
+
+  e.preventDefault();
+
+  const btn = document.getElementById('btnSubmitRecharge');
+  const originalText = btn.innerHTML;
+
+  btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Starting payment...';
+  btn.disabled = true;
+
+  const product = document.getElementById('modalProductName').value;
+  const service = document.getElementById('modalServiceName').value;
+  const amount = document.getElementById('modalCalculatedAmount').value;
+  const rechargeType = document.getElementById('modalRechargeType').value;
+  const duration = document.getElementById('planDurationSelect').value;
+
+  if (!rechargeType) {
+    alert('Recharge type is missing. Please close the window and try again.');
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+    return;
   }
 
-  const rechargeModal = document.getElementById('rechargeModal');
-  rechargeModal.addEventListener('show.bs.modal', function (event) {
-    const btn = event.relatedTarget;
-    if (!btn) return;
-    const product = btn.getAttribute('data-product');
-    const service = btn.getAttribute('data-service');
-    document.getElementById('modalProductName').value = product;
-    document.getElementById('modalServiceName').value = service;
-    document.getElementById('displayProductName').textContent = product;
-    document.getElementById('displayServiceName').textContent = service;
-    document.getElementById('modalBasePrice').value = btn.getAttribute('data-base-price') || '199';
-    document.getElementById('planDurationSelect').value = '1';
-    calculatePlanTotal();
-  });
+  // Flask URL mein selected recharge type dynamically set hoga
+  const orderUrl = "{{ url_for('recharge.create_cashfree_order', type='TYPE_PLACEHOLDER') }}"
+    .replace('TYPE_PLACEHOLDER', encodeURIComponent(rechargeType));
 
-  document.getElementById('rechargeForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
-    const btn = document.getElementById('btnSubmitRecharge');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Starting payment...';
-    btn.disabled = true;
+  try {
 
-    const product = document.getElementById('modalProductName').value;
-    const service = document.getElementById('modalServiceName').value;
-    const amount = document.getElementById('modalCalculatedAmount').value;
+    const response = await fetch(orderUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        product_name: product + ' (' + service + ' Recharge)',
+        amount: amount,
+        recharge_Duration: duration
+      })
+    });
 
-    try {
-      const response = await fetch("{{ url_for('recharge.create_cashfree_order') }}", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify({ product_name: product + ' (' + service + ' Recharge)', amount: amount })
+    const data = await response.json();
+
+    if (response.ok && data.status === "success" && data.payment_session_id) {
+
+      const cashfree = Cashfree({ mode: "sandbox" });
+
+      cashfree.checkout({
+        paymentSessionId: data.payment_session_id,
+        redirectTarget: "_self"
       });
-      const data = await response.json();
 
-      if (response.ok && data.status === "success" && data.payment_session_id) {
-        const cashfree = Cashfree({ mode: "sandbox" });
-        cashfree.checkout({ paymentSessionId: data.payment_session_id, redirectTarget: "_self" });
-      } else {
-        alert(data.message || "Could not start the payment. Please try again.");
-        btn.innerHTML = originalText; btn.disabled = false;
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Could not reach the payment server. Please check your internet connection.");
-      btn.innerHTML = originalText; btn.disabled = false;
+    } else {
+
+      alert(data.message || "Could not start the payment. Please try again.");
+
+      btn.innerHTML = originalText;
+      btn.disabled = false;
     }
-  });
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert("Could not reach the payment server. Please check your internet connection.");
+
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  }
+
+});
+
 </script>
+
 {% endblock %}
