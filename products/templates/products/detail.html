@@ -228,6 +228,9 @@
     </a>
   </div>
 
+  <!-- Top Global Alert Box (Shows errors & success messages at the top) -->
+  <div id="trialAlertBox" class="alert d-none mb-4 shadow-sm" role="alert"></div>
+
   <div class="row g-4 g-lg-5 align-items-start">
     <!-- LEFT COLUMN: Media Player & Specs -->
     <div class="col-lg-7">
@@ -265,6 +268,10 @@
             <span class="val text-info">{{ product.category | default('Digital Tool', true) }}</span>
           </div>
           <div class="spec-item">
+            <span class="label">Tag Name</span>
+            <span class="val text-success">{{ product.tag_name or product.TagName or product.tagName or product.tag or 'Standard' }}</span>
+          </div>
+          <div class="spec-item">
             <span class="label">Trial Option</span>
             <span class="val text-warning">3 Days Free</span>
           </div>
@@ -286,7 +293,7 @@
         <div class="guarantee-box">
           <i class="fa-solid fa-shield-check text-info fs-3"></i>
           <div>
-            <span class="fw-bold text-white d-block small">Nexus Verified Architecture</span>
+            <span class="fw-bold text-white d-block small">Tech Gyan Amit Verified Architecture</span>
             <span class="text-slate small" style="font-size: 0.76rem;">Every script is vetted for memory leaks, clean webhook handshakes, and compatibility.</span>
           </div>
         </div>
@@ -415,7 +422,7 @@
 
           <button type="button" 
                   id="btnActivateTrial" 
-                  onclick="activateTrialProcess('{{ product.id }}', '{{ product.name | escape }}')" 
+                  onclick="activateTrialProcess('{{ product.id }}', '{{ product.name | escape }}', '{{ product.tag_name or product.TagName or product.tagName or product.tag or 'Standard' }}')" 
                   class="btn-nexus-primary w-100 justify-content-center py-3 fs-6 fw-bold">
             <i class="fa-solid fa-rocket me-2"></i> Activate 3-Day Trial Now
           </button>
@@ -463,7 +470,7 @@
 
           <button type="button" 
                   id="btnProceedCashfree" 
-                  onclick="initiateCashfreeCheckout('{{ product.id }}', '{{ product.name | escape }}', '{{ product.price }}')" 
+                  onclick="initiateCashfreeCheckout('{{ product.id }}', '{{ product.name | escape }}', '{{ product.price }}', 'appRecharge', '{{ product.tag_name or product.TagName or product.tagName or product.tag or 'Standard' }}')" 
                   class="btn-nexus-primary w-100 justify-content-center py-3 fs-6 fw-bold">
             <i class="fa-solid fa-lock me-2"></i> Pay ₹{{ product.price }} via Cashfree
           </button>
@@ -511,6 +518,7 @@
 </div>
 
 <!-- Cashfree SDK & JS Scripts -->
+<!-- Cashfree SDK & JS Scripts -->
 <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
 <script>
   // Mode Switcher: 3-Day Trial vs Subscribe
@@ -548,15 +556,45 @@
     }
   }
 
+  // Helper Function: Hide Modal, Show Alert at Top, and Auto-Hide after 4 seconds
+  function showAlertAndCloseModal(type, message) {
+    // 1. Hide Payment Modal immediately
+    const modalEl = document.getElementById('paymentModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    if (modalInstance) {
+      modalInstance.hide();
+    }
+
+    // 2. Show alert at top (#trialAlertBox)
+    const alertBox = document.getElementById('trialAlertBox');
+    if (alertBox) {
+      if (type === 'success') {
+        alertBox.className = "alert alert-success mt-3 shadow-sm";
+        alertBox.innerHTML = `<i class="fa-solid fa-circle-check me-2"></i> ${message}`;
+      } else {
+        alertBox.className = "alert alert-danger mt-3 shadow-sm";
+        alertBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation me-2"></i> ${message}`;
+      }
+      alertBox.classList.remove('d-none');
+      alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      // 3. 🕒 Auto-hide the alert box after 4 seconds (4000 milliseconds)
+      setTimeout(() => {
+        alertBox.classList.add('d-none');
+      }, 4000);
+    }
+  }
+
   // Activate 3-Day Trial Function
-  async function activateTrialProcess(productId, productName) {
+  async function activateTrialProcess(productId, productName, tagName) {
     const btn = document.getElementById('btnActivateTrial');
     const originalText = btn.innerHTML;
+    
     btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Registering Trial...`;
     btn.disabled = true;
 
     try {
-      const response = await fetch("{{ url_for('recharge.activate_trial',type='appRechargeTrial') }}", {
+      const response = await fetch("{{ url_for('recharge.activate_trial', type='appRechargeTrial') }}", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -565,37 +603,45 @@
         body: JSON.stringify({
           product_id: productId,
           product_name: productName,
+          tag_name: tagName,
           recharge_type: "appRechargeTrial"
         })
       });
 
       const data = await response.json();
+      console.log(data);
 
-      if (response.ok && data.status === "success") {
-        alert("3-Day Trial Activated Successfully! Redirecting to Dashboard...");
-        window.location.href = "{{ url_for('home.dashboard') }}";
+      const apiStatus = (data.status || "").trim().toLowerCase();
+
+      if (response.ok && apiStatus === "success") {
+        showAlertAndCloseModal('success', data.message || "3-Day Trial Activated Successfully! Redirecting to Dashboard...");
+        setTimeout(() => {
+          window.location.href = "{{ url_for('home.dashboard') }}";
+        }, 1500);
       } else {
-        alert(data.message || "Failed to register trial. Please try again.");
+        showAlertAndCloseModal('error', data.message || "Failed to register trial. Please try again.");
         btn.innerHTML = originalText;
         btn.disabled = false;
       }
+
     } catch (err) {
       console.error(err);
-      alert("Network error while connecting to trial service.");
+      showAlertAndCloseModal('error', "Network error while connecting to trial service.");
       btn.innerHTML = originalText;
       btn.disabled = false;
     }
   }
 
-  // Cashfree Order Checkout
-  async function initiateCashfreeCheckout(productId, productName, amount,type) {
+  // Cashfree Order Checkout & Error Handler
+  async function initiateCashfreeCheckout(productId, productName, amount, type, tagName) {
     const btn = document.getElementById('btnProceedCashfree');
     const originalText = btn.innerHTML;
+    
     btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Initializing Payment Gateway...`;
     btn.disabled = true;
 
     try {
-      const response = await fetch("{{ url_for('recharge.create_cashfree_order',type='appRecharge') }}", {
+      const response = await fetch("{{ url_for('recharge.create_cashfree_order', type='Productrecharge') }}", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -604,6 +650,7 @@
         body: JSON.stringify({
           product_id: productId,
           product_name: productName,
+          tag_name: tagName,
           amount: amount,
           recharge_type: type,
           recharge_Duration: 1
@@ -622,13 +669,13 @@
           redirectTarget: "_self"
         });
       } else {
-        alert(data.message || "Failed to initialize payment gateway. Please try again.");
+        showAlertAndCloseModal('error', data.message || "Payment initialization failed. Please try again.");
         btn.innerHTML = originalText;
         btn.disabled = false;
       }
     } catch (err) {
       console.error(err);
-      alert("Error connecting to server. Please check your network.");
+      showAlertAndCloseModal('error', "Network error while connecting to payment service.");
       btn.innerHTML = originalText;
       btn.disabled = false;
     }
@@ -653,7 +700,7 @@
       embedUrl = rawUrl;
     }
 
-    if (embedUrl) {
+    (embedUrl) => {
       container.innerHTML = `
         <iframe 
           src="${embedUrl}" 

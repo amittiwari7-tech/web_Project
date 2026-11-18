@@ -1,11 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-IN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#070B19">
 
-  <title>{% block title %}Tech Gyan Amit | Products, Tools & Custom Services{% endblock %}</title>
+  <!-- ==================================
+       SEO
+       Child pages can override the title, meta_description,
+       meta_keywords, meta_robots, canonical, og_image and extra_head blocks.
+  ================================== -->
+
+  <!-- Title (keep under ~60 characters, brand first on the homepage) -->
+  <title>{% block title %}Tech Gyan Amit | Google Sheets ERP, Automation & Custom Software{% endblock %}</title>
+
+  <!-- Description (shown under the URL in Google; keep 140-155 characters) -->
+  <meta name="description" content="{% block meta_description %}Tech Gyan Amit offers ready-made Google Sheets ERP, Python Flask apps, business automation tools and custom software built to simplify your work.{% endblock %}">
+  <meta name="keywords" content="{% block meta_keywords %}Tech Gyan Amit, Google Sheets ERP, Python automation, Flask web apps, custom ERP software, business automation, Google Apps Script, custom software development India{% endblock %}">
+  <meta name="author" content="Tech Gyan Amit">
+  <meta name="application-name" content="Tech Gyan Amit">
+  <meta name="apple-mobile-web-app-title" content="Tech Gyan Amit">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- Indexing rules (override the meta_robots block with noindex, nofollow on login/dashboard pages) -->
+  <meta name="robots" content="{% block meta_robots %}index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1{% endblock %}">
+  <meta name="googlebot" content="{% block meta_googlebot %}index, follow{% endblock %}">
+
+  <!-- Canonical URL (query strings removed to avoid duplicate pages) -->
+  <link rel="canonical" href="{% block canonical %}{{ request.base_url }}{% endblock %}">
+
+  <!-- Language / region -->
+  <meta name="language" content="English">
+  <meta name="geo.region" content="IN">
+  <meta http-equiv="content-language" content="en-IN">
+
+  <!-- Open Graph (WhatsApp, Facebook, LinkedIn previews) -->
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+  <meta property="og:site_name" content="Tech Gyan Amit">
+  <meta property="og:title" content="{{ self.title()|striptags|trim }}">
+  <meta property="og:description" content="{{ self.meta_description()|striptags|trim }}">
+  <meta property="og:url" content="{{ self.canonical()|trim }}">
+  <meta property="og:image" content="{% block og_image %}{{ url_for('static', filename='images/logo.png', _external=True) }}{% endblock %}">
+  <meta property="og:image:alt" content="Tech Gyan Amit logo">
+  <meta property="og:locale" content="en_IN">
+
+  <!-- Twitter / X card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ self.title()|striptags|trim }}">
+  <meta name="twitter:description" content="{{ self.meta_description()|striptags|trim }}">
+  <meta name="twitter:image" content="{{ self.og_image()|trim }}">
+
+  <!-- Favicons (place these files in /static/images/) -->
+  <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/png">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/logo.png') }}">
+
+  <!-- Structured data: brand name, logo and site name in Google results -->
+  <script type="application/ld+json">
+  {{ {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": request.url_root ~ "#organization",
+        "name": "Tech Gyan Amit",
+        "alternateName": ["TechGyanAmit", "Tech Gyan Amit Products, Tools & Services"],
+        "url": request.url_root,
+        "logo": {
+          "@type": "ImageObject",
+          "url": url_for('static', filename='images/logo.png', _external=True)
+        },
+        "description": "Practical digital products, business automation, custom ERP systems, web applications and technology solutions designed to make work simpler.",
+        "areaServed": "IN",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+91-7217723569",
+          "contactType": "customer support",
+          "areaServed": "IN",
+          "availableLanguage": ["English", "Hindi"]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": request.url_root ~ "#website",
+        "url": request.url_root,
+        "name": "Tech Gyan Amit",
+        "alternateName": "TechGyanAmit",
+        "description": "Ready-made tools, Google Sheets ERP, automation and custom software services.",
+        "inLanguage": "en-IN",
+        "publisher": { "@id": request.url_root ~ "#organization" }
+      }
+    ]
+  }|tojson }}
+  </script>
+
+  <!-- Page-specific extra tags (breadcrumbs, product schema, etc.) -->
+  {% block extra_head %}{% endblock %}
+
+  <!-- Faster font / CDN loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 
   <!-- Bootstrap 5.3 + Font Awesome + Google Fonts -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">

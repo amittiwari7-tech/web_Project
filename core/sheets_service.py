@@ -21,7 +21,7 @@ def get_products():
         response = requests.get(Config.APPS_SCRIPT_URL, timeout=8)
         if response.status_code == 200:
             data = response.json()
-            
+            print("[Core Cache] Fetched products from Apps Script:", data)
             if isinstance(data, list):
                 _cache["products"] = data
                 _cache["timestamp"] = current_time
@@ -43,10 +43,31 @@ def post_to_sheets(action, payload):
     try:
         url = f"{Config.APPS_SCRIPT_URL}?action={action}"
         response = requests.post(url, json=payload, timeout=8)
-        return response.status_code == 200 and response.json().get("status") == "success"
+        print(f"[Core Post] Submission response for action '{action}': {response.status_code}, {response.text}")
+        
+        # Response ko safely JSON mein parse karein
+        try:
+            res_data = response.json()
+        except Exception:
+            res_data = {}
+            
+        # Status aur message nikalna
+        api_status = str(res_data.get("status", "")).strip().lower()
+        api_message = res_data.get("message", "No message provided")
+        
+        # Sirf tabhi True ho jab HTTP 200 ho AUR status 'success' ho
+        is_success = (response.status_code == 200 and api_status == "success")
+        
+        if not is_success:
+            print(f"[Core Post Warning] Action '{action}' failed or rejected: {api_message}")
+            
+        # Yahan ab hum (is_success, api_message) dono return kar rahe hain
+        return is_success, api_message
+
     except Exception as e:
-        print(f"[Core Post] Submission error ({action}): {e}")
-        return False
+        error_msg = str(e)
+        print(f"[Core Post] Submission error ({action}): {error_msg}")
+        return False, error_msg
 
 
 # --- FIXED ROUTE ---

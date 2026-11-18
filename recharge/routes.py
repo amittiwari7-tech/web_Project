@@ -3,6 +3,7 @@ import re
 import uuid
 import requests
 import traceback
+import urllib.parse
 from flask import request, jsonify, render_template, session, url_for
 from . import recharge_bp
 from core.sheets_service import post_to_sheets
@@ -28,7 +29,12 @@ def create_cashfree_order(type):
         data = request.get_json(silent=True) or {}
         print(f"Received data for Cashfree order creation: {data}")
 
-        # 1. Sanitize & parse Amount
+        # 1. Sabse pehle tagName yahan define karein taaki error na aaye
+        tagName = str(data.get('tag_name') or "").strip()
+        safe_tag_name = urllib.parse.quote(tagName)
+        safe_product_Id = urllib.parse.quote(str(data.get('product_id') or 'N/A').strip())
+
+        # 2. Sanitize & parse Amount
         raw_amount = data.get('amount', 199)
         if isinstance(raw_amount, str):
             raw_amount = re.sub(r'[^\d.]', '', raw_amount)
@@ -48,25 +54,25 @@ def create_cashfree_order(type):
         except (ValueError, TypeError):
             recharge_Duration = 1
 
-        # 2. Format customer details
+        # 3. Format customer details
         customer_id = session.get('user_id') or 7217
         customer_name = str(session.get('user_name') or 'Developer')[:50]
         customer_email = str(session.get('email') or 'developer@nexus.local').strip()
         if '@' not in customer_email:
             customer_email = "developer@nexus.local"
 
-        # 3. Clean 10-digit phone
+        # 4. Clean 10-digit phone
         raw_phone = str(session.get('phone') or data.get('phone') or '9999999999')
         digits = re.sub(r'\D', '', raw_phone)
         customer_phone = digits[-10:] if len(digits) >= 10 else "9999999999"
 
-        # 4. Callback URL
+        # 5. Callback URL (Encoded safe_tag_name ke sath)
         try:
-            return_url = f"{request.host_url.rstrip('/')}{url_for('recharge.payment_callback')}?order_id={order_id}&type={type}&duration={recharge_Duration}"
+            return_url = f"{request.host_url.rstrip('/')}{url_for('recharge.payment_callback')}?order_id={order_id}&type={type}&duration={recharge_Duration}&tag_name={safe_tag_name}&product_id={safe_product_Id}"
         except Exception:
-            return_url = f"{request.host_url.rstrip('/')}/recharge/payment-callback?order_id={order_id}&type={type}&duration={recharge_Duration}"
+            return_url = f"{request.host_url.rstrip('/')}/recharge/payment-callback?order_id={order_id}&type={type}&duration={recharge_Duration}&tag_name={safe_tag_name}&product_id={safe_product_Id}"
 
-        # 5. Build Cashfree Headers & Payload
+        # 6. Build Cashfree Headers & Payload
         headers = {
             "accept": "application/json",
             "content-type": "application/json",
@@ -90,12 +96,14 @@ def create_cashfree_order(type):
             "order_meta": {
                 "return_url": return_url
             },
-            "order_note": f"{product_name}"[:40]
+            "order_note": f"{product_name}"[:40],
+            "tag_name": tagName,
+            "product_Id": safe_product_Id
         }
         
         print("Payload for Cashfree Order Creation:", payload)
 
-        # 6. Execute API request
+        # 7. Execute API request
         response = requests.post(CASHFREE_BASE_URL, json=payload, headers=headers, timeout=12)
         
         if not response.text or response.text.strip() == "":
@@ -112,15 +120,13 @@ def create_cashfree_order(type):
                 "message": "Invalid response received from Payment Gateway."
             }), 500
 
-        # NOTE: Yahan se post_to_sheets hata diya gaya hai taaki order bante hi data save na ho.
-        # Ab data sirf payment complete hone ke baad callback par save hoga.
-
         if response.status_code == 200 and isinstance(res_data, dict) and "payment_session_id" in res_data:
             return jsonify({
                 "status": "success",
                 "payment_session_id": res_data["payment_session_id"],
                 "order_id": order_id,
-                "order_Type": type
+                "order_Type": type,
+                "tag_name": tagName
             })
         else:
             err_msg = "Payment session creation failed."
@@ -145,6 +151,7 @@ def payment_callback():
     order_id = request.args.get('order_id', 'UNKNOWN')
     order_type = request.args.get('type', 'Productrecharge')
     duration = request.args.get('duration', 1)
+    tag_name = request.args.get('tag_name', '')
 
     headers = {
         "accept": "application/json",
@@ -163,11 +170,13 @@ def payment_callback():
         if response.status_code == 200:
             res_json = response.json()
             order_status = res_json.get("order_status")
-
+           
             # Check karein ki payment 100% successful hui hai ya nahi
             if order_status == "PAID":
                 res_json["order_Type"] = order_type
                 res_json["recharge_duration"] = duration
+                res_json["tag_name"] = tag_name
+                res_json["product_Id"] = request.args.get('product_id', 'N/A')
                 
                 # 🟢 Sirf SUCCESS / PAID hone par hi Google Sheet par data save hoga!
                 post_to_sheets('appSubscription', res_json)
@@ -186,7 +195,8 @@ def activate_trial(type):
         return jsonify({"status": "error", "message": "User not authenticated. Please log in first."}), 401
 
     data = request.get_json(silent=True) or {}
-    product_name = str(data.get('product_name') or 'NEXUS Digital License')
+    product_name = str(data.get('product_name') or 'Tech Gyan Amit Digital License')
+    tagName = str(data.get('tag_name') or 'trial')
 
     customer_id = str(session.get('user_id') or '7217')
     customer_name = str(session.get('user_name') or 'Developer')
@@ -208,15 +218,26 @@ def activate_trial(type):
         'Created At': '',
         'Order Note': f"{product_name}",
         "order_Type": type,
+        "tag_name": tagName,
+        "product_Id":data.get('product_id', 'N/A'),
     }
-
-    sheets_response = post_to_sheets('trial', {
+    
+    print(trial_data)
+    success, message = post_to_sheets('trial', {
         'username': trial_data
     })
+    
+    print(f"Trial registration response from Google Sheets: {success}, {message}")
+
+    # Agar Google sheet se success True aaya hai, tabhi 'success' bhejein, warna 'error'
+    status_str = "success" if success else "error"
 
     return jsonify({
-        "status": "success",
-        "message": "Trial registered successfully",
+        "status": status_str,
+        "message": message,  # Yahan Google Sheet ka actual message (jaise "Data Already Exist...") jayega
         "order_id": order_id,
-        "sheets_result": sheets_response
+        "sheets_result": {
+            "success": success,
+            "message": message
+        }
     })

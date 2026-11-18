@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Ready-to-Use Digital Products // NEXUS{% endblock %}
+{% block title %}Ready-to-Use Digital Products // Tech Gyan Amit{% endblock %}
 
 {% block content %}
 <style>
@@ -56,6 +56,54 @@
     box-shadow: 0 16px 36px -10px rgba(6, 182, 212, 0.25);
     transform: translateY(-6px);
   }
+
+  /* Custom styling for button and metadata pills */
+  .btn-nexus-detail {
+    background: linear-gradient(135deg, #0e2a47 0%, #081a2e 100%);
+    color: #ffffff;
+    border: 1px solid #06B6D4;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .btn-nexus-detail:hover {
+    background: #06B6D4;
+    color: #081a2e;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+  }
+
+  .card-name-pill {
+    font-size: 0.72rem;
+    font-family: var(--font-mono, monospace);
+    color: #06B6D4;
+    background: rgba(6, 182, 212, 0.1);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    padding: 2px 8px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+
+  .tag-name-pill {
+    font-size: 0.72rem;
+    font-family: var(--font-mono, monospace);
+    color: #10B981; /* Emerald Green for tags */
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    padding: 2px 8px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 6px;
+    margin-left: 4px;
+  }
 </style>
 
 <div class="container product-catalog-scope py-3">
@@ -82,6 +130,21 @@
             </span>
           </div>
 
+          <!-- Card Name & Tag Name Badges -->
+          <div class="d-flex flex-wrap gap-1 mb-1">
+            {% if product.card_name or product.CardName or product.cardName %}
+            <span class="card-name-pill">
+              <i class="fa-solid fa-tag me-1"></i> {{ product.card_name or product.CardName or product.cardName }}
+            </span>
+            {% endif %}
+
+            {% if product.tag_name or product.TagName or product.tagName or product.tag %}
+            <span class="tag-name-pill">
+              <i class="fa-solid fa-bookmark me-1"></i> {{ product.tag_name or product.TagName or product.tagName or product.tag }}
+            </span>
+            {% endif %}
+          </div>
+
           <!-- Product Title -->
           <h4 class="fs-5 mb-2">
             {{ product.name or product.Title or product.title or 'Unnamed Product' }}
@@ -93,13 +156,13 @@
           </p>
         </div>
 
-        <!-- Card Footer: Pricing and Action -->
+        <!-- Card Footer: Pricing and Action Button with Details & Guide -->
         <div class="pt-3 border-top border-secondary-subtle d-flex align-items-center justify-content-between">
           <div>
             <span class="price-label d-block text-uppercase">ONE-TIME ASSET</span>
             <span class="fs-4 price-amount font-mono">₹{{ product.price or product.Price or '0' }}</span>
           </div>
-          <a href="{{ url_for('products.detail', product_id=product.id or product.ID) }}" class="btn-nexus-primary">
+          <a href="{{ url_for('products.detail', product_id=product.id or product.ID) }}" class="btn-nexus-detail">
             <span>Details & Guide</span> <i class="fa-solid fa-arrow-right"></i>
           </a>
         </div>
@@ -107,7 +170,7 @@
     </div>
     {% else %}
     <div class="col-12 text-center py-5">
-      <p class="text-slate-400 ">
+      <p class="text-slate-400">
         No products found in the catalog. Check connection or clear cache.
       </p>
     </div>
