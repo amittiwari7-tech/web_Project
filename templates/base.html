@@ -344,7 +344,78 @@
     }
 
     /* ==================================
-       FLOATING WIDGETS
+       FOOTER YOUTUBE SUBSCRIBER CARD
+    ================================== */
+    .footer-yt-box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 11px 14px;
+      background: var(--dark-card);
+      border: 1px solid rgba(0, 210, 255, 0.28);
+      border-radius: 12px;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+      max-width: 340px;
+      width: 100%;
+    }
+
+    .footer-yt-left {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .footer-yt-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 46, 76, 0.14);
+      border: 1px solid rgba(255, 46, 76, 0.35);
+      color: var(--brand-red);
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .footer-yt-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.25;
+    }
+
+    .footer-yt-count {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--brand-cyan);
+      margin-top: 2px;
+    }
+
+    .footer-yt-sub-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--brand-blue), var(--brand-cyan));
+      color: #ffffff !important;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .footer-yt-sub-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0, 210, 255, 0.35);
+    }
+
+    /* ==================================
+       FLOATING WIDGETS (Unified Dark Navy + Cyan Palette)
     ================================== */
     .floating-social-wrapper {
       position: fixed;
@@ -358,18 +429,27 @@
     }
 
     .social-trigger-btn {
-      width: 50px;
-      height: 50px;
-      border: none;
+      width: 52px;
+      height: 52px;
+      border: 1px solid rgba(0, 210, 255, 0.45);
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--brand-blue), var(--brand-red));
-      color: white;
+      background: linear-gradient(145deg, #0F172A, #070B19);
+      color: var(--brand-cyan);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 20px;
       cursor: pointer;
-      box-shadow: 0 8px 22px rgba(0, 102, 255, 0.4);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65), 0 0 16px rgba(0, 210, 255, 0.22);
+      transition: var(--transition);
+    }
+
+    .social-trigger-btn:hover {
+      transform: scale(1.07);
+      background: linear-gradient(135deg, var(--brand-blue), var(--brand-cyan));
+      color: #ffffff;
+      border-color: var(--brand-cyan);
+      box-shadow: 0 10px 28px rgba(0, 102, 255, 0.45);
     }
 
     .social-menu {
@@ -389,8 +469,8 @@
     }
 
     .social-icon-btn {
-      width: 43px;
-      height: 43px;
+      width: 44px;
+      height: 44px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -400,12 +480,14 @@
       border-radius: 50%;
       font-size: 18px;
       text-decoration: none;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+      transition: var(--transition);
     }
 
     .social-icon-btn:hover {
       color: var(--brand-cyan);
       border-color: var(--brand-cyan);
+      background: #131E36;
       transform: translateX(4px);
     }
 
@@ -418,28 +500,30 @@
 
     .ai-agent-btn {
       position: relative;
-      width: 55px;
-      height: 55px;
+      width: 54px;
+      height: 54px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-size: 22px;
-      background: radial-gradient(circle at 30% 30%, var(--brand-cyan), var(--brand-blue));
-      border: 3px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-size: 21px;
+      background: linear-gradient(135deg, var(--brand-blue), var(--brand-cyan));
+      border: 1px solid rgba(0, 210, 255, 0.5);
       border-radius: 50%;
-      box-shadow: 0 8px 25px rgba(0, 102, 255, 0.4);
+      box-shadow: 0 8px 25px rgba(0, 102, 255, 0.42);
       cursor: pointer;
+      transition: var(--transition);
     }
 
     .ai-agent-btn:hover {
       transform: scale(1.07);
+      box-shadow: 0 10px 30px rgba(0, 210, 255, 0.5);
     }
 
     .ai-badge {
       position: absolute;
-      top: 0;
-      right: 0;
+      top: 1px;
+      right: 1px;
       width: 13px;
       height: 13px;
       border: 2px solid var(--dark-bg);
@@ -517,7 +601,7 @@
     .chat-msg.user {
       align-self: flex-end;
       color: white;
-      background: linear-gradient(135deg, var(--brand-blue), var(--brand-red));
+      background: linear-gradient(135deg, var(--brand-blue), var(--brand-cyan));
       border-bottom-right-radius: 4px;
     }
 
@@ -547,7 +631,6 @@
 
     .ai-send-btn {
       padding: 0 15px;
-      color: white;
       background: var(--brand-cyan);
       color: #070B19;
       font-weight: 700;
@@ -843,16 +926,36 @@
             <img class="footer-brand-logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="Tech Gyan Amit">
             <div>
               <div class="fw-bold text-white font-mono">TECH GYAN AMIT</div>
-              <small style="color: var(--brand-cyan);"></small>
+              <small style="color: var(--brand-cyan);">Products, Tools & Services</small>
             </div>
           </div>
-          <p class="small mb-4" style="line-height:1.8;max-width:340px">
-            Practical digital products, business automation, custom ERP systems, web applications and technology,solutions designed to make work simpler.
+          <p class="small mb-3" style="line-height:1.8;max-width:340px">
+            Practical digital products, business automation, custom ERP systems, web applications and technology solutions designed to make work simpler.
           </p>
+
+          <!-- YouTube Logo + Subscriber Count in Footer -->
+          <div class="footer-yt-box mb-3" id="footerYtWidget" data-channel-id="YOUR_YOUTUBE_CHANNEL_ID" data-api-key="">
+            <div class="footer-yt-left">
+              <div class="footer-yt-logo" aria-hidden="true">
+                <i class="fa-brands fa-youtube"></i>
+              </div>
+              <div>
+                <div class="footer-yt-title">Tech Gyan Amit</div>
+                <div class="footer-yt-count" id="ytSubCountText">{{ yt_subscribers | default('YouTube Channel') }}</div>
+              </div>
+            </div>
+            <a href="https://www.youtube.com/channel/UCLO1y3x89u92zg1LCAcAuTw?sub_confirmation=1"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="footer-yt-sub-btn">
+              <i class="fa-brands fa-youtube"></i> Subscribe
+            </a>
+          </div>
+
           <div class="footer-social">
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn"><i class="fa-brands fa-github"></i></a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn"><i class="fa-brands fa-linkedin"></i></a>
-            <a href="https://wa.me/917217723569" target="_blank" rel="noopener noreferrer" class="social-icon-btn"><i class="fa-brands fa-whatsapp"></i></a>
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="https://wa.me/917217723569" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
           </div>
         </div>
 
@@ -973,6 +1076,29 @@
     document.addEventListener('keydown', function(event) {
       if (event.key === 'Escape') toggleChat(false);
     });
+
+    // Optional live subscriber count via YouTube Data API v3 (if channelId & apiKey are set)
+    (function loadFooterSubscriberCount() {
+      const box = document.getElementById('footerYtWidget');
+      const countEl = document.getElementById('ytSubCountText');
+      if (!box || !countEl) return;
+
+      const channelId = (box.getAttribute('data-channel-id') || '').trim();
+      const apiKey = (box.getAttribute('data-api-key') || '').trim();
+      if (!channelId || channelId === 'YOUR_YOUTUBE_CHANNEL_ID' || !apiKey) return;
+
+      fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${encodeURIComponent(channelId)}&key=${encodeURIComponent(apiKey)}`)
+        .then(res => res.json())
+        .then(data => {
+          const item = data && data.items && data.items[0];
+          const rawCount = item && item.statistics && item.statistics.subscriberCount;
+          if (rawCount && !item.statistics.hiddenSubscriberCount) {
+            const formatted = Number(rawCount).toLocaleString('en-IN');
+            countEl.textContent = `${formatted} subscribers`;
+          }
+        })
+        .catch(() => {});
+    })();
   </script>
 </body>
 </html>
