@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Tech Gyan Amit // Ready-to-Use ERP Apps, Web Apps, AppSheet & Automation{% endblock %}
+{% block title %}Tech Gyan Amit // Ready-to-Use ERP Apps, Web Apps, AppSheet & Custom Solutions{% endblock %}
 
 {% block content %}
 {% set products = products or [] %}
@@ -135,7 +135,7 @@
             <i class="fa-solid fa-bolt"></i> Explore {{ product_count }} Ready Apps
           </a>
           <a href="{{ url_for('interactions.custom_order') }}" class="btn-tga-outline px-4 py-3 fs-6">
-            <i class="fa-solid fa-wand-magic-sparkles text-info"></i> Request Custom App
+            <i class="fa-solid fa-wand-magic-sparkles text-info"></i> Request Custom Build
           </a>
         </div>
       </div>
@@ -151,7 +151,7 @@
             <li class="d-flex align-items-center"><i class="fa-solid fa-circle-check text-success me-2"></i> Ready-to-Use ERP &amp; Web App Access (Not Full Source Code)</li>
             <li class="d-flex align-items-center"><i class="fa-solid fa-circle-check text-success me-2"></i> Activated Within 24 Hours After Payment</li>
             <li class="d-flex align-items-center"><i class="fa-solid fa-circle-check text-success me-2"></i> Google Sheets, AppSheet, CRM &amp; Web Portal Apps</li>
-            <li class="d-flex align-items-center"><i class="fa-solid fa-circle-check text-success me-2"></i> Step-by-Step Video Guide &amp; WhatsApp Support</li>
+            <li class="d-flex align-items-center"><i class="fa-solid fa-circle-check text-success me-2"></i> Custom Flutter &amp; Python Projects on Request</li>
           </ul>
         </div>
       </div>
@@ -189,19 +189,16 @@
   </div>
 
   <!-- ========================================================
-       3. SPECIALIZED PRODUCT CATEGORIES (GOOGLE SHEETS, APPSHEET & CRM)
-       ======================================================== -->
-  <!-- ========================================================
-       3. SPECIALIZED PRODUCT CATEGORIES (6 DEDICATED CARDS)
+       3. SPECIALIZED PRODUCT CATEGORIES (6 CARDS ONLY)
        ======================================================== -->
   <div class="mb-5">
     <div class="mb-4">
       <span class="font-mono text-uppercase small" style="color: var(--accent-cyan); letter-spacing: 2px;">Solutions</span>
-      <h2 class="h3 fw-bold text-white mb-0">What You Can Subscribe &amp; Use Today</h2>
+      <h2 class="h3 fw-bold text-white mb-0">What You Can Subscribe &amp; Build Today</h2>
     </div>
 
     <div class="row g-4">
-      <!-- 1. Google Sheets ERP -->
+      <!-- Card 1: Google Sheets ERP Systems -->
       <div class="col-md-6 col-lg-4">
         <div class="nexus-card">
           <div class="category-icon-box" style="background: rgba(16, 185, 129, 0.12); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3);">
@@ -214,7 +211,7 @@
         </div>
       </div>
 
-      <!-- 2. Google AppSheet Business Apps (Dedicated Box) -->
+      <!-- Card 2: Google AppSheet Business Apps -->
       <div class="col-md-6 col-lg-4">
         <div class="nexus-card">
           <div class="category-icon-box" style="background: rgba(56, 189, 248, 0.12); color: #38BDF8; border: 1px solid rgba(56, 189, 248, 0.3);">
@@ -222,12 +219,12 @@
           </div>
           <h5 class="fw-bold text-white fs-6 mb-2">Google AppSheet Business Apps</h5>
           <p class="mb-0 text-muted small" style="line-height: 1.7;">
-            Ready-to-use AppSheet apps for stock tracking, purchase approvals, site inspections, dispatch logs, and field data capture synced with Google Sheets.
+            Ready-to-use AppSheet apps for stock tracking, purchase approvals, site inspections, dispatch logs, and field operations synced with Google Sheets.
           </p>
         </div>
       </div>
 
-      <!-- 3. Cloud ERP & CRM Web Portals -->
+      <!-- Card 3: Cloud ERP & CRM Web Portals -->
       <div class="col-md-6 col-lg-4">
         <div class="nexus-card">
           <div class="category-icon-box" style="background: rgba(99, 102, 241, 0.12); color: var(--accent-violet); border: 1px solid rgba(99, 102, 241, 0.3);">
@@ -240,7 +237,7 @@
         </div>
       </div>
 
-      <!-- 4. WhatsApp Notifications & Automation -->
+      <!-- Card 4: WhatsApp Notifications & Automation -->
       <div class="col-md-6 col-lg-4">
         <div class="nexus-card">
           <div class="category-icon-box" style="background: rgba(6, 182, 212, 0.12); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3);">
@@ -253,20 +250,7 @@
         </div>
       </div>
 
-      <!-- 5. Custom Android & Mobile Apps (Dedicated Box) -->
-      <div class="col-md-6 col-lg-4">
-        <div class="nexus-card">
-          <div class="category-icon-box" style="background: rgba(34, 197, 94, 0.12); color: #22C55E; border: 1px solid rgba(34, 197, 94, 0.3);">
-            <i class="fa-brands fa-android"></i>
-          </div>
-          <h5 class="fw-bold text-white fs-6 mb-2">Custom Android &amp; AppSheet Apps</h5>
-          <p class="mb-0 text-muted small" style="line-height: 1.7;">
-            Custom Android applications for billing, barcode/QR inventory scanning, field sales, and real-time cloud database sync tailored to your workflow.
-          </p>
-        </div>
-      </div>
-
-      <!-- 6. AI Voice & Smart Business Utilities -->
+      <!-- Card 5: AI Voice & Smart Business Utilities -->
       <div class="col-md-6 col-lg-4">
         <div class="nexus-card">
           <div class="category-icon-box" style="background: rgba(245, 158, 11, 0.12); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3);">
@@ -274,7 +258,20 @@
           </div>
           <h5 class="fw-bold text-white fs-6 mb-2">AI Voice &amp; Smart Business Utilities</h5>
           <p class="mb-0 text-muted small" style="line-height: 1.7;">
-            Voice-assisted invoice generators, automated data extractors, and intelligent business utilities built to save daily manual work.
+            Voice-assisted billing tools, barcode/QR inventory scanners, automated data extractors, and smart utilities built to save daily manual work.
+          </p>
+        </div>
+      </div>
+
+      <!-- Card 6: Custom Flutter & Python Enterprise Builds -->
+      <div class="col-md-6 col-lg-4">
+        <div class="nexus-card">
+          <div class="category-icon-box" style="background: rgba(236, 72, 153, 0.12); color: #F472B6; border: 1px solid rgba(236, 72, 153, 0.3);">
+            <i class="fa-solid fa-cubes"></i>
+          </div>
+          <h5 class="fw-bold text-white fs-6 mb-2">Custom Flutter &amp; Python Projects</h5>
+          <p class="mb-0 text-muted small" style="line-height: 1.7;">
+            Need a large-scale custom application? We build full-stack web platforms and cross-platform apps using Flutter and Python tailored to your exact business requirements.
           </p>
         </div>
       </div>
@@ -378,18 +375,18 @@
   </div>
 
   <!-- ========================================================
-       6. CUSTOM BUILD CTA BANNER (GOOGLE SHEETS, CRM & APPSHEET)
+       6. CUSTOM BUILD CTA BANNER (FLUTTER, PYTHON, SHEETS, CRM & APPSHEET)
        ======================================================== -->
   <div class="nexus-card p-4 p-md-5 text-center" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(6, 182, 212, 0.12)); border-color: rgba(6, 182, 212, 0.35);">
-    <h3 class="fw-bold text-white mb-2">Need a Custom Google Sheets ERP, CRM, AppSheet App or Web Portal?</h3>
-    <p class="mx-auto mb-4 text-light" style="max-width: 650px; font-size: 0.95rem; color: #CBD5E1 !important;">
-      We build custom <strong>Google Sheets ERPs</strong>, <strong>Google AppSheet mobile &amp; desktop apps</strong>, <strong>CRM systems</strong>, web portals, and WhatsApp automations tailored directly to your business operations.
+    <h3 class="fw-bold text-white mb-2">Need a Large Custom Project in Flutter, Python, AppSheet or Google Sheets?</h3>
+    <p class="mx-auto mb-4 text-light" style="max-width: 660px; font-size: 0.95rem; color: #CBD5E1 !important;">
+      We build custom <strong>Flutter &amp; Python enterprise apps</strong>, <strong>Google Sheets ERPs</strong>, <strong>AppSheet business apps</strong>, <strong>CRM systems</strong>, and WhatsApp automations tailored directly to your business operations.
     </p>
     <div class="d-flex justify-content-center flex-wrap gap-3">
       <a href="{{ url_for('interactions.custom_order') }}" class="btn-tga-primary px-4 py-2">
-        <i class="fa-solid fa-code"></i> Request Custom App
+        <i class="fa-solid fa-code"></i> Request Custom Project
       </a>
-      <a href="https://wa.me/917217723569?text=Hi%20Tech%20Gyan%20Amit,%20I%20am%20interested%20in%20a%20custom%20Google%20Sheets,%20CRM%20or%20AppSheet%20app" target="_blank" rel="noopener noreferrer" class="btn-tga-outline px-4 py-2">
+      <a href="https://wa.me/917217723569?text=Hi%20Tech%20Gyan%20Amit,%20I%20am%20interested%20in%20a%20custom%20Flutter,%20Python,%20AppSheet%20or%20ERP%20project" target="_blank" rel="noopener noreferrer" class="btn-tga-outline px-4 py-2">
         <i class="fa-brands fa-whatsapp text-success"></i> Direct Chat on WhatsApp
       </a>
     </div>
