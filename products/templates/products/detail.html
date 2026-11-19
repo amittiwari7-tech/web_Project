@@ -211,7 +211,23 @@
   .payment-method-card input[type="radio"] {
     accent-color: var(--accent-cyan);
   }
+
+  .apk-link-box {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    word-break: break-all;
+  }
 </style>
+
+{% set raw_price = (product.price | string) | replace('₹', '') | replace(',', '') | trim %}
+{% set numeric_price = raw_price | float(default=0) %}
+{% set is_free_product = numeric_price <= 0 %}
+{% set apk_download_link = product.download_link or product.download_url or product.file_url or '' %}
+{% set product_tag = product.tag_name or product.TagName or product.tagName or product.tag or 'Standard' %}
 
 <div class="container detail-wrapper my-4">
   <!-- Breadcrumbs & Navigation -->
@@ -269,11 +285,15 @@
           </div>
           <div class="spec-item">
             <span class="label">Tag Name</span>
-            <span class="val text-success">{{ product.tag_name or product.TagName or product.tagName or product.tag or 'Standard' }}</span>
+            <span class="val text-success">{{ product_tag }}</span>
           </div>
           <div class="spec-item">
-            <span class="label">Trial Option</span>
-            <span class="val text-warning">3 Days Free</span>
+            <span class="label">Access Mode</span>
+            {% if is_free_product %}
+              <span class="val text-success">Free APK</span>
+            {% else %}
+              <span class="val text-warning">3 Days Free</span>
+            {% endif %}
           </div>
           <div class="spec-item">
             <span class="label">License</span>
@@ -303,22 +323,39 @@
     <!-- RIGHT COLUMN: Commercial License & Checkout -->
     <div class="col-lg-5">
       <div class="checkout-side-card">
-        <span class="badge bg-dark border border-info text-info font-mono px-3 py-2 rounded-pill mb-3">
-          <i class="fa-solid fa-bolt me-1"></i> Instant Digital Delivery
-        </span>
+        {% if is_free_product %}
+          <span class="badge bg-dark border border-success text-success font-mono px-3 py-2 rounded-pill mb-3">
+            <i class="fa-solid fa-download me-1"></i> Free Direct APK Access
+          </span>
+        {% else %}
+          <span class="badge bg-dark border border-info text-info font-mono px-3 py-2 rounded-pill mb-3">
+            <i class="fa-solid fa-bolt me-1"></i> Instant Digital Delivery
+          </span>
+        {% endif %}
 
         <h1 class="fw-bolder text-white mb-3" style="font-size: 1.85rem; line-height: 1.25;">
           {{ product.name }}
         </h1>
 
-        <div class="d-flex align-items-baseline gap-2 mb-1">
-          <span class="price-tag">₹{{ product.price }}</span>
-          <span class="text-slate font-mono small">/ One-time fee</span>
-        </div>
+        {% if is_free_product %}
+          <div class="d-flex align-items-baseline gap-2 mb-1">
+            <span class="price-tag text-success">FREE</span>
+            <span class="text-slate font-mono small">(₹0)</span>
+          </div>
 
-        <div class="price-sub">
-          <i class="fa-solid fa-circle-check"></i> Lifetime Updates & Direct Script Ownership
-        </div>
+          <div class="price-sub">
+            <i class="fa-solid fa-circle-check"></i> Direct System APK Download & Shareable Link
+          </div>
+        {% else %}
+          <div class="d-flex align-items-baseline gap-2 mb-1">
+            <span class="price-tag">₹{{ product.price }}</span>
+            <span class="text-slate font-mono small">/ One-time fee</span>
+          </div>
+
+          <div class="price-sub">
+            <i class="fa-solid fa-circle-check"></i> Lifetime Updates & Direct Script Ownership
+          </div>
+        {% endif %}
 
         <hr class="border-secondary-subtle my-3">
 
@@ -336,27 +373,69 @@
             <i class="fa-solid fa-headset"></i>
             <span><strong>Dedicated WhatsApp Assistance:</strong> Chat directly with developers if you get stuck.</span>
           </div>
-          <div class="feature-bullet">
-            <i class="fa-solid fa-arrows-rotate"></i>
-            <span><strong>Free Sandbox Period:</strong> Test fully active with our 3-day test trial.</span>
-          </div>
+          {% if not is_free_product %}
+            <div class="feature-bullet">
+              <i class="fa-solid fa-arrows-rotate"></i>
+              <span><strong>Free Sandbox Period:</strong> Test fully active with our 3-day test trial.</span>
+            </div>
+          {% endif %}
         </div>
 
-        <!-- Dynamic Unlock & Buy Button with Login Check -->
-        {% if session.get('status') %}
-          <button type="button" 
-                  class="btn-nexus-primary w-100 justify-content-center py-3 fs-5 fw-bold mb-3 border-0" 
-                  data-bs-toggle="modal" 
-                  data-bs-target="#paymentModal">
-            <i class="fa-solid fa-lock-open"></i> Unlock & Buy Now
-          </button>
+        {% if is_free_product %}
+          <!-- FREE PRODUCT: Direct APK Download & Get Link (Logs data with status = "free" without payment gateway) -->
+          {% if session.get('status') %}
+            <div class="d-flex flex-column gap-2 mb-3">
+              <button type="button"
+                      id="btnDownloadApk"
+                      onclick="recordFreeAccessAndRun('download_apk', '{{ product.id }}', '{{ product.name | escape }}', '{{ product_tag | escape }}', '{{ apk_download_link | escape }}')"
+                      class="btn-nexus-primary w-100 justify-content-center py-3 fs-5 fw-bold border-0">
+                <i class="fa-solid fa-download me-2"></i> Download APK
+              </button>
+
+              <button type="button"
+                      id="btnGetApkLink"
+                      onclick="recordFreeAccessAndRun('get_link', '{{ product.id }}', '{{ product.name | escape }}', '{{ product_tag | escape }}', '{{ apk_download_link | escape }}')"
+                      class="btn-nexus-outline w-100 justify-content-center py-2 fs-6 fw-semibold">
+                <i class="fa-solid fa-link me-2"></i> Get Link
+              </button>
+            </div>
+
+            <div id="apkLinkResultBox" class="apk-link-box d-none mb-3">
+              <div class="text-success fw-bold mb-1">
+                <i class="fa-solid fa-link me-1"></i> Direct APK Link:
+              </div>
+              <div class="d-flex align-items-center justify-content-between gap-2">
+                <a id="apkLinkAnchor" href="#" target="_blank" rel="noopener noreferrer" class="text-info text-decoration-none"></a>
+                <button type="button" class="btn btn-sm btn-outline-info py-0 px-2" onclick="copyApkLink()">
+                  <i class="fa-regular fa-copy"></i> Copy
+                </button>
+              </div>
+            </div>
+          {% else %}
+            <button type="button"
+                    class="btn-nexus-primary w-100 justify-content-center py-3 fs-5 fw-bold mb-3 border-0"
+                    data-bs-toggle="modal"
+                    data-bs-target="#loginRequiredModal">
+              <i class="fa-solid fa-download me-2"></i> Download APK
+            </button>
+          {% endif %}
         {% else %}
-          <button type="button" 
-                  class="btn-nexus-primary w-100 justify-content-center py-3 fs-5 fw-bold mb-3 border-0" 
-                  data-bs-toggle="modal" 
-                  data-bs-target="#loginRequiredModal">
-            <i class="fa-solid fa-lock-open"></i> Unlock & Buy Now
-          </button>
+          <!-- PAID PRODUCT: Existing 3-Day Trial & Cashfree Checkout Flow -->
+          {% if session.get('status') %}
+            <button type="button" 
+                    class="btn-nexus-primary w-100 justify-content-center py-3 fs-5 fw-bold mb-3 border-0" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#paymentModal">
+              <i class="fa-solid fa-lock-open"></i> Unlock & Buy Now
+            </button>
+          {% else %}
+            <button type="button" 
+                    class="btn-nexus-primary w-100 justify-content-center py-3 fs-5 fw-bold mb-3 border-0" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#loginRequiredModal">
+              <i class="fa-solid fa-lock-open"></i> Unlock & Buy Now
+            </button>
+          {% endif %}
         {% endif %}
 
         <a href="{{ url_for('interactions.custom_order') }}" class="btn-nexus-outline w-100 text-center py-2 fs-6">
@@ -365,7 +444,11 @@
 
         <div class="text-center mt-3">
           <small class="text-slate font-mono" style="font-size: 0.72rem;">
-            <i class="fa-solid fa-shield-halved me-1 text-success"></i> 256-bit Encrypted Checkout Powered by Cashfree Payments
+            {% if is_free_product %}
+              <i class="fa-solid fa-shield-halved me-1 text-success"></i> Verified Direct APK Package • Zero Payment Required
+            {% else %}
+              <i class="fa-solid fa-shield-halved me-1 text-success"></i> 256-bit Encrypted Checkout Powered by Cashfree Payments
+            {% endif %}
           </small>
         </div>
       </div>
@@ -373,7 +456,8 @@
   </div>
 </div>
 
-<!-- Payment & 3-Day Trial Selection Modal -->
+{% if not is_free_product %}
+<!-- Payment & 3-Day Trial Selection Modal (Only shown when price > 0) -->
 <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content" style="background: var(--card-surface); border: 1px solid var(--border-glow); border-radius: 20px; color: #F8FAFC;">
@@ -403,7 +487,7 @@
           </div>
           <div class="text-end">
             <span class="text-slate d-block" style="font-size: 0.75rem;">PAYABLE NOW</span>
-            <span class="text-info fw-bold fs-5" id="displayModalAmount">₹0 (Free Trial)</span>
+            <span class="text-warning fw-bold fs-5" id="displayModalAmount">₹0 (Free Trial)</span>
           </div>
         </div>
 
@@ -422,7 +506,7 @@
 
           <button type="button" 
                   id="btnActivateTrial" 
-                  onclick="activateTrialProcess('{{ product.id }}', '{{ product.name | escape }}', '{{ product.tag_name or product.TagName or product.tagName or product.tag or 'Standard' }}')" 
+                  onclick="activateTrialProcess('{{ product.id }}', '{{ product.name | escape }}', '{{ product_tag | escape }}')" 
                   class="btn-nexus-primary w-100 justify-content-center py-3 fs-6 fw-bold">
             <i class="fa-solid fa-rocket me-2"></i> Activate 3-Day Trial Now
           </button>
@@ -470,7 +554,7 @@
 
           <button type="button" 
                   id="btnProceedCashfree" 
-                  onclick="initiateCashfreeCheckout('{{ product.id }}', '{{ product.name | escape }}', '{{ product.price }}', 'appRecharge', '{{ product.tag_name or product.TagName or product.tagName or product.tag or 'Standard' }}')" 
+                  onclick="initiateCashfreeCheckout('{{ product.id }}', '{{ product.name | escape }}', '{{ product.price }}', 'appRecharge', '{{ product_tag | escape }}')" 
                   class="btn-nexus-primary w-100 justify-content-center py-3 fs-6 fw-bold">
             <i class="fa-solid fa-lock me-2"></i> Pay ₹{{ product.price }} via Cashfree
           </button>
@@ -485,6 +569,7 @@
     </div>
   </div>
 </div>
+{% endif %}
 
 <!-- Login Required Modal Popup -->
 <div class="modal fade" id="loginRequiredModal" tabindex="-1" aria-labelledby="loginRequiredModalLabel" aria-hidden="true">
@@ -502,7 +587,7 @@
         </div>
         <h5 class="fw-bold mb-2">Please Login First</h5>
         <p class="text-slate small mb-0 px-3">
-          You must be logged in to claim free trials or purchase licenses for <strong>{{ product.name }}</strong>.
+          You must be logged in to download APKs, claim free trials, or purchase licenses for <strong>{{ product.name }}</strong>.
         </p>
       </div>
       <div class="modal-footer border-top border-secondary-subtle justify-content-center gap-2">
@@ -518,9 +603,133 @@
 </div>
 
 <!-- Cashfree SDK & JS Scripts -->
-<!-- Cashfree SDK & JS Scripts -->
 <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
 <script>
+  // Helper: Resolve APK download URL (uses product link if set, else product download route fallback)
+  function resolveApkUrl(productId, configuredUrl) {
+    const cleanUrl = (configuredUrl || "").trim();
+    if (cleanUrl) {
+      return cleanUrl;
+    }
+    return `/products/${encodeURIComponent(productId)}/download-apk`;
+  }
+
+  function triggerSystemApkDownload(productId, productName, configuredUrl) {
+    const apkUrl = resolveApkUrl(productId, configuredUrl);
+    const safeFileName = `${(productName || 'app').toLowerCase().replace(/[^a-z0-9]+/g, '_')}.apk`;
+
+    const link = document.createElement('a');
+    link.href = apkUrl;
+    link.setAttribute('download', safeFileName);
+    link.setAttribute('target', '_blank');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function revealApkLinkBox(productId, configuredUrl) {
+    const apkUrl = resolveApkUrl(productId, configuredUrl);
+    const fullUrl = apkUrl.startsWith('http') ? apkUrl : `${window.location.origin}${apkUrl}`;
+
+    const box = document.getElementById('apkLinkResultBox');
+    const anchor = document.getElementById('apkLinkAnchor');
+
+    if (box && anchor) {
+      anchor.href = fullUrl;
+      anchor.textContent = fullUrl;
+      box.classList.remove('d-none');
+    }
+  }
+
+  // Send free access data directly to backend (same flow as trial, status = "free", no payment gateway)
+  async function recordFreeAccessAndRun(actionType, productId, productName, tagName, configuredUrl) {
+    const dlBtn = document.getElementById('btnDownloadApk');
+    const linkBtn = document.getElementById('btnGetApkLink');
+    const activeBtn = actionType === 'download_apk' ? dlBtn : linkBtn;
+    const originalText = activeBtn ? activeBtn.innerHTML : '';
+
+    if (activeBtn) {
+      activeBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Processing...`;
+      activeBtn.disabled = true;
+    }
+
+    try {
+      const response = await fetch("{{ url_for('recharge.activate_trial', type='FreeApp') }}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          product_id: productId,
+          product_name: productName,
+          tag_name: tagName,
+          amount: 0,
+          status: "free",
+          order_status: "free",
+          recharge_type: "freeApkAccess",
+          access_action: actionType
+        })
+      });
+
+      const data = await response.json();
+      const apiStatus = (data.status || "").trim().toLowerCase();
+
+      if (response.ok && apiStatus === "success") {
+        if (actionType === 'download_apk') {
+          triggerSystemApkDownload(productId, productName, configuredUrl);
+          showTopAlert('success', `Recorded as <strong>free</strong>. Starting APK download for <strong>${productName}</strong>...`);
+        } else {
+          revealApkLinkBox(productId, configuredUrl);
+          showTopAlert('success', `Recorded as <strong>free</strong>. Direct APK link generated for <strong>${productName}</strong>.`);
+        }
+      } else {
+        showTopAlert('error', data.message || "Failed to log free access.");
+      }
+    } catch (err) {
+      console.error(err);
+      showTopAlert('error', "Network error while saving free access log.");
+    } finally {
+      if (activeBtn) {
+        activeBtn.innerHTML = originalText;
+        activeBtn.disabled = false;
+      }
+    }
+  }
+
+  // Copy APK link to clipboard
+  function copyApkLink() {
+    const anchor = document.getElementById('apkLinkAnchor');
+    if (!anchor || !anchor.href) return;
+
+    navigator.clipboard.writeText(anchor.href).then(() => {
+      showTopAlert('success', 'APK download link copied to clipboard.');
+    }).catch(() => {
+      showTopAlert('error', 'Could not copy link automatically. Please copy it manually.');
+    });
+  }
+
+  // Helper: Show top alert with auto-hide
+  function showTopAlert(type, message) {
+    const alertBox = document.getElementById('trialAlertBox');
+    if (!alertBox) return;
+
+    if (type === 'success') {
+      alertBox.className = "alert alert-success mt-3 shadow-sm";
+      alertBox.innerHTML = `<i class="fa-solid fa-circle-check me-2"></i> ${message}`;
+    } else {
+      alertBox.className = "alert alert-danger mt-3 shadow-sm";
+      alertBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation me-2"></i> ${message}`;
+    }
+
+    alertBox.classList.remove('d-none');
+    alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    setTimeout(() => {
+      alertBox.classList.add('d-none');
+    }, 4000);
+  }
+
   // Mode Switcher: 3-Day Trial vs Subscribe
   function switchMode(mode) {
     const btnTrial = document.getElementById('btnModeTrial');
@@ -528,6 +737,8 @@
     const trialSec = document.getElementById('trialSection');
     const subSec = document.getElementById('subscribeSection');
     const displayAmount = document.getElementById('displayModalAmount');
+
+    if (!btnTrial || !btnSub || !trialSec || !subSec || !displayAmount) return;
 
     if (mode === 'trial') {
       btnTrial.classList.add('active');
@@ -558,31 +769,12 @@
 
   // Helper Function: Hide Modal, Show Alert at Top, and Auto-Hide after 4 seconds
   function showAlertAndCloseModal(type, message) {
-    // 1. Hide Payment Modal immediately
     const modalEl = document.getElementById('paymentModal');
-    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    const modalInstance = modalEl ? bootstrap.Modal.getInstance(modalEl) : null;
     if (modalInstance) {
       modalInstance.hide();
     }
-
-    // 2. Show alert at top (#trialAlertBox)
-    const alertBox = document.getElementById('trialAlertBox');
-    if (alertBox) {
-      if (type === 'success') {
-        alertBox.className = "alert alert-success mt-3 shadow-sm";
-        alertBox.innerHTML = `<i class="fa-solid fa-circle-check me-2"></i> ${message}`;
-      } else {
-        alertBox.className = "alert alert-danger mt-3 shadow-sm";
-        alertBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation me-2"></i> ${message}`;
-      }
-      alertBox.classList.remove('d-none');
-      alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-      // 3. 🕒 Auto-hide the alert box after 4 seconds (4000 milliseconds)
-      setTimeout(() => {
-        alertBox.classList.add('d-none');
-      }, 4000);
-    }
+    showTopAlert(type, message);
   }
 
   // Activate 3-Day Trial Function
@@ -684,8 +876,9 @@
   // Video Embed Processor
   document.addEventListener('DOMContentLoaded', function () {
     const container = document.getElementById('videoContainer');
-    const rawUrl = container.getAttribute('data-url').trim();
+    if (!container) return;
 
+    const rawUrl = (container.getAttribute('data-url') || '').trim();
     if (!rawUrl) return;
 
     let embedUrl = '';
@@ -700,7 +893,7 @@
       embedUrl = rawUrl;
     }
 
-    (embedUrl) => {
+    if (embedUrl) {
       container.innerHTML = `
         <iframe 
           src="${embedUrl}" 

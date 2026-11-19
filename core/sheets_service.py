@@ -122,3 +122,26 @@ def authUser(email, password):
     except requests.exceptions.RequestException as e:
         print(f"Network or connection error during authentication: {e}")
         return None
+    
+def get_user_subscriptions(user_id):
+    """Fetches active subscriptions for a specific user_id from Apps Script."""
+    if not user_id:
+        return []
+    try:
+        response = requests.get(
+            Config.APPS_SCRIPT_URL,
+            params={"action": "getSubscriptions", "user_id": str(user_id).strip()},
+            timeout=10
+        )
+        print(f"[Subscriptions Fetch] {response.status_code}, {response.text}")
+
+        if response.status_code == 200:
+            data = response.json()
+            if isinstance(data, list):
+                return data
+            if isinstance(data, dict):
+                return data.get("data", [])
+    except Exception as e:
+        print(f"[Subscriptions Fetch] Error for user_id '{user_id}': {e}")
+
+    return []    

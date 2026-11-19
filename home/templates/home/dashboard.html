@@ -1,71 +1,37 @@
-
 {% extends "base.html" %}
 
 {% block title %}My Subscriptions | Tech Gyan Amit{% endblock %}
 
 {% block content %}
 
-{% set products = [
-  {
-    'name': 'Google Sheets ERP & Inventory Suite',
-    'tag': 'Apps Script core, voice invoicing, multi-branch sync',
-    'icon': 'fa-table', 'color': 'blue', 'price': 999,
-    'recharged': 'Jan 05, 2026', 'expires': 'Jan 05, 2027', 'days': 54,
-    'chips': [
-      {'label': 'WhatsApp', 'icon': 'fa-brands fa-whatsapp', 'service': 'WhatsApp Gateway', 'price': 199, 'recharged': 'Nov 15, 2025', 'expires': 'Dec 15, 2026', 'days': 34},
-      {'label': 'AI Voice', 'icon': 'fa-solid fa-brain', 'service': 'Gemini AI Voice Engine', 'price': 149, 'recharged': 'Jan 02, 2026', 'expires': 'Jan 02, 2027', 'days': 52}
-    ]
-  },
-  {
-    'name': 'WhatsApp AI Concierge & Chatbot',
-    'tag': 'Meta Cloud API, 24/7 context memory',
-    'icon': 'fa-robot', 'color': 'green', 'price': 999,
-    'recharged': 'Sep 01, 2026', 'expires': 'Dec 01, 2026', 'days': 19,
-    'chips': [
-      {'label': 'WhatsApp', 'icon': 'fa-brands fa-whatsapp', 'service': 'WhatsApp Meta Cloud API', 'price': 199, 'recharged': 'Oct 20, 2026', 'expires': 'Nov 22, 2026', 'days': 12},
-      {'label': 'AI Quota', 'icon': 'fa-solid fa-brain', 'service': 'Gemini 2.5 AI Reasoning Engine', 'price': 149, 'recharged': 'Sep 15, 2026', 'expires': 'Jan 17, 2027', 'days': 68}
-    ]
-  },
-  {
-    'name': 'PaceCourt Logistics & Warehouse Inward',
-    'tag': 'Line items, debit/credit notes, inspection steps',
-    'icon': 'fa-warehouse', 'color': 'amber', 'price': 999,
-    'recharged': 'Aug 15, 2026', 'expires': 'Feb 15, 2027', 'days': 95,
-    'chips': [
-      {'label': 'WhatsApp', 'icon': 'fa-brands fa-whatsapp', 'service': 'Vendor WhatsApp Alerts', 'price': 199, 'recharged': 'Oct 24, 2026', 'expires': 'Dec 24, 2026', 'days': 44},
-      {'label': 'OCR AI', 'icon': 'fa-solid fa-file-invoice', 'service': 'OCR Invoice AI Parser', 'price': 149, 'recharged': 'Oct 14, 2026', 'expires': 'Nov 14, 2026', 'days': 4}
-    ]
-  },
-  {
-    'name': 'Flutter Smart POS',
-    'tag': 'SQLite local sync, thermal printing, voice item fill',
-    'icon': 'fa-mobile-screen-button', 'color': 'violet', 'price': 999,
-    'recharged': 'Oct 01, 2026', 'expires': 'Jan 01, 2027', 'days': 50,
-    'chips': [
-      {'label': 'WhatsApp', 'icon': 'fa-brands fa-whatsapp', 'service': 'WhatsApp Invoice Dispatch', 'price': 199, 'recharged': 'Oct 30, 2026', 'expires': 'Jan 30, 2027', 'days': 81},
-      {'label': 'AI Voice', 'icon': 'fa-solid fa-microphone', 'service': 'Speech-to-Invoice AI', 'price': 149, 'recharged': 'Nov 01, 2026', 'expires': 'Dec 01, 2026', 'days': 19}
-    ]
-  },
-  {
-    'name': 'Abc Seekho Learning Engine',
-    'tag': 'English-Hindi phonetics, text-to-speech, student tracking',
-    'icon': 'fa-graduation-cap', 'color': 'red', 'price': 999,
-    'recharged': 'Nov 03, 2026', 'expires': 'Nov 03, 2027', 'days': 356,
-    'chips': [
-      {'label': 'WhatsApp', 'icon': 'fa-brands fa-whatsapp', 'service': 'Parent WhatsApp Reports', 'price': 199, 'recharged': 'Nov 03, 2026', 'expires': 'Feb 12, 2027', 'days': 94},
-      {'label': 'AI Pronunciation', 'icon': 'fa-solid fa-brain', 'service': 'AI Pronunciation Evaluator', 'price': 149, 'recharged': 'Oct 18, 2026', 'expires': 'Dec 18, 2026', 'days': 38}
-    ]
-  }
-] %}
+{% set products = products or [] %}
 
-{% set ns = namespace(soon=0) %}
+{# Metrics calculation based on backend products data #}
+{% set ns = namespace(soon=0, paid_products=0, paid_addons=0, free_items=0) %}
 {% for p in products %}
-  {% if p.days <= 15 %}
-    {% set ns.soon = ns.soon + 1 %}
-  {% endif %}
-  {% for c in p.chips %}
-    {% if c.days <= 15 %}
+  {% set p_price = (p.price | default(0)) | float %}
+  {% set p_has_expiry = (p.expires | default('') | trim) != '' %}
+  {% set raw_p_days = p.daysNum if p.daysNum is defined else ((p.days | default(0) | string) | replace('days', '') | replace('day', '') | trim) %}
+  {% set p_days = raw_p_days | int(default=0) %}
+
+  {% if p_price > 0 or p_has_expiry %}
+    {% set ns.paid_products = ns.paid_products + 1 %}
+    {% if p_days <= 15 %}
       {% set ns.soon = ns.soon + 1 %}
+    {% endif %}
+  {% else %}
+    {% set ns.free_items = ns.free_items + 1 %}
+  {% endif %}
+
+  {% for c in (p.chips or []) %}
+    {% set c_price = (c.price | default(0)) | float %}
+    {% set raw_c_days = c.daysNum if c.daysNum is defined else ((c.days | default(0) | string) | replace('days', '') | replace('day', '') | trim) %}
+    {% set c_days = raw_c_days | int(default=0) %}
+    {% if c_price > 0 %}
+      {% set ns.paid_addons = ns.paid_addons + 1 %}
+      {% if c_days <= 15 %}
+        {% set ns.soon = ns.soon + 1 %}
+      {% endif %}
     {% endif %}
   {% endfor %}
 {% endfor %}
@@ -99,7 +65,7 @@
 .sub-row:last-child { border-bottom:0; }
 
 .sub-prod { display:flex; align-items:center; gap:16px; min-width:0; }
-.sub-ico { flex:0 0 48px; height:48px; border-radius:14px; display:grid; place-items:center; font-size:20px; color:var(--c); background:var(--cb); border:1px solid var(--c); }
+.sub-ico { flex:0 0 48px; height:48px; border-radius:14px; display:grid; place-items:center; font-size:20px; font-weight:800; color:var(--c); background:var(--cb); border:1px solid var(--c); }
 .sub-prod h2 { margin:0 0 3px; font-size:16.5px; font-weight:700; color:#fff; line-height:1.3; font-family:'Plus Jakarta Sans',sans-serif; }
 .sub-prod small { color:#94A3B8; font-size:13px; line-height:1.4; display:block; }
 
@@ -176,6 +142,8 @@
     </div>
     <div class="sub-stats">
       <div class="sub-stat"><b>{{ products|length }}</b><span>Active products</span></div>
+      <div class="sub-stat"><b>{{ ns.paid_addons }}</b><span>Paid add-ons</span></div>
+      <div class="sub-stat"><b>{{ ns.free_items }}</b><span>Free items</span></div>
       <div class="sub-stat {{ 'alert-stat' if ns.soon }}"><b>{{ ns.soon }}</b><span>Expiring in 15 days</span></div>
     </div>
   </div>
@@ -189,45 +157,70 @@
 
   <section class="sub-list" aria-label="Your subscriptions">
     {% for p in products %}
-    {% set d = p.days %}
+    {% set p_product_id = p.product_id or p.productId or p.id or '' %}
+    {% set p_tag_name = p.tag_name or p.tagName or p.tag or '' %}
+    {% set p_price = (p.price | default(0)) | float %}
+    {% set p_has_expiry = (p.expires | default('') | trim) != '' %}
+    {% set show_product_recharge = (p_price > 0 or p_has_expiry) %}
+
+    {% set raw_d = p.daysNum if p.daysNum is defined else ((p.days | default(0) | string) | replace('days', '') | replace('day', '') | trim) %}
+    {% set d = raw_d | int(default=0) %}
+    {% set d_text = p.daysText if p.daysText is defined else (p.days if p.days else (d ~ ' day' ~ ('s' if d != 1 else ''))) %}
     {% set tone = 'tone-bad' if d <= 7 else ('tone-warn' if d <= 20 else 'tone-ok') %}
 
-    <article class="sub-row c-{{ p.color }} {{ tone }}">
+    {% set active_chips = namespace(items=[]) %}
+    {% for c in (p.chips or []) %}
+      {% set c_price = (c.price | default(0)) | float %}
+      {% if c_price > 0 %}
+        {% set active_chips.items = active_chips.items + [c] %}
+      {% endif %}
+    {% endfor %}
+
+    <article class="sub-row c-{{ p.color | default('blue') }} {{ tone }}">
 
       <div class="sub-prod">
-        <div class="sub-ico"><i class="fa-solid {{ p.icon }}"></i></div>
+        <div class="sub-ico">
+          {% if p.icon and p.icon.startswith('fa-') %}
+            <i class="fa-solid {{ p.icon }}"></i>
+          {% else %}
+            {{ p.iconText or p.icon or (p.name[:1] | upper) }}
+          {% endif %}
+        </div>
         <div>
           <h2>{{ p.name }}</h2>
-          <small>{{ p.tag }}</small>
+          <small>{{ p_tag_name }}</small>
         </div>
       </div>
 
       <div class="sub-date">
         <label>Last recharged</label>
-        <strong>{{ p.recharged }}</strong>
+        <strong>{{ p.recharged or 'Free' }}</strong>
       </div>
 
       <div class="sub-date sub-expiry">
         <label>Expires on</label>
-        <strong>{{ p.expires }}</strong>
-        <div class="sub-bar"><i style="width: {{ [(d / 90 * 100)|round|int, 100]|min }}%"></i></div>
-        <div class="sub-left">{{ d }} day{{ 's' if d != 1 }} left</div>
+        <strong>{{ p.expires or 'No Expiry' }}</strong>
+        <div class="sub-bar"><i style="width: {{ [[(d / 90 * 100)|round|int, 0]|max, 100]|min }}%"></i></div>
+        <div class="sub-left">{{ d_text }}{% if d >= 0 and 'left' not in (d_text|lower) and 'expired' not in (d_text|lower) %} left{% endif %}</div>
       </div>
 
       <div class="sub-actions">
-
-        <!-- Product Recharge -->
+        {% if show_product_recharge %}
         <button type="button"
                 class="sub-recharge {{ 'urgent' if d <= 7 }}"
                 data-bs-toggle="modal"
                 data-bs-target="#rechargeModal"
                 data-product="{{ p.name }}"
+                data-product-id="{{ p_product_id }}"
+                data-tag-name="{{ p_tag_name }}"
                 data-service="Product Plan"
                 data-type="Productrecharge"
-                data-base-price="{{ p.price }}">
+                data-base-price="{{ p_price if p_price > 0 else 0 }}">
           <i class="fa-solid fa-rotate me-1"></i> Recharge product
         </button>
+        {% endif %}
 
+        {% if active_chips.items or show_product_recharge %}
         <div class="dropdown">
           <button type="button" class="sub-more"
                   data-bs-toggle="dropdown"
@@ -237,17 +230,37 @@
           </button>
 
           <ul class="dropdown-menu dropdown-menu-end sub-menu">
-            {% for c in p.chips %}
+            {% if show_product_recharge %}
             <li>
               <button type="button" class="dropdown-item"
                       data-bs-toggle="modal"
                       data-bs-target="#rechargeModal"
                       data-product="{{ p.name }}"
+                      data-product-id="{{ p_product_id }}"
+                      data-tag-name="{{ p_tag_name }}"
+                      data-service="Product Plan"
+                      data-type="Productrecharge"
+                      data-base-price="{{ p_price if p_price > 0 else 0 }}">
+                <i class="fa-solid fa-rotate me-2" style="color:#00D2FF"></i>
+                Recharge Product{% if p_price > 0 %} (&#8377;{{ p_price | int if p_price == (p_price | int) else p_price }}){% endif %}
+              </button>
+            </li>
+            {% endif %}
+
+            {% for c in active_chips.items %}
+            {% set c_price = (c.price | default(0)) | float %}
+            <li>
+              <button type="button" class="dropdown-item"
+                      data-bs-toggle="modal"
+                      data-bs-target="#rechargeModal"
+                      data-product="{{ p.name }}"
+                      data-product-id="{{ p_product_id }}"
+                      data-tag-name="{{ p_tag_name }}"
                       data-service="{{ c.service }}"
-                      data-type="{{ 'Whatsapprecharge' if 'WhatsApp' in c.label else 'AIrecharge' }}"
-                      data-base-price="{{ c.price }}">
+                      data-type="{{ 'Whatsapprecharge' if 'whatsapp' in ((c.label ~ ' ' ~ c.service) | lower) else 'AIrecharge' }}"
+                      data-base-price="{{ c_price | int if c_price == (c_price | int) else c_price }}">
                 <i class="{{ c.icon }} me-2" style="color:#00D2FF"></i>
-                Recharge {{ c.label }} (&#8377;{{ c.price }})
+                Recharge {{ c.label }} (&#8377;{{ c_price | int if c_price == (c_price | int) else c_price }})
               </button>
             </li>
             {% endfor %}
@@ -261,27 +274,34 @@
             </li>
           </ul>
         </div>
+        {% endif %}
       </div>
 
-      {% if p.chips %}
+      {% if active_chips.items %}
       <div class="sub-chips">
         <span>Other recharges:</span>
 
-        {% for c in p.chips %}
-        {% set ct = 'tone-bad' if c.days <= 7 else ('tone-warn' if c.days <= 20 else 'tone-ok') %}
+        {% for c in active_chips.items %}
+        {% set c_price = (c.price | default(0)) | float %}
+        {% set raw_cd = c.daysNum if c.daysNum is defined else ((c.days | default(0) | string) | replace('days', '') | replace('day', '') | trim) %}
+        {% set c_days = raw_cd | int(default=0) %}
+        {% set c_text = c.daysText if c.daysText is defined else (c.days if c.days else (c_days ~ 'd')) %}
+        {% set ct = 'tone-bad' if c_days <= 7 else ('tone-warn' if c_days <= 20 else 'tone-ok') %}
 
         <div class="chip {{ ct }}">
           <i class="{{ c.icon }}"></i>
           {{ c.label }}
-          <em>Recharged {{ c.recharged }} &middot; Expires {{ c.expires }} &middot; {{ c.days }}d left</em>
+          <em>Recharged {{ c.recharged }} &middot; Expires {{ c.expires }} &middot; {{ c_text }}</em>
 
           <button type="button" class="chip-btn"
                   data-bs-toggle="modal"
                   data-bs-target="#rechargeModal"
                   data-product="{{ p.name }}"
+                  data-product-id="{{ p_product_id }}"
+                  data-tag-name="{{ p_tag_name }}"
                   data-service="{{ c.service }}"
-                  data-type="{{ 'Whatsapprecharge' if 'WhatsApp' in c.label else 'AIrecharge' }}"
-                  data-base-price="{{ c.price }}">
+                  data-type="{{ 'Whatsapprecharge' if 'whatsapp' in ((c.label ~ ' ' ~ c.service) | lower) else 'AIrecharge' }}"
+                  data-base-price="{{ c_price | int if c_price == (c_price | int) else c_price }}">
             <i class="fa-solid fa-rotate"></i> Recharge
           </button>
         </div>
@@ -327,6 +347,8 @@
           </div>
 
           <input type="hidden" id="modalProductName" name="product_name">
+          <input type="hidden" id="modalProductId" name="product_id">
+          <input type="hidden" id="modalTagName" name="tag_name">
           <input type="hidden" id="modalServiceName" name="service_name">
           <input type="hidden" id="modalRechargeType" name="recharge_type">
           <input type="hidden" id="modalBasePrice" value="199">
@@ -401,7 +423,7 @@
 
 function calculatePlanTotal() {
 
-  const base = parseFloat(document.getElementById('modalBasePrice').value) || 199;
+  const base = parseFloat(document.getElementById('modalBasePrice').value) || 0;
   const months = parseInt(document.getElementById('planDurationSelect').value) || 1;
 
   let total = base * months;
@@ -422,19 +444,23 @@ rechargeModal.addEventListener('show.bs.modal', function(event) {
   const btn = event.relatedTarget;
   if (!btn) return;
 
-  const product = btn.getAttribute('data-product');
-  const service = btn.getAttribute('data-service');
-  const rechargeType = btn.getAttribute('data-type');
+  const product = btn.getAttribute('data-product') || '';
+  const productId = btn.getAttribute('data-product-id') || '';
+  const tagName = btn.getAttribute('data-tag-name') || '';
+  const service = btn.getAttribute('data-service') || '';
+  const rechargeType = btn.getAttribute('data-type') || '';
 
   document.getElementById('modalProductName').value = product;
+  document.getElementById('modalProductId').value = productId;
+  document.getElementById('modalTagName').value = tagName;
   document.getElementById('modalServiceName').value = service;
   document.getElementById('modalRechargeType').value = rechargeType;
 
-  document.getElementById('displayProductName').textContent = product;
-  document.getElementById('displayServiceName').textContent = service;
+  document.getElementById('displayProductName').textContent = product || '-';
+  document.getElementById('displayServiceName').textContent = service || '-';
 
   document.getElementById('modalBasePrice').value =
-    btn.getAttribute('data-base-price') || '199';
+    btn.getAttribute('data-base-price') || '0';
 
   document.getElementById('planDurationSelect').value = '1';
 
@@ -454,6 +480,8 @@ document.getElementById('rechargeForm').addEventListener('submit', async functio
   btn.disabled = true;
 
   const product = document.getElementById('modalProductName').value;
+  const productId = document.getElementById('modalProductId').value;
+  const tagName = document.getElementById('modalTagName').value;
   const service = document.getElementById('modalServiceName').value;
   const amount = document.getElementById('modalCalculatedAmount').value;
   const rechargeType = document.getElementById('modalRechargeType').value;
@@ -479,8 +507,11 @@ document.getElementById('rechargeForm').addEventListener('submit', async functio
         "Accept": "application/json"
       },
       body: JSON.stringify({
-        product_name: product + ' (' + service + ' Recharge)',
+        product_id: productId,
+        tag_name: tagName,
+        product_name: product,
         amount: amount,
+        recharge_type: rechargeType,
         recharge_Duration: duration
       })
     });

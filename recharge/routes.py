@@ -4,7 +4,7 @@ import uuid
 import requests
 import traceback
 import urllib.parse
-from flask import request, jsonify, render_template, session, url_for
+from flask import request, jsonify, render_template, session, url_for, redirect
 from . import recharge_bp
 from core.sheets_service import post_to_sheets
 
@@ -148,10 +148,18 @@ def create_cashfree_order(type):
 
 @recharge_bp.route('/payment-callback', methods=['GET'])
 def payment_callback():
-    order_id = request.args.get('order_id', 'UNKNOWN')
+    order_id = (request.args.get('order_id') or 'UNKNOWN').strip()
     order_type = request.args.get('type', 'Productrecharge')
     duration = request.args.get('duration', 1)
     tag_name = request.args.get('tag_name', '')
+
+    # Refresh hone par ya already processed order par dobara sheet me add nahi hoga
+    if request.args.get('processed') == '1':
+        return render_template('recharge/success.html', order_id=order_id)
+
+    processed_orders = session.get('processed_order_ids', [])
+    if order_id in processed_orders:
+        return redirect(url_for('recharge.payment_callback', order_id=order_id, processed='1'))
 
     headers = {
         "accept": "application/json",
@@ -181,6 +189,12 @@ def payment_callback():
                 # 🟢 Sirf SUCCESS / PAID hone par hi Google Sheet par data save hoga!
                 post_to_sheets('appSubscription', res_json)
                 verified_data = res_json
+
+                # Order ID ko mark karein aur clean URL par redirect karein taaki refresh duplicate na kare
+                processed_orders.append(order_id)
+                session['processed_order_ids'] = processed_orders[-50:]
+                session.modified = True
+                return redirect(url_for('recharge.payment_callback', order_id=order_id, processed='1'))
             else:
                 print(f"Order {order_id} status is {order_status}, not saved to sheet.")
     except Exception as err:
@@ -219,7 +233,7 @@ def activate_trial(type):
         'Order Note': f"{product_name}",
         "order_Type": type,
         "tag_name": tagName,
-        "product_Id":data.get('product_id', 'N/A'),
+        "product_Id": data.get('product_id', 'N/A'),
     }
     
     print(trial_data)
