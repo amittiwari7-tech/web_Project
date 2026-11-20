@@ -6,8 +6,8 @@
 
 {% set products = products or [] %}
 
-{# Metrics calculation based on backend products data #}
-{% set ns = namespace(soon=0, paid_products=0, paid_addons=0, free_items=0) %}
+{# Metrics & active-plan status calculation based on backend products data #}
+{% set ns = namespace(soon=0, paid_products=0, paid_addons=0, free_items=0, active_unexpired=0) %}
 {% for p in products %}
   {% set p_price = (p.price | default(0)) | float %}
   {% set p_has_expiry = (p.expires | default('') | trim) != '' %}
@@ -16,6 +16,9 @@
 
   {% if p_price > 0 or p_has_expiry %}
     {% set ns.paid_products = ns.paid_products + 1 %}
+    {% if p_days > 0 %}
+      {% set ns.active_unexpired = ns.active_unexpired + 1 %}
+    {% endif %}
     {% if p_days <= 15 %}
       {% set ns.soon = ns.soon + 1 %}
     {% endif %}
@@ -29,6 +32,9 @@
     {% set c_days = raw_c_days | int(default=0) %}
     {% if c_price > 0 %}
       {% set ns.paid_addons = ns.paid_addons + 1 %}
+      {% if c_days > 0 %}
+        {% set ns.active_unexpired = ns.active_unexpired + 1 %}
+      {% endif %}
       {% if c_days <= 15 %}
         {% set ns.soon = ns.soon + 1 %}
       {% endif %}
@@ -46,8 +52,11 @@
 .sub-stat b { display:block; font-size:24px; line-height:1.1; color:#00D2FF; font-family:'Plus Jakarta Sans',sans-serif; }
 .sub-stat span { font-size:13px; color:#94A3B8; }
 .sub-stat.alert-stat b { color:#EF4444; }
-.sub-notice { display:flex; align-items:center; gap:14px; padding:14px 18px; margin-bottom:22px; background:rgba(245,158,11,.12); border:1px solid rgba(245,158,11,.3); border-radius:14px; color:#FCD34D; font-size:14.5px; font-weight:500; }
-.sub-notice i { font-size:20px; color:#F59E0B; }
+.sub-notice { display:flex; align-items:center; gap:14px; padding:14px 18px; margin-bottom:16px; background:rgba(245,158,11,.12); border:1px solid rgba(245,158,11,.3); border-radius:14px; color:#FCD34D; font-size:14.5px; font-weight:500; }
+.sub-notice i { font-size:20px; color:#F59E0B; flex-shrink:0; }
+
+.sub-notice-info { display:flex; align-items:center; gap:14px; padding:14px 18px; margin-bottom:22px; background:rgba(0,210,255,.08); border:1px solid rgba(0,210,255,.28); border-radius:14px; color:#BAE6FD; font-size:14px; font-weight:500; }
+.sub-notice-info i { font-size:19px; color:#00D2FF; flex-shrink:0; }
 
 .tone-ok { --t:#10B981; --tb:rgba(16,185,129,.12); }
 .tone-warn { --t:#F59E0B; --tb:rgba(245,158,11,.12); }
@@ -112,12 +121,43 @@
 #rechargeModal .modal-title { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; color:#fff; font-size:19px; }
 #rechargeModal .btn-close { filter:invert(1) grayscale(100%) brightness(200%); }
 
-.rc-summary { background:rgba(4,8,20,.7); border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:16px 18px; margin-bottom:20px; }
+.rc-summary { background:rgba(4,8,20,.7); border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:16px 18px; margin-bottom:16px; }
 .rc-summary .r { display:flex; justify-content:space-between; gap:12px; font-size:14px; padding:4px 0; }
 .rc-summary .r span:first-child { color:#94A3B8; }
 .rc-summary .r span:last-child { font-weight:700; text-align:right; color:#F8FAFC; }
 .rc-total { border-top:1px solid rgba(255,255,255,.1); margin-top:10px; padding-top:12px !important; }
 .rc-total span:last-child { color:#10B981; font-size:22px; font-weight:800; }
+
+.rc-expiry-alert {
+  display:none;
+  align-items:flex-start;
+  gap:10px;
+  padding:12px 14px;
+  margin-bottom:16px;
+  border-radius:12px;
+  background:rgba(245,158,11,.14);
+  border:1px solid rgba(245,158,11,.38);
+  color:#FDE68A;
+  font-size:13px;
+  line-height:1.45;
+}
+.rc-expiry-alert.show { display:flex; }
+.rc-expiry-alert i { color:#F59E0B; font-size:16px; margin-top:2px; flex-shrink:0; }
+
+.rc-refund-note {
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:10px 14px;
+  margin-bottom:16px;
+  border-radius:10px;
+  background:rgba(239,68,68,.1);
+  border:1px solid rgba(239,68,68,.28);
+  color:#FCA5A5;
+  font-size:12.5px;
+  line-height:1.45;
+}
+.rc-refund-note i { color:#EF4444; margin-top:2px; flex-shrink:0; }
 
 .rc-pay { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px; border:1px solid rgba(255,255,255,.1); border-radius:12px; cursor:pointer; background:rgba(255,255,255,.02); transition:all .2s; }
 .rc-pay:hover { border-color:rgba(0,210,255,.4); background:rgba(255,255,255,.04); }
@@ -152,6 +192,16 @@
   <div class="sub-notice" role="status">
     <i class="fa-solid fa-triangle-exclamation"></i>
     <span>{{ ns.soon }} recharge{{ 's' if ns.soon != 1 }} will expire within 15 days. Renew to avoid any service interruption.</span>
+  </div>
+  {% endif %}
+
+  {% if ns.active_unexpired > 0 %}
+  <div class="sub-notice-info" role="status">
+    <i class="fa-solid fa-circle-info"></i>
+    <span>
+      <strong>{{ ns.active_unexpired }}</strong> plan{{ 's' if ns.active_unexpired != 1 }} still {{ 'have' if ns.active_unexpired != 1 else 'has' }} remaining validity (expiry not reached yet).
+      Please note: <strong>Recharge payments are non-refundable</strong> once completed.
+    </span>
   </div>
   {% endif %}
 
@@ -215,6 +265,8 @@
                 data-tag-name="{{ p_tag_name }}"
                 data-service="Product Plan"
                 data-type="Productrecharge"
+                data-days-left="{{ d }}"
+                data-expires-on="{{ p.expires or '-' }}"
                 data-base-price="{{ p_price if p_price > 0 else 0 }}">
           <i class="fa-solid fa-rotate me-1"></i> Recharge product
         </button>
@@ -240,6 +292,8 @@
                       data-tag-name="{{ p_tag_name }}"
                       data-service="Product Plan"
                       data-type="Productrecharge"
+                      data-days-left="{{ d }}"
+                      data-expires-on="{{ p.expires or '-' }}"
                       data-base-price="{{ p_price if p_price > 0 else 0 }}">
                 <i class="fa-solid fa-rotate me-2" style="color:#00D2FF"></i>
                 Recharge Product{% if p_price > 0 %} (&#8377;{{ p_price | int if p_price == (p_price | int) else p_price }}){% endif %}
@@ -249,6 +303,8 @@
 
             {% for c in active_chips.items %}
             {% set c_price = (c.price | default(0)) | float %}
+            {% set raw_cd = c.daysNum if c.daysNum is defined else ((c.days | default(0) | string) | replace('days', '') | replace('day', '') | trim) %}
+            {% set c_days = raw_cd | int(default=0) %}
             <li>
               <button type="button" class="dropdown-item"
                       data-bs-toggle="modal"
@@ -258,6 +314,8 @@
                       data-tag-name="{{ p_tag_name }}"
                       data-service="{{ c.service }}"
                       data-type="{{ 'Whatsapprecharge' if 'whatsapp' in ((c.label ~ ' ' ~ c.service) | lower) else 'AIrecharge' }}"
+                      data-days-left="{{ c_days }}"
+                      data-expires-on="{{ c.expires or '-' }}"
                       data-base-price="{{ c_price | int if c_price == (c_price | int) else c_price }}">
                 <i class="{{ c.icon }} me-2" style="color:#00D2FF"></i>
                 Recharge {{ c.label }} (&#8377;{{ c_price | int if c_price == (c_price | int) else c_price }})
@@ -301,6 +359,8 @@
                   data-tag-name="{{ p_tag_name }}"
                   data-service="{{ c.service }}"
                   data-type="{{ 'Whatsapprecharge' if 'whatsapp' in ((c.label ~ ' ' ~ c.service) | lower) else 'AIrecharge' }}"
+                  data-days-left="{{ c_days }}"
+                  data-expires-on="{{ c.expires or '-' }}"
                   data-base-price="{{ c_price | int if c_price == (c_price | int) else c_price }}">
             <i class="fa-solid fa-rotate"></i> Recharge
           </button>
@@ -343,7 +403,22 @@
           <div class="rc-summary">
             <div class="r"><span>Product</span><span id="displayProductName">-</span></div>
             <div class="r"><span>Service</span><span id="displayServiceName" style="color:#00D2FF">-</span></div>
+            <div class="r"><span>Current Expiry</span><span id="displayExpiryInfo">-</span></div>
             <div class="r rc-total"><span>Amount to pay</span><span id="displayTotalAmount">&#8377;199</span></div>
+          </div>
+
+          <!-- Active / Not Expired Warning inside Modal -->
+          <div class="rc-expiry-alert" id="modalExpiryWarning">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <div id="modalExpiryWarningText">
+              This plan has not expired yet. Recharge payments are non-refundable once processed.
+            </div>
+          </div>
+
+          <!-- Always Visible Non-Refundable Policy Note -->
+          <div class="rc-refund-note">
+            <i class="fa-solid fa-ban"></i>
+            <span><strong>Non-Refundable Notice:</strong> Once a recharge payment is completed, it cannot be refunded or reversed.</span>
           </div>
 
           <input type="hidden" id="modalProductName" name="product_name">
@@ -351,6 +426,8 @@
           <input type="hidden" id="modalTagName" name="tag_name">
           <input type="hidden" id="modalServiceName" name="service_name">
           <input type="hidden" id="modalRechargeType" name="recharge_type">
+          <input type="hidden" id="modalDaysLeft" value="0">
+          <input type="hidden" id="modalExpiresOn" value="-">
           <input type="hidden" id="modalBasePrice" value="199">
           <input type="hidden" id="modalCalculatedAmount" value="199">
 
@@ -422,7 +499,6 @@
 <script>
 
 function calculatePlanTotal() {
-
   const base = parseFloat(document.getElementById('modalBasePrice').value) || 0;
   const months = parseInt(document.getElementById('planDurationSelect').value) || 1;
 
@@ -435,12 +511,31 @@ function calculatePlanTotal() {
   document.getElementById('displayTotalAmount').textContent = '\u20B9' + total;
 }
 
+function updateExpiryWarningUI(daysLeft, expiresOn) {
+  const alertBox = document.getElementById('modalExpiryWarning');
+  const alertText = document.getElementById('modalExpiryWarningText');
+  const expiryDisplay = document.getElementById('displayExpiryInfo');
 
-// Modal open hone par selected button ka data lena
+  const d = parseInt(daysLeft, 10);
+  const expText = (expiresOn || '').trim();
+
+  if (!isNaN(d) && d > 0) {
+    const dayLabel = d === 1 ? '1 day' : `${d} days`;
+    expiryDisplay.textContent = expText && expText !== '-' ? `${expText} (${dayLabel} left)` : `${dayLabel} left`;
+    alertText.innerHTML = `<strong>Expiry not reached yet (${dayLabel} remaining${expText && expText !== '-' ? ' on ' + expText : ''}).</strong> Recharge payment is <strong>non-refundable</strong>. Proceed only if you want to extend now.`;
+    alertBox.classList.add('show');
+  } else if (!isNaN(d) && d <= 0 && expText && expText !== '-') {
+    expiryDisplay.textContent = `${expText} (Expired)`;
+    alertBox.classList.remove('show');
+  } else {
+    expiryDisplay.textContent = expText && expText !== '-' ? expText : '-';
+    alertBox.classList.remove('show');
+  }
+}
+
 const rechargeModal = document.getElementById('rechargeModal');
 
 rechargeModal.addEventListener('show.bs.modal', function(event) {
-
   const btn = event.relatedTarget;
   if (!btn) return;
 
@@ -449,12 +544,16 @@ rechargeModal.addEventListener('show.bs.modal', function(event) {
   const tagName = btn.getAttribute('data-tag-name') || '';
   const service = btn.getAttribute('data-service') || '';
   const rechargeType = btn.getAttribute('data-type') || '';
+  const daysLeft = btn.getAttribute('data-days-left') || '0';
+  const expiresOn = btn.getAttribute('data-expires-on') || '-';
 
   document.getElementById('modalProductName').value = product;
   document.getElementById('modalProductId').value = productId;
   document.getElementById('modalTagName').value = tagName;
   document.getElementById('modalServiceName').value = service;
   document.getElementById('modalRechargeType').value = rechargeType;
+  document.getElementById('modalDaysLeft').value = daysLeft;
+  document.getElementById('modalExpiresOn').value = expiresOn;
 
   document.getElementById('displayProductName').textContent = product || '-';
   document.getElementById('displayServiceName').textContent = service || '-';
@@ -464,14 +563,28 @@ rechargeModal.addEventListener('show.bs.modal', function(event) {
 
   document.getElementById('planDurationSelect').value = '1';
 
+  updateExpiryWarningUI(daysLeft, expiresOn);
   calculatePlanTotal();
 });
 
-
-// Payment submit
 document.getElementById('rechargeForm').addEventListener('submit', async function(e) {
-
   e.preventDefault();
+
+  const daysLeft = parseInt(document.getElementById('modalDaysLeft').value, 10);
+  const expiresOn = document.getElementById('modalExpiresOn').value;
+  const product = document.getElementById('modalProductName').value;
+  const service = document.getElementById('modalServiceName').value;
+
+  // Check expiry before making payment
+  if (!isNaN(daysLeft) && daysLeft > 0) {
+    const dayLabel = daysLeft === 1 ? '1 day' : `${daysLeft} days`;
+    const confirmed = window.confirm(
+      `Notice: ${product} (${service}) has NOT expired yet (${dayLabel} left${expiresOn && expiresOn !== '-' ? ', expires on ' + expiresOn : ''}).\n\nRecharge payments are NON-REFUNDABLE. Do you still want to continue with payment?`
+    );
+    if (!confirmed) {
+      return;
+    }
+  }
 
   const btn = document.getElementById('btnSubmitRecharge');
   const originalText = btn.innerHTML;
@@ -479,10 +592,8 @@ document.getElementById('rechargeForm').addEventListener('submit', async functio
   btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Starting payment...';
   btn.disabled = true;
 
-  const product = document.getElementById('modalProductName').value;
   const productId = document.getElementById('modalProductId').value;
   const tagName = document.getElementById('modalTagName').value;
-  const service = document.getElementById('modalServiceName').value;
   const amount = document.getElementById('modalCalculatedAmount').value;
   const rechargeType = document.getElementById('modalRechargeType').value;
   const duration = document.getElementById('planDurationSelect').value;
@@ -494,12 +605,10 @@ document.getElementById('rechargeForm').addEventListener('submit', async functio
     return;
   }
 
-  // Flask URL mein selected recharge type dynamically set hoga
   const orderUrl = "{{ url_for('recharge.create_cashfree_order', type='TYPE_PLACEHOLDER') }}"
     .replace('TYPE_PLACEHOLDER', encodeURIComponent(rechargeType));
 
   try {
-
     const response = await fetch(orderUrl, {
       method: "POST",
       headers: {
@@ -509,7 +618,7 @@ document.getElementById('rechargeForm').addEventListener('submit', async functio
       body: JSON.stringify({
         product_id: productId,
         tag_name: tagName,
-        product_name: product,
+        product_name: product + ' (' + service + ' Recharge)',
         amount: amount,
         recharge_type: rechargeType,
         recharge_Duration: duration
@@ -519,32 +628,23 @@ document.getElementById('rechargeForm').addEventListener('submit', async functio
     const data = await response.json();
 
     if (response.ok && data.status === "success" && data.payment_session_id) {
-
       const cashfree = Cashfree({ mode: "sandbox" });
 
       cashfree.checkout({
         paymentSessionId: data.payment_session_id,
         redirectTarget: "_self"
       });
-
     } else {
-
       alert(data.message || "Could not start the payment. Please try again.");
-
       btn.innerHTML = originalText;
       btn.disabled = false;
     }
-
   } catch (err) {
-
     console.error(err);
-
     alert("Could not reach the payment server. Please check your internet connection.");
-
     btn.innerHTML = originalText;
     btn.disabled = false;
   }
-
 });
 
 </script>

@@ -1,81 +1,222 @@
 {% extends "base.html" %}
 
-{% block title %}About Us // Tech Gyan Amit Platforms{% endblock %}
+{% block title %}About Us | Tech Gyan Amit — Google Sheets ERP, AppSheet, Python Flask & Custom Apps{% endblock %}
+
+{% block meta_description %}Learn about Tech Gyan Amit. We build ready-to-use Google Sheets ERP systems, Google AppSheet business apps, Python Flask web portals, WhatsApp automation, and custom Flutter & Android applications in India.{% endblock %}
+
+{% block meta_keywords %}About Tech Gyan Amit, Google Sheets ERP India, Google AppSheet developer, Python Flask web apps, Flutter Android custom apps, WhatsApp business automation, business process automation India{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{{ {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "@id": request.base_url ~ "#aboutpage",
+  "url": request.base_url,
+  "name": "About Tech Gyan Amit",
+  "description": "Tech Gyan Amit builds ready-to-use Google Sheets ERP systems, Google AppSheet apps, Python Flask web portals, and custom business software.",
+  "inLanguage": "en-IN",
+  "mainEntity": {
+    "@id": request.url_root ~ "#organization"
+  }
+}|tojson }}
+</script>
+{% endblock %}
 
 {% block content %}
-<div class="container py-5">
+<style>
+  :root {
+    --text-pure: #FFFFFF;
+    --text-body: #CBD5E1;
+    --text-sub: #94A3B8;
+    --card-surface: #0F172A;
+    --border-subtle: rgba(255, 255, 255, 0.1);
+    --border-glow: rgba(0, 210, 255, 0.35);
+    --accent-blue: #0066FF;
+    --accent-cyan: #00D2FF;
+    --accent-emerald: #10B981;
+  }
+
+  .about-scope {
+    color: var(--text-body);
+  }
+
+  .about-scope h1,
+  .about-scope h2,
+  .about-scope h3,
+  .about-scope h4,
+  .about-scope h5 {
+    color: var(--text-pure) !important;
+    font-weight: 700;
+  }
+
+  .about-scope p {
+    color: var(--text-body) !important;
+  }
+
+  .about-hero-box {
+    background: radial-gradient(circle at 85% 15%, rgba(0, 102, 255, 0.18), transparent 50%),
+                radial-gradient(circle at 15% 85%, rgba(0, 210, 255, 0.14), transparent 50%),
+                var(--card-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 26px;
+    padding: 3.75rem 2.5rem;
+    box-shadow: 0 25px 55px -15px rgba(0, 0, 0, 0.7);
+  }
+
+  .about-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 999px;
+    background: rgba(0, 210, 255, 0.1);
+    border: 1px solid rgba(0, 210, 255, 0.32);
+    color: var(--accent-cyan);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+  }
+
+  .text-gradient-tga {
+    background: linear-gradient(135deg, #38BDF8, #00D2FF, #818CF8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .about-card {
+    background: var(--card-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: 2rem;
+    height: 100%;
+    box-shadow: 0 14px 32px -12px rgba(0, 0, 0, 0.6);
+    transition: all 0.25s ease;
+  }
+
+  .about-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 18px 38px -10px rgba(0, 210, 255, 0.22);
+  }
+
+  .about-icon-box {
+    width: 54px;
+    height: 54px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .tech-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: rgba(7, 11, 25, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #E2E8F0;
+    font-size: 0.84rem;
+    font-weight: 600;
+  }
+
+  .tech-badge i {
+    color: var(--accent-cyan);
+  }
+
+  @media (max-width: 767.98px) {
+    .about-hero-box {
+      padding: 2.5rem 1.5rem;
+    }
+  }
+</style>
+
+<div class="container about-scope py-4">
   <!-- Hero Section -->
-  <div class="row align-items-center mb-5">
-    <div class="col-lg-8 mx-auto text-center">
-      <span class="badge bg-info text-dark font-mono mb-3 px-3 py-2 rounded-pill">
-        <i class="fa-solid fa-code-merge me-1"></i> Engineering Excellence
-      </span>
-      <h1 class="display-4 fw-bold text-white mb-3 font-mono">
-        Empowering Scale Through <span class="text-info">Smart Automation</span>
+  <header class="about-hero-box text-center mb-5">
+    <div class="col-lg-9 mx-auto">
+      <div class="about-pill mb-3">
+        <i class="fa-solid fa-code-merge"></i>
+        <span>About Tech Gyan Amit &bull; Business Automation &amp; Software</span>
+      </div>
+      <h1 class="display-5 fw-bold text-white mb-3" style="line-height: 1.2;">
+        Simplifying Business Operations Through <span class="text-gradient-tga">Smart Apps &amp; Automation</span>
       </h1>
-      <p class="text-slate lead mb-4">
-        Tech Gyan Amit is engineered to bridge the gap between complex enterprise workflows and rapid, lightweight deployment. We build production-ready Google Sheets ERPs, Flask microservices, and WhatsApp AI bridges.
+      <p class="lead mb-4 mx-auto" style="max-width: 720px; font-size: 1.05rem; line-height: 1.8; color: #CBD5E1 !important;">
+        <strong>Tech Gyan Amit</strong> helps growing businesses replace manual spreadsheets and repetitive paperwork with ready-to-use <strong>Google Sheets ERPs</strong>, <strong>Google AppSheet apps</strong>, <strong>Python Flask web portals</strong>, and <strong>WhatsApp workflow automations</strong>.
       </p>
+
+      <div class="d-flex flex-wrap justify-content-center gap-2 pt-2">
+        <span class="tech-badge"><i class="fa-solid fa-table"></i> Google Sheets ERP</span>
+        <span class="tech-badge"><i class="fa-solid fa-layer-group"></i> Google AppSheet</span>
+        <span class="tech-badge"><i class="fa-brands fa-python"></i> Python &amp; Flask</span>
+        <span class="tech-badge"><i class="fa-brands fa-android"></i> Flutter &amp; Android</span>
+        <span class="tech-badge"><i class="fa-brands fa-whatsapp"></i> WhatsApp Automation</span>
+      </div>
     </div>
-  </div>
+  </header>
 
   <!-- Core Pillars Grid -->
-  <div class="row g-4 mb-5">
-    <div class="col-md-4">
-      <div class="nexus-card">
-        <div class="text-info fs-3 mb-3">
-          <i class="fa-solid fa-bolt"></i>
-        </div>
-        <h4 class="text-white fw-bold mb-2">Rapid Deployment</h4>
-        <p class="text-slate small mb-0">
-          Get fully functional automation tools, source code packages, and live setup video guides within minutes of acquisition.
-        </p>
+  <section aria-label="Why Choose Tech Gyan Amit" class="mb-5">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <article class="about-card">
+          <div class="about-icon-box" style="background: rgba(0, 210, 255, 0.12); color: #00D2FF; border: 1px solid rgba(0, 210, 255, 0.3);">
+            <i class="fa-solid fa-bolt"></i>
+          </div>
+          <h2 class="h5 text-white fw-bold mb-2">Ready-to-Use Apps (24h Activation)</h2>
+          <p class="small mb-0" style="line-height: 1.75; color: #94A3B8 !important;">
+            No server setup or coding headache. Subscribe to our configured ERP, AppSheet, or web apps (managed access, not full source code) and get activated within <strong>24 hours</strong> after payment.
+          </p>
+        </article>
+      </div>
+
+      <div class="col-md-4">
+        <article class="about-card">
+          <div class="about-icon-box" style="background: rgba(16, 185, 129, 0.12); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3);">
+            <i class="fa-solid fa-database"></i>
+          </div>
+          <h2 class="h5 text-white fw-bold mb-2">Practical &amp; Scalable Architecture</h2>
+          <p class="small mb-0" style="line-height: 1.75; color: #94A3B8 !important;">
+            From fast Google Sheets &amp; AppSheet workflows to full-scale <strong>Python Flask</strong> web portals and <strong>Flutter</strong> mobile apps, every system is built for speed, reliability, and ease of use.
+          </p>
+        </article>
+      </div>
+
+      <div class="col-md-4">
+        <article class="about-card">
+          <div class="about-icon-box" style="background: rgba(129, 140, 248, 0.12); color: #818CF8; border: 1px solid rgba(129, 140, 248, 0.3);">
+            <i class="fa-solid fa-headset"></i>
+          </div>
+          <h2 class="h5 text-white fw-bold mb-2">Guided Videos &amp; Direct Support</h2>
+          <p class="small mb-0" style="line-height: 1.75; color: #94A3B8 !important;">
+            Every tool includes step-by-step video walkthroughs and direct WhatsApp assistance so your team can adopt new workflows smoothly without technical friction.
+          </p>
+        </article>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="nexus-card">
-        <div class="text-info fs-3 mb-3">
-          <i class="fa-solid fa-database"></i>
-        </div>
-        <h4 class="text-white fw-bold mb-2">Lightweight Backends</h4>
-        <p class="text-slate small mb-0">
-          Leverage Google Sheets as a high-speed database backed by Python Flask, optimized with custom caching and batch fetching strategies.
-        </p>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="nexus-card">
-        <div class="text-info fs-3 mb-3">
-          <i class="fa-solid fa-headset"></i>
-        </div>
-        <h4 class="text-white fw-bold mb-2">Direct Developer Support</h4>
-        <p class="text-slate small mb-0">
-          Work directly with builders and engineers via our WhatsApp concierge for custom enterprise integrations and bespoke builds.
-        </p>
-      </div>
-    </div>
-  </div>
+  </section>
 
   <!-- Call to Action Banner -->
-  <div class="row">
-    <div class="col-12">
-      <div class="nexus-card text-center p-5 position-relative overflow-hidden">
-        <div class="position-relative z-1">
-          <h3 class="text-white fw-bold mb-3 font-mono">Ready to Automate Your Workflow?</h3>
-          <p class="text-slate mb-4 max-w-500 mx-auto">
-            Explore our catalog of ready-made tools or request a custom architecture built specifically for your business operations.
-          </p>
-          <div class="d-flex justify-content-center gap-3">
-            <a href="{{ url_for('products.list_products') }}" class="btn-nexus-primary">
-              <i class="fa-solid fa-box-open"></i> Browse Catalog
-            </a>
-            <a href="{{ url_for('interactions.custom_order') }}" class="btn-nexus-outline">
-              <i class="fa-solid fa-hammer"></i> Request Custom Build
-            </a>
-          </div>
-        </div>
+  <section aria-label="Get Started">
+    <div class="about-card text-center p-4 p-md-5" style="background: linear-gradient(135deg, rgba(0, 102, 255, 0.16), rgba(0, 210, 255, 0.1)); border-color: var(--border-glow);">
+      <h2 class="h3 text-white fw-bold mb-3">Ready to Automate Your Business Workflow?</h2>
+      <p class="mx-auto mb-4" style="max-width: 600px; font-size: 0.96rem; color: #CBD5E1 !important;">
+        Explore our ready-made ERP, AppSheet, and web applications or request a custom solution built specifically for your business operations.
+      </p>
+      <div class="d-flex justify-content-center flex-wrap gap-3">
+        <a href="{{ url_for('products.list_products') }}" class="btn-tga-primary px-4 py-2">
+          <i class="fa-solid fa-layer-group"></i> Explore Ready Tools
+        </a>
+        <a href="{{ url_for('interactions.custom_order') }}" class="btn-tga-outline px-4 py-2">
+          <i class="fa-solid fa-wand-magic-sparkles text-info"></i> Request Custom Build
+        </a>
       </div>
     </div>
-  </div>
+  </section>
 </div>
 {% endblock %}

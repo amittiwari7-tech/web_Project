@@ -161,6 +161,26 @@
     gap: 12px;
   }
 
+  .non-refund-banner {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    border-radius: 12px;
+    padding: 11px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: #FCA5A5;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    margin-bottom: 1rem;
+  }
+
+  .non-refund-banner i {
+    color: #EF4444;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
   /* Plan Switcher Pills */
   .plan-type-toggle {
     display: flex;
@@ -253,7 +273,7 @@
       <div class="detail-card mb-4 p-2 p-md-3">
         <div class="d-flex align-items-center justify-content-between px-2 pt-1 pb-3">
           <span class="font-mono small text-info fw-bold">
-            <i class="fa-solid fa-play-circle me-1"></i> Video Walkthrough & Implementation Manual
+            <i class="fa-solid fa-play-circle me-1"></i> Video Walkthrough &amp; Usage Manual
           </span>
           <span class="badge bg-dark border border-secondary font-mono small text-white">
             HD Tutorial
@@ -266,7 +286,7 @@
               <i class="fa-solid fa-circle-play text-info mb-3" style="font-size: 3rem;"></i>
               <h5 class="fw-bold text-white mb-1">Guided Video Included</h5>
               <p class="text-slate small mb-0" style="max-width: 380px;">
-                A complete screen-recording guide demonstrating deployment, Google Sheet syncing, and credentials setup is bundled with your download package.
+                A complete walkthrough showing how to use the app, sync data, and manage your workflow.
               </p>
             </div>
           </div>
@@ -276,7 +296,7 @@
       <!-- Specs & Technical Deliverables -->
       <div class="detail-card mb-4">
         <h4 class="fw-bold text-white mb-3 fs-5">
-          <i class="fa-solid fa-cubes text-info me-2"></i> Deliverables & Tech Specs
+          <i class="fa-solid fa-cubes text-info me-2"></i> App Overview &amp; Key Details
         </h4>
         <div class="spec-grid mb-4">
           <div class="spec-item">
@@ -296,25 +316,25 @@
             {% endif %}
           </div>
           <div class="spec-item">
-            <span class="label">License</span>
-            <span class="val">Unlimited Personal</span>
+            <span class="label">Activation</span>
+            <span class="val">{% if is_free_product %}Direct{% else %}Within 24 Hrs{% endif %}</span>
           </div>
           <div class="spec-item">
             <span class="label">Support</span>
-            <span class="val">30 Days Included</span>
+            <span class="val">WhatsApp Included</span>
           </div>
         </div>
 
-        <h5 class="fw-bold text-white mb-2 fs-6">Documentation & Overview</h5>
+        <h5 class="fw-bold text-white mb-2 fs-6">Documentation &amp; Overview</h5>
         <div class="detail-desc-text mb-4">
-          {{ product.description or product.short_description or 'Complete, tested digital package ready for one-click deployment. Zero technical debt, fully commented code, and direct database webhooks.' }}
+          {{ product.description or product.short_description or 'Ready-to-use business application configured for smooth daily operations with guided video support.' }}
         </div>
 
         <div class="guarantee-box">
           <i class="fa-solid fa-shield-check text-info fs-3"></i>
           <div>
-            <span class="fw-bold text-white d-block small">Tech Gyan Amit Verified Architecture</span>
-            <span class="text-slate small" style="font-size: 0.76rem;">Every script is vetted for memory leaks, clean webhook handshakes, and compatibility.</span>
+            <span class="fw-bold text-white d-block small">Tech Gyan Amit Ready-to-Use App Delivery</span>
+            <span class="text-slate small" style="font-size: 0.76rem;">We provide ready-to-use ERP/App access (not full source code), activated within 24 hours after payment.</span>
           </div>
         </div>
       </div>
@@ -329,7 +349,7 @@
           </span>
         {% else %}
           <span class="badge bg-dark border border-info text-info font-mono px-3 py-2 rounded-pill mb-3">
-            <i class="fa-solid fa-bolt me-1"></i> Instant Digital Delivery
+            <i class="fa-solid fa-clock me-1"></i> Activated Within 24 Hours
           </span>
         {% endif %}
 
@@ -344,42 +364,55 @@
           </div>
 
           <div class="price-sub">
-            <i class="fa-solid fa-circle-check"></i> Direct System APK Download & Shareable Link
+            <i class="fa-solid fa-circle-check"></i> Direct System APK Download &amp; Shareable Link
           </div>
         {% else %}
           <div class="d-flex align-items-baseline gap-2 mb-1">
             <span class="price-tag">₹{{ product.price }}</span>
-            <span class="text-slate font-mono small">/ One-time fee</span>
+            <span class="text-slate font-mono small">/ Plan</span>
           </div>
 
           <div class="price-sub">
-            <i class="fa-solid fa-circle-check"></i> Lifetime Updates & Direct Script Ownership
+            <i class="fa-solid fa-circle-check"></i> Ready-to-Use App Access &bull; Activated Within 24 Hours
           </div>
         {% endif %}
 
         <hr class="border-secondary-subtle my-3">
 
-        <h6 class="text-uppercase font-mono text-slate small fw-bold mb-3">Package Contents:</h6>
+        <h6 class="text-uppercase font-mono text-slate small fw-bold mb-3">What You Get:</h6>
         <div class="d-flex flex-column gap-3 mb-4">
           <div class="feature-bullet">
-            <i class="fa-solid fa-file-code"></i>
-            <span><strong>Full Source Code:</strong> Unminified, clean codebase with zero external lock-in.</span>
+            <i class="fa-solid fa-layer-group"></i>
+            <span><strong>Ready-to-Use App Access:</strong> Live configured app access (not full source code) ready for your workflow.</span>
+          </div>
+          <div class="feature-bullet">
+            <i class="fa-solid fa-clock"></i>
+            <span><strong>24-Hour Activation:</strong> Your app access is activated within 24 hours after payment confirmation.</span>
           </div>
           <div class="feature-bullet">
             <i class="fa-solid fa-video"></i>
-            <span><strong>Setup Video Manual:</strong> Step-by-step guidance on API keys & installation.</span>
+            <span><strong>Guided Video Manual:</strong> Step-by-step walkthrough on using features and daily operations.</span>
           </div>
           <div class="feature-bullet">
             <i class="fa-solid fa-headset"></i>
-            <span><strong>Dedicated WhatsApp Assistance:</strong> Chat directly with developers if you get stuck.</span>
+            <span><strong>Dedicated WhatsApp Assistance:</strong> Chat directly with support if you need help.</span>
           </div>
           {% if not is_free_product %}
             <div class="feature-bullet">
               <i class="fa-solid fa-arrows-rotate"></i>
-              <span><strong>Free Sandbox Period:</strong> Test fully active with our 3-day test trial.</span>
+              <span><strong>Free Trial Option:</strong> Test with our 3-day trial before subscribing.</span>
             </div>
           {% endif %}
         </div>
+
+        {% if not is_free_product %}
+          <div class="non-refund-banner" role="alert">
+            <i class="fa-solid fa-ban"></i>
+            <div>
+              <strong>Non-Refundable Payment Notice:</strong> Recharge and subscription payments are <strong>non-refundable</strong> once completed. Please check plan details before paying.
+            </div>
+          </div>
+        {% endif %}
 
         {% if is_free_product %}
           <!-- FREE PRODUCT: Direct APK Download & Get Link (Logs data with status = "free" without payment gateway) -->
@@ -426,28 +459,28 @@
                     class="btn-nexus-primary w-100 justify-content-center py-3 fs-5 fw-bold mb-3 border-0" 
                     data-bs-toggle="modal" 
                     data-bs-target="#paymentModal">
-              <i class="fa-solid fa-lock-open"></i> Unlock & Buy Now
+              <i class="fa-solid fa-lock-open"></i> Unlock &amp; Buy Now
             </button>
           {% else %}
             <button type="button" 
                     class="btn-nexus-primary w-100 justify-content-center py-3 fs-5 fw-bold mb-3 border-0" 
                     data-bs-toggle="modal" 
                     data-bs-target="#loginRequiredModal">
-              <i class="fa-solid fa-lock-open"></i> Unlock & Buy Now
+              <i class="fa-solid fa-lock-open"></i> Unlock &amp; Buy Now
             </button>
           {% endif %}
         {% endif %}
 
         <a href="{{ url_for('interactions.custom_order') }}" class="btn-nexus-outline w-100 text-center py-2 fs-6">
-          <i class="fa-solid fa-code-fork me-1"></i> Request Custom Modifications
+          <i class="fa-solid fa-code-fork me-1"></i> Request Custom Build
         </a>
 
         <div class="text-center mt-3">
           <small class="text-slate font-mono" style="font-size: 0.72rem;">
             {% if is_free_product %}
-              <i class="fa-solid fa-shield-halved me-1 text-success"></i> Verified Direct APK Package • Zero Payment Required
+              <i class="fa-solid fa-shield-halved me-1 text-success"></i> Verified Direct APK Package &bull; Zero Payment Required
             {% else %}
-              <i class="fa-solid fa-shield-halved me-1 text-success"></i> 256-bit Encrypted Checkout Powered by Cashfree Payments
+              <i class="fa-solid fa-shield-halved me-1 text-success"></i> Non-Refundable Payment &bull; Activated Within 24 Hours via Cashfree
             {% endif %}
           </small>
         </div>
@@ -498,9 +531,9 @@
               <i class="fa-solid fa-shield-halved me-1"></i> 3-Day Evaluation Access:
             </div>
             <ul class="text-slate ps-3 mb-0" style="line-height: 1.6; font-size: 0.8rem;">
-              <li>Full access to source code and Google Sheets web app.</li>
-              <li>Includes 3-day WhatsApp and AI engine token test quota.</li>
-              <li>No upfront charges. Auto-logs your trial into our central database.</li>
+              <li>Ready-to-use app access (not full source code) for evaluation.</li>
+              <li>Includes 3-day test access and guided walkthrough.</li>
+              <li>No upfront charges. Auto-logs your trial into our system.</li>
             </ul>
           </div>
 
@@ -514,6 +547,13 @@
 
         <!-- 2. SUBSCRIBE / CASHFREE PAYMENT VIEW -->
         <div id="subscribeSection" style="display: none;">
+          <div class="non-refund-banner" role="alert">
+            <i class="fa-solid fa-ban"></i>
+            <div>
+              <strong>Non-Refundable Payment:</strong> Once payment is made, it will <strong>not be refunded</strong>. Your app will be activated within <strong>24 hours</strong> after payment.
+            </div>
+          </div>
+
           <label class="font-mono text-slate small fw-bold mb-3 d-block">SELECT PAYMENT METHOD:</label>
 
           <!-- Method 1: Instant UPI QR & Apps -->
@@ -521,7 +561,7 @@
             <div class="d-flex align-items-center gap-3">
               <div class="fs-4 text-success"><i class="fa-solid fa-qrcode"></i></div>
               <div>
-                <div class="text-white fw-bold small">UPI & Dynamic QR Code</div>
+                <div class="text-white fw-bold small">UPI &amp; Dynamic QR Code</div>
                 <div class="text-slate font-mono" style="font-size: 0.72rem;">GPay, PhonePe, Paytm, BHIM</div>
               </div>
             </div>
@@ -562,7 +602,7 @@
 
         <div class="text-center mt-3">
           <small class="text-slate font-mono" style="font-size: 0.7rem;">
-            <i class="fa-solid fa-shield-halved text-success me-1"></i> Direct encrypted account registration and webhook synchronization.
+            <i class="fa-solid fa-shield-halved text-success me-1"></i> Non-refundable payment &bull; Activated within 24 hours after payment.
           </small>
         </div>
       </div>
@@ -587,7 +627,7 @@
         </div>
         <h5 class="fw-bold mb-2">Please Login First</h5>
         <p class="text-slate small mb-0 px-3">
-          You must be logged in to download APKs, claim free trials, or purchase licenses for <strong>{{ product.name }}</strong>.
+          You must be logged in to download APKs, claim free trials, or purchase access for <strong>{{ product.name }}</strong>.
         </p>
       </div>
       <div class="modal-footer border-top border-secondary-subtle justify-content-center gap-2">
@@ -826,6 +866,13 @@
 
   // Cashfree Order Checkout & Error Handler
   async function initiateCashfreeCheckout(productId, productName, amount, type, tagName) {
+    const confirmed = window.confirm(
+      `Notice: Payment for ${productName} (₹${amount}) is NON-REFUNDABLE once completed, and your app will be activated within 24 hours after payment.\n\nDo you want to proceed?`
+    );
+    if (!confirmed) {
+      return;
+    }
+
     const btn = document.getElementById('btnProceedCashfree');
     const originalText = btn.innerHTML;
     

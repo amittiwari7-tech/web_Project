@@ -1,5 +1,52 @@
 {% extends 'base.html' %}
-{% block title %}Request Custom Build // Enterprise ERP, Bots & Software{% endblock %}
+
+{% block title %}Request a Custom Project | AppSheet, Android, Python Flask & Google Sheets Development | Tech Gyan Amit{% endblock %}
+
+{% block meta_description %}Submit your project brief to Tech Gyan Amit for custom Google AppSheet apps, Android & Flutter mobile apps, Python Flask web portals, Google Apps Script automation, and ERP solutions. Get a fixed quote within 24 hours.{% endblock %}
+
+{% block meta_keywords %}request custom software build, Google AppSheet developer India, custom Android Flutter app development, Python Flask web application development, Google Apps Script developer, Google Sheets ERP custom build, Tech Gyan Amit{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{{ {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": request.base_url ~ "#webpage",
+      "url": request.base_url,
+      "name": "Request a Custom Project | Tech Gyan Amit",
+      "description": "Submit your custom software requirements for Google AppSheet, Android & Flutter, Python Flask, Google Apps Script, and WhatsApp automation.",
+      "inLanguage": "en-IN",
+      "isPartOf": {
+        "@id": request.url_root ~ "#website"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How quickly will I receive a quote for my custom project?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Our engineering team reviews your project brief within 6 hours and provides a transparent fixed quote and delivery timeline within 24 hours."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which technologies do you use for custom business apps?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We build custom business applications using Google AppSheet, Google Apps Script & Google Sheets Web Apps, Python Flask, MySQL, Android & Flutter, and WhatsApp automation."
+          }
+        }
+      ]
+    }
+  ]
+}|tojson }}
+</script>
+{% endblock %}
 
 {% block content %}
 <style>
@@ -7,12 +54,12 @@
     --text-pure: #FFFFFF;
     --text-body: #CBD5E1;
     --text-sub: #94A3B8;
-    --card-surface: #0E1626;
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-glow: rgba(6, 182, 212, 0.35);
-    --accent-cyan: #06B6D4;
+    --card-surface: #0F172A;
+    --border-subtle: rgba(255, 255, 255, 0.1);
+    --border-glow: rgba(0, 210, 255, 0.35);
+    --accent-blue: #0066FF;
+    --accent-cyan: #00D2FF;
     --accent-emerald: #10B981;
-    --accent-violet: #6366F1;
   }
 
   .order-scope {
@@ -23,7 +70,8 @@
   .order-scope h2,
   .order-scope h3,
   .order-scope h4,
-  .order-scope h5 {
+  .order-scope h5,
+  .order-scope h6 {
     color: var(--text-pure) !important;
     font-weight: 700;
   }
@@ -32,48 +80,88 @@
     color: var(--text-body) !important;
   }
 
+  .order-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 999px;
+    background: rgba(0, 210, 255, 0.1);
+    border: 1px solid rgba(0, 210, 255, 0.32);
+    color: var(--accent-cyan);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+  }
+
+  .text-gradient-tga {
+    background: linear-gradient(135deg, #38BDF8, #00D2FF, #818CF8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
   .order-card {
     background: var(--card-surface);
     border: 1px solid var(--border-subtle);
-    border-radius: 20px;
+    border-radius: 22px;
     padding: 2.25rem;
-    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 22px 45px -15px rgba(0, 0, 0, 0.65);
+    position: relative;
+    overflow: hidden;
   }
 
-  .form-control-nexus,
-  .form-select-nexus {
-    background: rgba(255, 255, 255, 0.04) !important;
-    border: 1px solid var(--border-subtle) !important;
+  .order-card-accent {
+    border-color: var(--border-glow);
+    background: radial-gradient(circle at 100% 0%, rgba(0, 210, 255, 0.08), transparent 45%),
+                var(--card-surface);
+  }
+
+  .form-control-tga,
+  .form-select-tga {
+    background: rgba(7, 11, 25, 0.75) !important;
+    border: 1px solid rgba(255, 255, 255, 0.13) !important;
     color: #FFFFFF !important;
     border-radius: 12px;
-    padding: 0.75rem 1rem;
+    padding: 0.8rem 1rem;
     font-size: 0.95rem;
     transition: all 0.25s ease;
   }
 
-  .form-control-nexus:focus,
-  .form-select-nexus:focus {
-    background: rgba(255, 255, 255, 0.07) !important;
+  .form-control-tga::placeholder {
+    color: #64748B !important;
+  }
+
+  .form-control-tga:focus,
+  .form-select-tga:focus {
+    background: rgba(7, 11, 25, 0.95) !important;
     border-color: var(--accent-cyan) !important;
-    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.2) !important;
+    box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.2) !important;
     color: #FFFFFF !important;
     outline: none;
   }
 
-  .form-select-nexus option {
-    background-color: #0E1626 !important;
+  .form-select-tga option {
+    background-color: #0F172A !important;
     color: #FFFFFF !important;
     padding: 10px;
   }
 
-  .form-label-nexus {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-pure);
+  .form-label-tga {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #E2E8F0;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.8px;
     margin-bottom: 0.5rem;
-    font-family: var(--font-mono, monospace);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  .form-label-tga i {
+    color: var(--accent-cyan);
+    font-size: 0.85rem;
   }
 
   .sidebar-step {
@@ -83,129 +171,214 @@
   }
 
   .step-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: rgba(6, 182, 212, 0.12);
-    border: 1px solid rgba(6, 182, 212, 0.3);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(0, 210, 255, 0.12);
+    border: 1px solid rgba(0, 210, 255, 0.3);
     color: var(--accent-cyan);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.95rem;
+    font-size: 1rem;
     flex-shrink: 0;
   }
 
-  /* Submit Button Disabled State */
-  .btn-nexus-primary:disabled {
+  .stack-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 11px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    color: #CBD5E1;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  .stack-chip i {
+    color: var(--accent-cyan);
+  }
+
+  .btn-tga-primary:disabled {
     opacity: 0.75;
     cursor: not-allowed;
     transform: none !important;
     box-shadow: none !important;
   }
+
+  @media (max-width: 767.98px) {
+    .order-card {
+      padding: 1.5rem;
+    }
+  }
 </style>
 
+{% set selected_service = request.args.get('service', '') %}
+
 <div class="container order-scope py-4">
-  <div class="text-center mb-5">
-    <span class="font-mono text-info small text-uppercase" style="letter-spacing: 2px;">
-      Tailored Engineering & Builds
-    </span>
-    <h1 class="display-5 fw-bold text-white mt-1">Request a Custom Project</h1>
-    <p class="text-muted mx-auto" style="max-width: 620px; font-size: 1rem; line-height: 1.7; color: #94A3B8 !important;">
-      Need a customized Google Sheet ERP bridge, a WhatsApp Cloud API notification engine, or a full-stack Python portal? Provide your details below for a quote within 24 hours.
+  <!-- Semantic Header for SEO & Clear Value Proposition -->
+  <header class="text-center mb-5">
+    <div class="order-hero-badge mb-3">
+      <i class="fa-solid fa-wand-magic-sparkles"></i>
+      <span>Tailored Software &amp; Automation Engineering</span>
+    </div>
+    <h1 class="display-5 fw-bold text-white mt-1 mb-3">
+      Request a <span class="text-gradient-tga">Custom Project Build</span>
+    </h1>
+    <p class="mx-auto mb-4" style="max-width: 680px; font-size: 1rem; line-height: 1.75; color: #94A3B8 !important;">
+      Need a custom <strong>Google AppSheet app</strong>, <strong>Android &amp; Flutter mobile application</strong>, <strong>Python Flask web portal</strong>, or <strong>Google Sheets ERP automation</strong>? Share your requirements below to receive a fixed quote within 24 hours.
     </p>
-  </div>
 
-  <div class="row g-5 align-items-start">
-    <!-- Left Column: Inquiry Form -->
+    <div class="d-inline-flex flex-wrap justify-content-center gap-2">
+      <span class="stack-chip"><i class="fa-solid fa-layer-group"></i> Google AppSheet</span>
+      <span class="stack-chip"><i class="fa-brands fa-android"></i> Android &amp; Flutter</span>
+      <span class="stack-chip"><i class="fa-brands fa-python"></i> Python &amp; Flask</span>
+      <span class="stack-chip"><i class="fa-solid fa-table"></i> Google Sheets &amp; Apps Script</span>
+      <span class="stack-chip"><i class="fa-brands fa-whatsapp"></i> WhatsApp Automation</span>
+    </div>
+  </header>
+
+  <div class="row g-4 g-lg-5 align-items-start">
+    <!-- Left Column: Custom Project Inquiry Form -->
     <div class="col-lg-7">
-      <div class="order-card">
+      <section class="order-card" aria-label="Custom project requirement form">
+        <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-secondary-subtle">
+          <div>
+            <h2 class="h5 mb-1">Project Brief &amp; Contact Details</h2>
+            <small style="color: #94A3B8;">All fields are required so our team can prepare an accurate estimate.</small>
+          </div>
+          <span class="badge bg-dark border border-info text-info font-mono px-2 py-1">24h Quote</span>
+        </div>
+
         <form method="POST" action="{{ url_for('interactions.custom_order') }}" id="customOrderForm">
-          
+
           <div class="mb-4">
-            <label class="form-label form-label-nexus">Your Full Name</label>
-            <input type="text" name="name" class="form-control form-control-nexus" placeholder="e.g., Alex Johnson" required>
+            <label for="orderName" class="form-label form-label-tga">
+              <i class="fa-solid fa-user"></i> Your Full Name
+            </label>
+            <input type="text"
+                   id="orderName"
+                   name="name"
+                   class="form-control form-control-tga"
+                   placeholder="e.g., Rahul Sharma"
+                   value=""
+                   required>
           </div>
 
           <div class="row g-3 mb-4">
             <div class="col-md-6">
-              <label class="form-label form-label-nexus">Work Email</label>
-              <input type="email" name="email" class="form-control form-control-nexus" placeholder="alex@company.com" required>
+              <label for="orderEmail" class="form-label form-label-tga">
+                <i class="fa-solid fa-envelope"></i> Work Email
+              </label>
+              <input type="email"
+                     id="orderEmail"
+                     name="email"
+                     class="form-control form-control-tga"
+                     placeholder="name@company.com"
+                     value="{{ session.get('user_email', '') }}"
+                     required>
             </div>
             <div class="col-md-6">
-              <label class="form-label form-label-nexus">WhatsApp / Phone</label>
-              <input type="text" name="phone" class="form-control form-control-nexus" placeholder="+91 98765 43210" required>
+              <label for="orderPhone" class="form-label form-label-tga">
+                <i class="fa-brands fa-whatsapp"></i> WhatsApp / Phone Number
+              </label>
+              <input type="tel"
+                     id="orderPhone"
+                     name="phone"
+                     class="form-control form-control-tga"
+                     placeholder="+91 98765 43210"
+                     required>
             </div>
           </div>
 
           <div class="row g-3 mb-4">
             <div class="col-md-6">
-              <label class="form-label form-label-nexus">Project Type</label>
-              <select name="service_type" class="form-select form-select-nexus" required>
-                <option value="" disabled selected>Select an architecture...</option>
-                <option value="Google Sheets ERP / Automation">Google Sheets ERP / Automation</option>
-                <option value="WhatsApp Cloud API / Bot">WhatsApp Cloud API / Bot</option>
-                <option value="Python Flask / FastAPI Backend">Python Flask / FastAPI Backend</option>
-                <option value="Mobile App (Flutter / Android)">Mobile App (Flutter / Android)</option>
-                <option value="Web Scraper / Data Pipeline">Web Scraper / Data Pipeline</option>
+              <label for="orderServiceType" class="form-label form-label-tga">
+                <i class="fa-solid fa-cubes"></i> Project Architecture
+              </label>
+              <select id="orderServiceType" name="service_type" class="form-select form-select-tga" required>
+                <option value="" disabled {% if not selected_service %}selected{% endif %}>Select an architecture...</option>
+                <option value="Google AppSheet Business App" {% if 'AppSheet' in selected_service %}selected{% endif %}>Google AppSheet Business App</option>
+                <option value="Google Apps Script & Sheets Web App" {% if 'Sheets' in selected_service or 'Script' in selected_service %}selected{% endif %}>Google Apps Script &amp; Sheets Web App</option>
+                <option value="Python & Flask Web Application" {% if 'Python' in selected_service or 'Flask' in selected_service %}selected{% endif %}>Python &amp; Flask Web Application</option>
+                <option value="Android & Flutter Mobile App" {% if 'Android' in selected_service or 'Flutter' in selected_service %}selected{% endif %}>Android &amp; Flutter Mobile App</option>
+                <option value="WhatsApp Business Automation" {% if 'WhatsApp' in selected_service %}selected{% endif %}>WhatsApp Business Automation</option>
+                <option value="Custom ERP, CRM or AI Utility" {% if 'ERP' in selected_service or 'CRM' in selected_service %}selected{% endif %}>Custom ERP, CRM or AI Utility</option>
                 <option value="Other Custom Solution">Other Custom Solution</option>
               </select>
             </div>
+
             <div class="col-md-6">
-              <label class="form-label form-label-nexus">Estimated Budget</label>
-              <select name="budget" class="form-select form-select-nexus" required>
+              <label for="orderBudget" class="form-label form-label-tga">
+                <i class="fa-solid fa-indian-rupee-sign"></i> Estimated Budget
+              </label>
+              <select id="orderBudget" name="budget" class="form-select form-select-tga" required>
                 <option value="" disabled selected>Select budget range...</option>
-                <option value="₹2,500 – ₹5,000">₹2,500 – ₹5,000 (Small script/macro)</option>
-                <option value="₹5,000 – ₹15,000">₹5,000 – ₹15,000 (Bot/Dashboard)</option>
-                <option value="₹15,000 – ₹35,000">₹15,000 – ₹35,000 (Full ERP/App build)</option>
-                <option value="₹35,000+">₹35,000+ (Enterprise scope)</option>
+                <option value="₹2,500 – ₹5,000">₹2,500 – ₹5,000 (Script / Sheet Automation)</option>
+                <option value="₹5,000 – ₹15,000">₹5,000 – ₹15,000 (AppSheet / Bot / Portal)</option>
+                <option value="₹15,000 – ₹35,000">₹15,000 – ₹35,000 (Full ERP / Mobile App)</option>
+                <option value="₹35,000+">₹35,000+ (Enterprise Multi-Module Build)</option>
               </select>
             </div>
           </div>
 
           <div class="mb-4">
-            <label class="form-label form-label-nexus">Detailed Requirements</label>
-            <textarea name="description" rows="5" class="form-control form-control-nexus" placeholder="Explain your current workflow, expected inputs/outputs, preferred timelines, and any third-party APIs you want connected..." required></textarea>
+            <label for="orderDescription" class="form-label form-label-tga">
+              <i class="fa-solid fa-list-check"></i> Detailed Requirements &amp; Workflow
+            </label>
+            <textarea id="orderDescription"
+                      name="description"
+                      rows="5"
+                      class="form-control form-control-tga"
+                      placeholder="Describe your current workflow, user roles, reports/invoices needed, and any integrations (Google Sheets, WhatsApp, Payment Gateway, etc.)..."
+                      required></textarea>
           </div>
 
-          <!-- Submit Button with Dynamic Loader Container -->
-          <button type="submit" id="orderSubmitBtn" class="btn-nexus-primary w-100 justify-content-center py-3 fs-6">
-            <span id="orderBtnIcon" class="me-2"><i class="fa-solid fa-paper-plane"></i></span>
-            <span id="orderBtnText">Submit Brief & Dispatch Quote</span>
+          <button type="submit" id="orderSubmitBtn" class="btn-tga-primary w-100 justify-content-center py-3 fs-6">
+            <span id="orderBtnIcon" class="me-1"><i class="fa-solid fa-paper-plane"></i></span>
+            <span id="orderBtnText">Submit Brief &amp; Request Quote</span>
           </button>
         </form>
-      </div>
+      </section>
     </div>
 
-    <!-- Right Column: What Happens Next & Direct WhatsApp -->
-    <div class="col-lg-5">
-      <div class="order-card mb-4" style="border-color: var(--border-glow);">
-        <h4 class="fs-5 mb-4">
+    <!-- Right Column: Process Timeline & Direct WhatsApp -->
+    <aside class="col-lg-5">
+      <div class="order-card order-card-accent mb-4">
+        <h2 class="h5 mb-4">
           <i class="fa-solid fa-timeline text-info me-2"></i> How We Handle Your Build
-        </h4>
-        
+        </h2>
+
         <div class="d-flex flex-column gap-4">
           <div class="sidebar-step">
             <div class="step-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
             <div>
-              <h6 class="text-white mb-1 fs-6">1. Scope Review within 6 Hours</h6>
-              <p class="small mb-0" style="color: #94A3B8 !important;">Our lead engineer reviews your technical requirement and validates feasibility.</p>
+              <h3 class="text-white mb-1 fs-6">1. Scope Review Within 6 Hours</h3>
+              <p class="small mb-0" style="color: #94A3B8 !important;">
+                We review your workflow, data structure, and integration requirements to confirm technical feasibility.
+              </p>
             </div>
           </div>
 
           <div class="sidebar-step">
             <div class="step-icon"><i class="fa-solid fa-file-contract"></i></div>
             <div>
-              <h6 class="text-white mb-1 fs-6">2. Fixed Quote & Timeline</h6>
-              <p class="small mb-0" style="color: #94A3B8 !important;">We send you a transparent quote with milestones—no unexpected costs or billing surprises.</p>
+              <h3 class="text-white mb-1 fs-6">2. Fixed Quote &amp; Delivery Milestone</h3>
+              <p class="small mb-0" style="color: #94A3B8 !important;">
+                You receive a clear timeline and fixed project cost with transparent milestones—no hidden charges.
+              </p>
             </div>
           </div>
 
           <div class="sidebar-step">
-            <div class="step-icon"><i class="fa-solid fa-terminal"></i></div>
+            <div class="step-icon"><i class="fa-solid fa-rocket"></i></div>
             <div>
-              <h6 class="text-white mb-1 fs-6">3. Build, Walkthrough Video & Handoff</h6>
-              <p class="small mb-0" style="color: #94A3B8 !important;">You receive clean source code, installation scripts, and a private recorded setup guide.</p>
+              <h3 class="text-white mb-1 fs-6">3. Build, Walkthrough Video &amp; Support</h3>
+              <p class="small mb-0" style="color: #94A3B8 !important;">
+                We deploy your custom app, provide a complete training video guide, and assist your team on WhatsApp.
+              </p>
             </div>
           </div>
         </div>
@@ -213,19 +386,22 @@
 
       <!-- Quick WhatsApp Alternative Box -->
       <div class="order-card text-center p-4">
-        <i class="fa-brands fa-whatsapp text-success mb-3" style="font-size: 2.5rem;"></i>
-        <h5 class="fs-6 mb-2">Need to discuss right now?</h5>
+        <div class="mx-auto mb-3 d-flex align-items-center justify-content-center rounded-circle"
+             style="width: 56px; height: 56px; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35);">
+          <i class="fa-brands fa-whatsapp text-success fs-3"></i>
+        </div>
+        <h3 class="h5 fs-6 mb-2">Prefer a Quick Discussion First?</h3>
         <p class="small mb-3" style="color: #94A3B8 !important;">
-          Skip the form and start a direct conversation with our engineering lead on WhatsApp.
+          Share a voice note or sample sheet directly with Tech Gyan Amit on WhatsApp for instant guidance.
         </p>
-        <a href="https://wa.me/917217723569?text=Hi%20Tech Gyan Amit,%20I%20have%20an%20urgent%20custom%20development%20requirement." 
-           target="_blank" 
-           rel="noopener" 
-           class="btn-nexus-outline w-100 justify-content-center py-2">
-          <i class="fa-brands fa-whatsapp text-success me-1"></i> Quick WhatsApp Ping
+        <a href="https://wa.me/917217723569?text=Hi%20Tech%20Gyan%20Amit,%20I%20have%20a%20custom%20software%20/%20AppSheet%20/%20web%20app%20requirement."
+           target="_blank"
+           rel="noopener noreferrer"
+           class="btn-tga-outline w-100 justify-content-center py-2">
+          <i class="fa-brands fa-whatsapp text-success"></i> Chat on WhatsApp
         </a>
       </div>
-    </div>
+    </aside>
   </div>
 </div>
 
@@ -237,23 +413,16 @@
     const btnIcon = document.getElementById('orderBtnIcon');
     const btnText = document.getElementById('orderBtnText');
 
-    form.addEventListener('submit', function (e) {
-      // Check HTML5 validity (required fields, valid email pattern, etc.)
+    if (!form || !submitBtn) return;
+
+    form.addEventListener('submit', function () {
       if (!form.checkValidity()) {
-        return; // Allow native validation tooltips to appear without locking the button
+        return;
       }
 
-      // 1. Disable button to prevent duplicate submissions
       submitBtn.disabled = true;
-
-      // 2. Insert Bootstrap spinner animation
       btnIcon.innerHTML = `<span class="spinner-border spinner-border-sm text-light" role="status" aria-hidden="true"></span>`;
-
-      // 3. Update button action text
-      btnText.textContent = 'Logging Brief to Google Sheets...';
-
-      // 4. Submit form
-      form.submit();
+      btnText.textContent = 'Submitting Project Brief...';
     });
   });
 </script>

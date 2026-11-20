@@ -1,5 +1,68 @@
 {% extends 'base.html' %}
-{% block title %}Custom Services // Enterprise ERP, CRM, Bots & Automation{% endblock %}
+
+{% block title %}Custom AppSheet, Android, Python Flask & Google Sheets Web App Development | Tech Gyan Amit{% endblock %}
+
+{% block meta_description %}Hire Tech Gyan Amit for custom Google AppSheet apps, Android & Flutter mobile apps, Python Flask web portals, Google Apps Script automation, and Google Sheets ERP systems.{% endblock %}
+
+{% block meta_keywords %}Google AppSheet developer India, Android app development, Flutter mobile apps, Python Flask web development, Google Apps Script automation, Google Sheets web app, custom ERP CRM development, Tech Gyan Amit{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{{ {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "serviceType": "Custom Software, AppSheet, Android, Python Flask & Google Sheets Development",
+  "provider": {
+    "@type": "Organization",
+    "name": "Tech Gyan Amit",
+    "url": request.url_root,
+    "telephone": "+91-7217723569"
+  },
+  "areaServed": {
+    "@type": "Country",
+    "name": "India"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Custom Business App & Automation Services",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Google AppSheet Business App Development",
+          "description": "Custom no-code mobile and desktop AppSheet applications synced with Google Sheets for inventory, approvals, field inspections, and operations."
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Android & Flutter Mobile App Development",
+          "description": "Custom cross-platform Android mobile applications with offline SQLite sync, barcode/QR scanning, and cloud backend integration."
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Python & Flask Web Application Development",
+          "description": "Scalable multi-user web portals, role-based ERP/CRM dashboards, REST APIs, and MySQL/cloud database architectures."
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Google Apps Script & Google Sheets Web Apps",
+          "description": "Custom Google Sheets web apps, automated PDF invoice/PO generators, approval workflows, and real-time spreadsheet automation."
+        }
+      }
+    ]
+  }
+}|tojson }}
+</script>
+{% endblock %}
 
 {% block content %}
 <style>
@@ -7,11 +70,11 @@
     --text-pure: #FFFFFF;
     --text-body: #CBD5E1;
     --text-sub: #94A3B8;
-    --card-surface: #0E1626;
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --accent-cyan: #06B6D4;
+    --card-surface: #0F172A;
+    --border-subtle: rgba(255, 255, 255, 0.1);
+    --accent-cyan: #00D2FF;
     --accent-emerald: #10B981;
-    --accent-violet: #6366F1;
+    --accent-violet: #818CF8;
   }
 
   .services-scope {
@@ -46,33 +109,33 @@
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
+    box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.6);
   }
 
   .service-card:hover {
     transform: translateY(-6px);
     border-color: var(--accent-cyan);
-    box-shadow: 0 16px 36px -10px rgba(6, 182, 212, 0.22);
+    box-shadow: 0 18px 38px -10px rgba(0, 210, 255, 0.22);
   }
 
   .service-icon-box {
-    width: 58px;
-    height: 58px;
+    width: 56px;
+    height: 56px;
     border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
-    margin-bottom: 1.25rem;
+    font-size: 1.45rem;
   }
 
   .feature-pill {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.8rem;
-    padding: 6px 12px;
+    font-size: 0.78rem;
+    padding: 6px 11px;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.04);
     border: 1px solid var(--border-subtle);
     color: var(--text-body);
   }
@@ -82,93 +145,191 @@
   }
 
   .service-price-tag {
-    font-family: var(--font-mono, monospace);
-    font-size: 1.35rem;
-    font-weight: 700;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
     color: var(--accent-emerald);
+  }
+
+  .stack-strip {
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 14px 20px;
   }
 </style>
 
+{% set default_services = [
+  {
+    "title": "Google AppSheet Business Apps",
+    "category": "AppSheet",
+    "icon": "fa-layer-group",
+    "icon_bg": "rgba(56, 189, 248, 0.14)",
+    "icon_color": "#38BDF8",
+    "icon_border": "rgba(56, 189, 248, 0.35)",
+    "description": "Custom mobile and desktop business apps built on Google AppSheet and synced live with Google Sheets for stock management, purchase approvals, site inspections, and field reporting.",
+    "features": ["Inventory & Stock App", "Role-Based Views", "Offline Mobile Sync", "Automated Email/PDF Alerts"],
+    "price": "Custom Quote"
+  },
+  {
+    "title": "Google Apps Script & Sheets Web Apps",
+    "category": "Apps Script & Sheets",
+    "icon": "fa-table",
+    "icon_bg": "rgba(16, 185, 129, 0.14)",
+    "icon_color": "#10B981",
+    "icon_border": "rgba(16, 185, 129, 0.35)",
+    "description": "Turn Google Sheets into powerful web applications and automated ERP engines with custom Google Apps Script HTML/Bootstrap frontends, automated PDF invoices, and scheduled triggers.",
+    "features": ["Sheets Web App UI", "Auto PDF & PO Generator", "Custom Triggers & APIs", "Zero Server Hosting Cost"],
+    "price": "Custom Quote"
+  },
+  {
+    "title": "Python & Flask Web Applications",
+    "category": "Python & Flask",
+    "icon": "fa-brands fa-python",
+    "icon_bg": "rgba(129, 140, 248, 0.14)",
+    "icon_color": "#818CF8",
+    "icon_border": "rgba(129, 140, 248, 0.35)",
+    "description": "High-performance multi-user web portals, custom ERP & CRM platforms, SaaS dashboards, and payment-integrated web systems built with Python Flask, MySQL, and Google Sheets APIs.",
+    "features": ["Role-Based Admin Portals", "MySQL & Cloud Sync", "Cashfree / Payment Gateway", "REST API Integrations"],
+    "price": "Custom Quote"
+  },
+  {
+    "title": "Android & Flutter Mobile Apps",
+    "category": "Android & Flutter",
+    "icon": "fa-brands fa-android",
+    "icon_bg": "rgba(34, 197, 94, 0.14)",
+    "icon_color": "#22C55E",
+    "icon_border": "rgba(34, 197, 94, 0.35)",
+    "description": "Fast, modern Android applications built with Flutter for billing, barcode/QR inventory scanning, field sales tracking, and real-time sync with your web or Google Sheets backend.",
+    "features": ["Custom Android APK", "QR / Barcode Scanner", "Offline Local Storage", "Live Backend Sync"],
+    "price": "Custom Quote"
+  },
+  {
+    "title": "WhatsApp Business Workflow Automation",
+    "category": "WhatsApp API",
+    "icon": "fa-brands fa-whatsapp",
+    "icon_bg": "rgba(6, 182, 212, 0.14)",
+    "icon_color": "#00D2FF",
+    "icon_border": "rgba(6, 182, 212, 0.35)",
+    "description": "Connect your Google Sheets, AppSheet, or Python Flask system directly with WhatsApp for instant order confirmations, PO approvals, payment reminders, and lead capture.",
+    "features": ["Instant PO & Invoice Alerts", "Payment Reminders", "Webhook Lead Capture", "Multi-User Notifications"],
+    "price": "Custom Quote"
+  },
+  {
+    "title": "Custom ERP, CRM & AI Utilities",
+    "category": "Enterprise ERP",
+    "icon": "fa-wand-magic-sparkles",
+    "icon_bg": "rgba(245, 158, 11, 0.14)",
+    "icon_color": "#F59E0B",
+    "icon_border": "rgba(245, 158, 11, 0.35)",
+    "description": "End-to-end procurement, quality control (QC), material inward registers, voice-assisted billing, and AI-powered data extraction tailored to your exact business workflow.",
+    "features": ["Procurement & QC Modules", "Vendor & Payment Ledger", "AI Voice / OCR Billing", "Dedicated Support"],
+    "price": "Custom Quote"
+  }
+] %}
+
+{% set service_list = services if (services is defined and services|length > 0) else default_services %}
+
 <div class="container services-scope py-3">
 
-  <!-- Header Section -->
-  <div class="text-center mb-5">
-    <span class="font-mono text-info small text-uppercase" style="letter-spacing: 2px;">
-      Bespoke Architecture & Engineering
+  <!-- Header Section (SEO Semantic H1 & Value Proposition) -->
+  <header class="text-center mb-5">
+    <span class="font-mono text-info small text-uppercase fw-bold" style="letter-spacing: 2px;">
+      Custom Business Software &amp; Automation
     </span>
-    <h1 class="display-5 fw-bold text-white mt-1">Enterprise Services & Development</h1>
-    <p class="text-muted mx-auto" style="max-width: 650px; font-size: 1rem; line-height: 1.7;">
-      From custom Google Sheets ERP pipelines and PostgreSQL backends to WhatsApp Cloud API bots and Android/Flutter frontend engineering.
+    <h1 class="display-5 fw-bold text-white mt-2 mb-3">
+      AppSheet, Android, Python Flask &amp; Google Sheets Web App Development
+    </h1>
+    <p class="text-muted mx-auto mb-4" style="max-width: 720px; font-size: 1rem; line-height: 1.75;">
+      We design and build custom <strong>Google AppSheet apps</strong>, <strong>Android &amp; Flutter mobile applications</strong>, <strong>Python Flask web portals</strong>, and <strong>Google Apps Script / Google Sheets web apps</strong> engineered to automate your daily business operations.
     </p>
-  </div>
+
+    <!-- Core Tech Stack Pills for Quick Scanning & SEO Relevance -->
+    <div class="stack-strip d-inline-flex flex-wrap justify-content-center gap-2 gap-md-3">
+      <span class="feature-pill"><i class="fa-solid fa-layer-group"></i> Google AppSheet</span>
+      <span class="feature-pill"><i class="fa-brands fa-android"></i> Android &amp; Flutter</span>
+      <span class="feature-pill"><i class="fa-brands fa-python"></i> Python &amp; Flask</span>
+      <span class="feature-pill"><i class="fa-solid fa-code"></i> Google Apps Script</span>
+      <span class="feature-pill"><i class="fa-solid fa-table"></i> Google Sheets Web Apps</span>
+    </div>
+  </header>
 
   <!-- Services Grid -->
-  <div class="row g-4 mb-5">
-    {% for service in services %}
-    <div class="col-lg-4 col-md-6">
-      <div class="service-card">
-        <div>
-          <div class="d-flex align-items-center justify-content-between mb-3">
-            <div class="service-icon-box" style="background: rgba(6, 182, 212, 0.12); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3);">
-              <i class="fa-solid {{ service.icon | default('fa-cubes') }}"></i>
-            </div>
-            <span class="badge bg-dark border border-secondary font-mono small text-white px-2 py-1">
-              {{ service.category | default('Engineering') }}
-            </span>
-          </div>
-
-          <h4 class="fs-5 mb-2">{{ service.title }}</h4>
-          <p class="small mb-4" style="line-height: 1.7;">
-            {{ service.description }}
-          </p>
-
-          <h6 class="text-uppercase font-mono small text-muted mb-2" style="font-size: 0.72rem; letter-spacing: 1px;">
-            Included Capabilities
-          </h6>
-          <div class="d-flex flex-wrap gap-2 mb-4">
-            {% for feat in service.features %}
-            <span class="feature-pill">
-              <i class="fa-solid fa-check"></i> {{ feat }}
-            </span>
-            {% endfor %}
-          </div>
-        </div>
-
-        <div class="pt-3 border-top border-secondary-subtle d-flex align-items-center justify-content-between">
+  <section aria-label="Custom Development Services">
+    <div class="row g-4 mb-5">
+      {% for service in service_list %}
+      {% set icon_cls = service.icon | default('fa-cubes') %}
+      {% set full_icon = icon_cls if ('fa-brands' in icon_cls or 'fa-solid' in icon_cls or 'fa-regular' in icon_cls) else ('fa-solid ' ~ icon_cls) %}
+      <div class="col-lg-4 col-md-6">
+        <article class="service-card">
           <div>
-            <small class="d-block text-muted font-mono" style="font-size: 0.68rem;">INVESTMENT</small>
-            <span class="service-price-tag">{{ service.price }}</span>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div class="service-icon-box" style="background: {{ service.icon_bg | default('rgba(0, 210, 255, 0.12)') }}; color: {{ service.icon_color | default('#00D2FF') }}; border: 1px solid {{ service.icon_border | default('rgba(0, 210, 255, 0.3)') }};">
+                <i class="{{ full_icon }}"></i>
+              </div>
+              <span class="badge bg-dark border border-secondary font-mono small text-white px-3 py-1">
+                {{ service.category | default('Custom Solution') }}
+              </span>
+            </div>
+
+            <h2 class="fs-5 mb-2">{{ service.title }}</h2>
+            <p class="small mb-4" style="line-height: 1.7;">
+              {{ service.description }}
+            </p>
+
+            <h3 class="text-uppercase font-mono small text-muted mb-2" style="font-size: 0.72rem; letter-spacing: 1px;">
+              Key Capabilities
+            </h3>
+            <div class="d-flex flex-wrap gap-2 mb-4">
+              {% for feat in service.features %}
+              <span class="feature-pill">
+                <i class="fa-solid fa-check"></i> {{ feat }}
+              </span>
+              {% endfor %}
+            </div>
           </div>
-          <a href="https://wa.me/917217723569?text=Hello%20NEXUS,%20I%20am%20interested%20in%20your%20{{ service.title|urlencode }}%20service." 
-             target="_blank" 
-             rel="noopener"
-             class="btn-nexus-primary">
-            <span>Inquire</span> <i class="fa-solid fa-arrow-right"></i>
-          </a>
-        </div>
+
+          <div class="pt-3 border-top border-secondary-subtle d-flex align-items-center justify-content-between gap-2">
+            <div>
+              <small class="d-block text-muted font-mono" style="font-size: 0.68rem;">PROJECT MODEL</small>
+              <span class="service-price-tag">{{ service.price | default('Custom Quote') }}</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <a href="{{ url_for('interactions.custom_order') }}" class="btn-tga-outline py-2 px-3">
+                Brief
+              </a>
+              <a href="https://wa.me/917217723569?text=Hello%20Tech%20Gyan%20Amit,%20I%20am%20interested%20in%20your%20{{ service.title|urlencode }}%20service."
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 class="btn-tga-primary py-2 px-3">
+                <span>Inquire</span> <i class="fa-solid fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </article>
       </div>
+      {% endfor %}
     </div>
-    {% endfor %}
-  </div>
+  </section>
 
   <!-- Bottom CTA: Custom Scope -->
-  <div class="service-card p-4 p-md-5 text-center" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(6, 182, 212, 0.12)); border-color: rgba(6, 182, 212, 0.35);">
-    <h3 class="fw-bold text-white mb-2">Have a Different Scope or Specific Stack Requirement?</h3>
-    <p class="mx-auto mb-4" style="max-width: 620px; font-size: 0.95rem; color: #CBD5E1 !important;">
-      We construct end-to-end custom systems based on your exact requirements, schemas, and API credentials.
+  <section class="service-card p-4 p-md-5 text-center" style="background: linear-gradient(135deg, rgba(0, 102, 255, 0.16), rgba(0, 210, 255, 0.1)); border-color: rgba(0, 210, 255, 0.35);">
+    <h2 class="h3 fw-bold text-white mb-2">Have a Custom Workflow in AppSheet, Android, Python Flask or Google Sheets?</h2>
+    <p class="mx-auto mb-4" style="max-width: 650px; font-size: 0.95rem; color: #CBD5E1 !important;">
+      Share your business process or spreadsheet structure with us. We build tailored mobile apps, web portals, and end-to-end automation systems built specifically for your team.
     </p>
     <div class="d-flex justify-content-center flex-wrap gap-3">
-      <a href="{{ url_for('interactions.custom_order') }}" class="btn-nexus-primary px-4 py-2">
+      <a href="{{ url_for('interactions.custom_order') }}" class="btn-tga-primary px-4 py-2">
         <i class="fa-solid fa-file-invoice"></i> Submit Custom Project Brief
       </a>
-      <a href="https://wa.me/917217723569?text=Hi%20NEXUS,%20I%20want%20to%20discuss%20a%20custom%20architecture" 
-         target="_blank" 
-         rel="noopener" 
-         class="btn-nexus-outline px-4 py-2">
-        <i class="fa-brands fa-whatsapp text-success"></i> Direct Tech Call on WhatsApp
+      <a href="https://wa.me/917217723569?text=Hi%20Tech%20Gyan%20Amit,%20I%20want%20to%20discuss%20a%20custom%20AppSheet,%20Android,%20Python%20or%20Google%20Sheets%20app"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="btn-tga-outline px-4 py-2">
+        <i class="fa-brands fa-whatsapp text-success"></i> Direct Chat on WhatsApp
       </a>
     </div>
-  </div>
+  </section>
 
 </div>
 {% endblock %}
